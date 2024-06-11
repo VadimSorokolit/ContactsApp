@@ -79,8 +79,21 @@ public final class CoreDataManager: NSObject {
             if let contacts = try context.fetch(fetchRequest) as? [Contact] {
                 let contact = contacts.first(where: { $0.email == email })
                 contact?.jobPosition = jobPosition
-                appDelegate.saveContext()
             }
+            appDelegate.saveContext()
+        } catch {
+            print("Error fetching contacts: \(error.localizedDescription)")
+        }
+    }
+    
+    // Delete all contacts
+    public func deleteContacts() {
+        let fetchRequest  = NSFetchRequest<NSFetchRequestResult>(entityName: "Contact")
+        do {
+            if let contacts = try context.fetch(fetchRequest) as? [Contact] {
+                contacts.forEach { context.delete($0)}
+            }
+            appDelegate.saveContext()
         } catch {
             print("Error fetching contacts: \(error.localizedDescription)")
         }
