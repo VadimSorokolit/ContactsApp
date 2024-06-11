@@ -9,12 +9,11 @@ import Foundation
 import UIKit
 import CoreData
 
-// MARK: - CRUD
-
-public final class CoreDataManager: NSObject {
-    private static let shared = CoreDataManager()
+final class CoreDataService {
     
-    private override init() {}
+    // MARK: - Properties
+    
+    static let shared = CoreDataService()
     
     private var appDelegate: AppDelegate {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
@@ -24,11 +23,15 @@ public final class CoreDataManager: NSObject {
     }
     
     private var context: NSManagedObjectContext {
-        appDelegate.persistentContainer.viewContext
+        self.appDelegate.persistentContainer.viewContext
     }
     
-    // Creat contact
-    public func createContact(name: String, jobPosition: String, email: String, photo: UIImage?) {
+    // MARK: - Methods
+    
+    private init() {}
+    
+    // Create contact
+    func createContact(name: String, jobPosition: String, email: String, photo: UIImage?) {
         guard let contactEnityDesctription = NSEntityDescription.entity(forEntityName: "Contact", in: context) else {
             print("Error: Contact entity description not found")
             return
@@ -39,11 +42,11 @@ public final class CoreDataManager: NSObject {
         contact.email = email
         contact.photo = photo ?? UIImage(systemName: "photo")
         
-        appDelegate.saveContext()
+        self.appDelegate.saveContext()
     }
     
     // Fetch contacts
-    public func fetchContacts() -> [Contact] {
+    func fetchContacts() -> [Contact] {
         let fetchRequest  = NSFetchRequest<NSFetchRequestResult>(entityName: "Contact")
         do {
             if let contacts = try context.fetch(fetchRequest) as? [Contact] {
@@ -59,8 +62,8 @@ public final class CoreDataManager: NSObject {
         }
     }
     
-    // FetchContactbyEmail
-    public func fetchContact(_ email: String) -> Contact? {
+    // Fetch contact by email
+    func fetchContact(_ email: String) -> Contact? {
         let fetchRequest  = NSFetchRequest<NSFetchRequestResult>(entityName: "Contact")
         do {
             if let contacts = try context.fetch(fetchRequest) as? [Contact] {
@@ -73,44 +76,44 @@ public final class CoreDataManager: NSObject {
     }
     
     // Update contact
-    public func updateContact(by email: String, jobPosition: String) {
+    func updateContact(by email: String, jobPosition: String) {
         let fetchRequest  = NSFetchRequest<NSFetchRequestResult>(entityName: "Contact")
         do {
             if let contacts = try context.fetch(fetchRequest) as? [Contact] {
                 let contact = contacts.first(where: { $0.email == email })
                 contact?.jobPosition = jobPosition
             }
-            appDelegate.saveContext()
+            self.appDelegate.saveContext()
         } catch {
             print("Error fetching contacts: \(error.localizedDescription)")
         }
     }
     
     // Delete all contacts
-    public func deleteContacts() {
+    func deleteContacts() {
         let fetchRequest  = NSFetchRequest<NSFetchRequestResult>(entityName: "Contact")
         do {
             if let contacts = try context.fetch(fetchRequest) as? [Contact] {
-                contacts.forEach { context.delete($0)}
+                contacts.forEach { context.delete($0) }
             }
-            appDelegate.saveContext()
+            self.appDelegate.saveContext()
         } catch {
             print("Error fetching contacts: \(error.localizedDescription)")
         }
     }
     
     // Delete contact by email
-    public func deleteContact(by email: String) {
+    func deleteContact(by email: String) {
         let fetchRequest  = NSFetchRequest<NSFetchRequestResult>(entityName: "Contact")
         do {
             if let contacts = try context.fetch(fetchRequest) as? [Contact] {
-                if let contact = contacts.first(where: {$0.email == email }) {
+                if let contact = contacts.first(where: { $0.email == email }) {
                     context.delete(contact)
                 } else {
                     print("It's contact don't exist")
                 }
             }
-            appDelegate.saveContext()
+            self.appDelegate.saveContext()
         }
         catch {
             print("Error fetching contacts: \(error.localizedDescription)")
