@@ -72,4 +72,18 @@ public final class CoreDataManager: NSObject {
         return nil
     }
     
+    // Update contact
+    public func updateContact(by email: String, jobPosition: String) {
+        let fetchRequest  = NSFetchRequest<NSFetchRequestResult>(entityName: "Contact")
+        do {
+            if let contacts = try context.fetch(fetchRequest) as? [Contact] {
+                let contact = contacts.first(where: { $0.email == email })
+                contact?.jobPosition = jobPosition
+                appDelegate.saveContext()
+            }
+        } catch {
+            print("Error fetching contacts: \(error.localizedDescription)")
+        }
+    }
+    
 }
