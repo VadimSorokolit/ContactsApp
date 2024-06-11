@@ -27,7 +27,15 @@ public final class CoreDataManager: NSObject {
         appDelegate.persistentContainer.viewContext
     }
     
-    public func createContact(name: String, jobPosition: String, email: String, photo: UIImage) {
-        
+    public func createContact(name: String, jobPosition: String, email: String, photo: UIImage?) {
+        guard let contactEnityDesctription = NSEntityDescription.entity(forEntityName: "Contact", in: context) else {
+            print("Error: Contact entity description not found")
+            return
+        }
+        let contact = Contact(entity: contactEnityDesctription, insertInto: context)
+        contact.name = name
+        contact.jobPosition = jobPosition
+        contact.email = email
+        contact.photo = photo ?? UIImage(systemName: "photo")
     }
 }
