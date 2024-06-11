@@ -59,5 +59,17 @@ public final class CoreDataManager: NSObject {
         }
     }
     
+    // FetchContactbyEmail
+    public func fetchContact(_ email: String) -> Contact? {
+        let fetchRequest  = NSFetchRequest<NSFetchRequestResult>(entityName: "Contact")
+        do {
+            if let contacts = try context.fetch(fetchRequest) as? [Contact] {
+                return contacts.first(where: { $0.email == email })
+            }
+        } catch {
+            print("Error fetching contacts: \(error.localizedDescription)")
+        }
+        return nil
+    }
     
 }
