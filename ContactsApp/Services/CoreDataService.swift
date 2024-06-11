@@ -99,4 +99,22 @@ public final class CoreDataManager: NSObject {
         }
     }
     
+    // Delete contact by email
+    public func deleteContact(by email: String) {
+        let fetchRequest  = NSFetchRequest<NSFetchRequestResult>(entityName: "Contact")
+        do {
+            if let contacts = try context.fetch(fetchRequest) as? [Contact] {
+                if let contact = contacts.first(where: {$0.email == email }) {
+                    context.delete(contact)
+                } else {
+                    print("It's contact don't exist")
+                }
+            }
+            appDelegate.saveContext()
+        }
+        catch {
+            print("Error fetching contacts: \(error.localizedDescription)")
+        }
+    }
+    
 }
