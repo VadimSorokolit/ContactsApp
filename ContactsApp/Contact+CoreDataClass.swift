@@ -2,7 +2,7 @@
 //  Contact+CoreDataClass.swift
 //  ContactsApp
 //
-//  Created by Vadim  on 11.06.2024.
+//  Created by Vadym Sorokolit on 11.06.2024.
 //
 //
 

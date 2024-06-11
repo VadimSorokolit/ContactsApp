@@ -2,11 +2,12 @@
 //  Contact+CoreDataProperties.swift
 //  ContactsApp
 //
-//  Created by Vadim  on 11.06.2024.
+//  Created by Vadym Sorokolit on 11.06.2024.
 //
 //
 
 import Foundation
+import UIKit
 import CoreData
 
 
@@ -19,7 +20,7 @@ extension Contact {
     @NSManaged public var name: String?
     @NSManaged public var jobPosition: String?
     @NSManaged public var email: String?
-    @NSManaged public var photo: NSObject?
+    @NSManaged public var photo: UIImageView?
 
 }
 

@@ -2,7 +2,7 @@
 //  ContactsAppUITests.swift
 //  ContactsAppUITests
 //
-//  Created by Vadim  on 05.06.2024.
+//  Created by Vadym Sorokolit on 05.06.2024.
 //
 
 import XCTest
