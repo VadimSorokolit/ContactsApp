@@ -19,7 +19,6 @@
 		DD72B98A2C18C88F003FBB46 /* Contact+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD72B9882C18C88F003FBB46 /* Contact+CoreDataClass.swift */; };
 		DD72B98B2C18C88F003FBB46 /* Contact+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD72B9892C18C88F003FBB46 /* Contact+CoreDataProperties.swift */; };
 		DD72B98D2C18C998003FBB46 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD72B98C2C18C998003FBB46 /* CoreDataService.swift */; };
-		DD72B9912C1A0110003FBB46 /* ContactsApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DD72B98F2C1A0110003FBB46 /* ContactsApp.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,7 +55,6 @@
 		DD72B9882C18C88F003FBB46 /* Contact+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Contact+CoreDataClass.swift"; sourceTree = "<group>"; };
 		DD72B9892C18C88F003FBB46 /* Contact+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Contact+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		DD72B98C2C18C998003FBB46 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
-		DD72B9902C1A0110003FBB46 /* ContactsApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ContactsApp.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,7 +108,6 @@
 		DD1223482C10CF9300A5C93B /* ContactsApp */ = {
 			isa = PBXGroup;
 			children = (
-				DD72B98F2C1A0110003FBB46 /* ContactsApp.xcdatamodeld */,
 				DD1223492C10CF9300A5C93B /* AppDelegate.swift */,
 				DD12234B2C10CF9300A5C93B /* SceneDelegate.swift */,
 				DD12234D2C10CF9300A5C93B /* ViewController.swift */,
@@ -279,7 +276,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD72B98D2C18C998003FBB46 /* CoreDataService.swift in Sources */,
-				DD72B9912C1A0110003FBB46 /* ContactsApp.xcdatamodeld in Sources */,
 				DD12234E2C10CF9300A5C93B /* ViewController.swift in Sources */,
 				DD12234A2C10CF9300A5C93B /* AppDelegate.swift in Sources */,
 				DD12234C2C10CF9300A5C93B /* SceneDelegate.swift in Sources */,
@@ -631,20 +627,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		DD72B98F2C1A0110003FBB46 /* ContactsApp.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				DD72B9902C1A0110003FBB46 /* ContactsApp.xcdatamodel */,
-			);
-			currentVersion = DD72B9902C1A0110003FBB46 /* ContactsApp.xcdatamodel */;
-			name = ContactsApp.xcdatamodeld;
-			path = /Users/vadim/Documents/Projects/Home/ContactsApp/ContactsApp/ContactsApp.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = DD12233E2C10CF9300A5C93B /* Project object */;
 }
