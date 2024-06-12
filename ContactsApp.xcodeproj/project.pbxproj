@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DD0991172C1A2D67009DEBA0 /* ContactsApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DD0991152C1A2D67009DEBA0 /* ContactsApp.xcdatamodeld */; };
 		DD12234A2C10CF9300A5C93B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1223492C10CF9300A5C93B /* AppDelegate.swift */; };
 		DD12234C2C10CF9300A5C93B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD12234B2C10CF9300A5C93B /* SceneDelegate.swift */; };
 		DD12234E2C10CF9300A5C93B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD12234D2C10CF9300A5C93B /* ViewController.swift */; };
@@ -39,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DD0991162C1A2D67009DEBA0 /* ContactsApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ContactsApp.xcdatamodel; sourceTree = "<group>"; };
 		DD1223462C10CF9300A5C93B /* ContactsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ContactsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD1223492C10CF9300A5C93B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DD12234B2C10CF9300A5C93B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 		DD1223482C10CF9300A5C93B /* ContactsApp */ = {
 			isa = PBXGroup;
 			children = (
+				DD0991152C1A2D67009DEBA0 /* ContactsApp.xcdatamodeld */,
 				DD1223492C10CF9300A5C93B /* AppDelegate.swift */,
 				DD12234B2C10CF9300A5C93B /* SceneDelegate.swift */,
 				DD12234D2C10CF9300A5C93B /* ViewController.swift */,
@@ -276,6 +279,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD72B98D2C18C998003FBB46 /* CoreDataService.swift in Sources */,
+				DD0991172C1A2D67009DEBA0 /* ContactsApp.xcdatamodeld in Sources */,
 				DD12234E2C10CF9300A5C93B /* ViewController.swift in Sources */,
 				DD12234A2C10CF9300A5C93B /* AppDelegate.swift in Sources */,
 				DD12234C2C10CF9300A5C93B /* SceneDelegate.swift in Sources */,
@@ -627,6 +631,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		DD0991152C1A2D67009DEBA0 /* ContactsApp.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				DD0991162C1A2D67009DEBA0 /* ContactsApp.xcdatamodel */,
+			);
+			currentVersion = DD0991162C1A2D67009DEBA0 /* ContactsApp.xcdatamodel */;
+			name = ContactsApp.xcdatamodeld;
+			path = /Users/vadim/Documents/Projects/Home/ContactsApp/ContactsApp/ContactsApp.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = DD12233E2C10CF9300A5C93B /* Project object */;
 }
