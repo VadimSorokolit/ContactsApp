@@ -94,12 +94,13 @@ final class CoreDataService {
                 // Update the job position
                 contact.jobPosition = jobPosition
                 // Save the context
-                try self.context.save()
+                self.appDelegate.saveContext()
             }
         } catch {
             print("Error fetching or updating contact: \(error.localizedDescription)")
         }
     }
+    
     // Delete all contacts
     func deleteContacts() {
         do {
@@ -125,7 +126,7 @@ final class CoreDataService {
                 // Delete the found contact
                 self.context.delete(contact)
                 // Save the context
-                try self.context.save()
+                self.appDelegate.saveContext()
             } else {
                 print("Contact does not exist")
             }
