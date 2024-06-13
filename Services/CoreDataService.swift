@@ -63,7 +63,7 @@ final class CoreDataService {
     }
     
     // Fetch contact by email
-    func fetchContact(_ email: String) -> Contact? {
+    func fetchContact(byEmail email: String) -> Contact? {
         let fetchRequest  = NSFetchRequest<NSFetchRequestResult>(entityName: "Contact")
         do {
             if let contacts = try context.fetch(fetchRequest) as? [Contact] {
