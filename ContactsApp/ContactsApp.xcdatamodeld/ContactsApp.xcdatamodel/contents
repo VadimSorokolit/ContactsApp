@@ -4,6 +4,6 @@
         <attribute name="email" optional="YES" attributeType="String"/>
         <attribute name="jobPosition" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="photo" optional="YES" attributeType="Transformable"/>
+        <attribute name="photo" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
     </entity>
 </model>

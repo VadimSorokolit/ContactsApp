@@ -42,7 +42,7 @@ final class CoreDataService {
         contact.name = name
         contact.jobPosition = jobPosition
         contact.email = email
-        contact.photo = photo ?? UIImage(systemName: "photo")
+        contact.photo = photo 
         self.appDelegate.saveContext()
     }
     
@@ -63,21 +63,17 @@ final class CoreDataService {
     }
     
     // Fetch contact by email
-    func fetchContact(by email: String) -> Contact? {
-        // Create a predicate to filter by email
-        let predicate = NSPredicate(format: "email == %@", email)
-        self.fetchRequest.predicate = predicate
-        // Set fetch limit to 1
+    func fetchContact(byEmail email: String) -> Contact? {
+        self.fetchRequest.predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.fetchLimit = 1
         
         do {
-            if let contacts = try self.context.fetch(self.fetchRequest) as? [Contact] {
-                return contacts.first
-            }
+            let contacts = try context.fetch(self.fetchRequest)
+            return contacts.first as? Contact
         } catch {
-            print("Error fetching contact: \(error.localizedDescription)")
+            print("Error fetching contact by email: \(error.localizedDescription)")
+            return nil
         }
-        return nil
     }
     
     // Update contact
