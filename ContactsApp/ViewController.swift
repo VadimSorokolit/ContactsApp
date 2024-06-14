@@ -28,10 +28,13 @@ class ViewController: UIViewController {
         view.backgroundColor = .lightGray
         
         self.addContact()
-        
-        if let contact = self.getContact() {
-            print("-->", contact.email ?? "No email")
-        }
+//        self.deleteContact()
+//        self.deleteAllContacts()
+//        self.updateContact()
+        self.getContacts()
+//        if let contact = self.getContact() {
+//            print("-->", contact.jobPosition ?? "No email")
+//        }
         print("------")
     }
     
@@ -48,6 +51,25 @@ class ViewController: UIViewController {
     private func getContact() -> Contact? {
         let contact = self.CoreDataServiceShared.fetchContact(byEmail: self.email)
         return contact
+    }
+    
+    private func getContacts() {
+        let contacts = self.CoreDataServiceShared.fetchContacts()
+        for contact in contacts {
+            print(contact.jobPosition ?? "")
+        }
+    }
+    
+    private func deleteContact() {
+        self.CoreDataServiceShared.deleteContact(byEmail: self.email)
+    }
+    
+    private func deleteAllContacts() {
+        self.CoreDataServiceShared.deleteAllContacts()
+    }
+    
+    private func updateContact() {
+        self.CoreDataServiceShared.updateContact(by: self.email, jobPosition: "Developer")
     }
 }
 

@@ -98,7 +98,7 @@ final class CoreDataService {
     }
     
     // Delete all contacts
-    func deleteContacts() {
+    func deleteAllContacts() {
         do {
             if let contacts = try self.context.fetch(self.fetchRequest) as? [Contact] {
                 contacts.forEach { self.context.delete($0) }
@@ -110,7 +110,7 @@ final class CoreDataService {
     }
     
     // Delete contact by email
-    func deleteContact(by email: String) {
+    func deleteContact(byEmail email: String) {
         // Create a predicate to filter by email
         let predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.predicate = predicate
