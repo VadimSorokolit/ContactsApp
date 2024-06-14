@@ -34,6 +34,9 @@ final class CoreDataService {
     
     // Create contact
     func createContact(name: String, jobPosition: String, email: String, photo: UIImage?) {
+        if self.isContactExist(byEmail: email) {
+            return
+        }
         guard let contactEnityDesctription = NSEntityDescription.entity(forEntityName: "Contact", in: self.context) else {
             print("Error: Contact entity description not found")
             return
@@ -129,6 +132,22 @@ final class CoreDataService {
         } catch {
             print("Error fetching or deleting contact: \(error.localizedDescription)")
         }
+    }
+    
+    // Check contact by email
+    func isContactExist(byEmail email: String) -> Bool {
+        self.fetchRequest.predicate = NSPredicate(format: "email == %@", email)
+        self.fetchRequest.fetchLimit = 1
+        
+        do {
+            let contacts = try context.fetch(self.fetchRequest)
+            if contacts.isEmpty {
+                return false
+            }
+        } catch {
+            print("Error fetching contact by email: \(error.localizedDescription)")
+        }
+        return true
     }
     
 }
