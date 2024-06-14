@@ -33,8 +33,8 @@ final class CoreDataService {
     private init() {}
     
     // Create contact
-    func createContact(name: String, jobPosition: String, email: String, photo: UIImage?) {
-        if self.isContactExist(byEmail: email) {
+    func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) {
+        if self.isContactExist(by: email) {
             return
         }
         guard let contactEnityDesctription = NSEntityDescription.entity(forEntityName: "Contact", in: self.context) else {
@@ -42,7 +42,7 @@ final class CoreDataService {
             return
         }
         let contact = Contact(entity: contactEnityDesctription, insertInto: self.context)
-        contact.name = name
+        contact.fullName = fullName
         contact.jobPosition = jobPosition
         contact.email = email
         contact.photo = photo 
@@ -66,7 +66,7 @@ final class CoreDataService {
     }
     
     // Fetch contact by email
-    func fetchContact(byEmail email: String) -> Contact? {
+    func fetchContact(by email: String) -> Contact? {
         self.fetchRequest.predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.fetchLimit = 1
         
@@ -84,10 +84,8 @@ final class CoreDataService {
         // Create a predicate to filter by email
         let predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.predicate = predicate
-        
         // Set fetch limit to 1
         self.fetchRequest.fetchLimit = 1
-        
         do {
             if let contacts = try self.context.fetch(self.fetchRequest) as? [Contact], let contact = contacts.first {
                 // Update the job position
@@ -113,13 +111,12 @@ final class CoreDataService {
     }
     
     // Delete contact by email
-    func deleteContact(byEmail email: String) {
+    func deleteContact(by email: String) {
         // Create a predicate to filter by email
         let predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.predicate = predicate
         // Set fetch limit to 1
         self.fetchRequest.fetchLimit = 1
-        
         do {
             if let contacts = try self.context.fetch(self.fetchRequest) as? [Contact], let contact = contacts.first {
                 // Delete the found contact
@@ -135,7 +132,7 @@ final class CoreDataService {
     }
     
     // Check contact by email
-    func isContactExist(byEmail email: String) -> Bool {
+    func isContactExist(by email: String) -> Bool {
         self.fetchRequest.predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.fetchLimit = 1
         

@@ -4,7 +4,6 @@
 //
 //  Created by Vadym Sorokolit on 12.06.2024.
 //
-//
 
 import Foundation
 import UIKit
@@ -16,7 +15,7 @@ extension Contact {
         return NSFetchRequest<Contact>(entityName: "Contact")
     }
 
-    @NSManaged public var name: String?
+    @NSManaged public var fullName: String?
     @NSManaged public var jobPosition: String?
     @NSManaged public var email: String?
     @NSManaged public var photo: UIImage?
