@@ -9,16 +9,10 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    // MARK: - Initializer
-    
-    private let CoreDataServiceShared = CoreDataService.shared
-    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .lightGray
     }
 
 }

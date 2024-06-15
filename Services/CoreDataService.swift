@@ -26,7 +26,7 @@ final class CoreDataService {
         self.appDelegate.persistentContainer.viewContext
     }
     
-    private let fetchRequest  = NSFetchRequest<NSFetchRequestResult>(entityName: "Contact")
+    private let fetchRequest = Contact.fetchRequest()
     
     // MARK: - Methods
     
@@ -37,25 +37,22 @@ final class CoreDataService {
         if self.isContactExist(by: email) {
             return
         }
-        guard let contactEnityDesctription = NSEntityDescription.entity(forEntityName: "Contact", in: self.context) else {
-            print("Error: Contact entity description not found")
-            return
-        }
-        let contact = Contact(entity: contactEnityDesctription, insertInto: self.context)
+        let contact = Contact(context: self.context)
         contact.fullName = fullName
         contact.jobPosition = jobPosition
         contact.email = email
-        contact.photo = photo 
+        contact.photo = photo
         self.appDelegate.saveContext()
     }
     
     // Fetch contacts
     func fetchContacts() -> [Contact] {
         do {
-            if let contacts = try self.context.fetch(self.fetchRequest) as? [Contact] {
+            let contacts = try self.context.fetch(self.fetchRequest)
+            if !contacts.isEmpty {
                 return contacts
             } else {
-                print("Error: Could not cast fetched objects to [Contact]")
+                print("Database is empty")
                 return []
             }
         }
@@ -71,8 +68,9 @@ final class CoreDataService {
         self.fetchRequest.fetchLimit = 1
         
         do {
-            let contacts = try context.fetch(self.fetchRequest)
-            return contacts.first as? Contact
+            let contacts = try self.context.fetch(self.fetchRequest)
+            let contact = contacts.first
+            return contact
         } catch {
             print("Error fetching contact by email: \(error.localizedDescription)")
             return nil
@@ -81,16 +79,13 @@ final class CoreDataService {
     
     // Update contact
     func updateContact(by email: String, jobPosition: String) {
-        // Create a predicate to filter by email
         let predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.predicate = predicate
-        // Set fetch limit to 1
         self.fetchRequest.fetchLimit = 1
         do {
-            if let contacts = try self.context.fetch(self.fetchRequest) as? [Contact], let contact = contacts.first {
-                // Update the job position
+            let contacts = try self.context.fetch(self.fetchRequest)
+            if let contact = contacts.first {
                 contact.jobPosition = jobPosition
-                // Save the context
                 self.appDelegate.saveContext()
             }
         } catch {
@@ -101,9 +96,10 @@ final class CoreDataService {
     // Delete all contacts
     func deleteAllContacts() {
         do {
-            if let contacts = try self.context.fetch(self.fetchRequest) as? [Contact] {
-                contacts.forEach { self.context.delete($0) }
-            }
+            let contacts = try self.context.fetch(self.fetchRequest)
+            contacts.forEach({ contact in
+                self.context.delete(contact)
+            })
             self.appDelegate.saveContext()
         } catch {
             print("Error fetching contacts: \(error.localizedDescription)")
@@ -112,16 +108,13 @@ final class CoreDataService {
     
     // Delete contact by email
     func deleteContact(by email: String) {
-        // Create a predicate to filter by email
         let predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.predicate = predicate
-        // Set fetch limit to 1
         self.fetchRequest.fetchLimit = 1
         do {
-            if let contacts = try self.context.fetch(self.fetchRequest) as? [Contact], let contact = contacts.first {
-                // Delete the found contact
+            let contacts = try self.context.fetch(self.fetchRequest)
+            if let contact = contacts.first {
                 self.context.delete(contact)
-                // Save the context
                 self.appDelegate.saveContext()
             } else {
                 print("Contact does not exist")
@@ -135,16 +128,15 @@ final class CoreDataService {
     func isContactExist(by email: String) -> Bool {
         self.fetchRequest.predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.fetchLimit = 1
-        
         do {
-            let contacts = try context.fetch(self.fetchRequest)
-            if contacts.isEmpty {
-                return false
+            let contacts = try self.context.fetch(self.fetchRequest)
+            if !contacts.isEmpty {
+                return true
             }
         } catch {
             print("Error fetching contact by email: \(error.localizedDescription)")
         }
-        return true
+        return false
     }
     
 }
