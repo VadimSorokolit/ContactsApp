@@ -78,7 +78,7 @@ final class CoreDataService {
     }
     
     // Update contact
-    func updateContact(by email: String, jobPosition: String) {
+    func updateContact(byEmail email: String, jobPosition: String) {
         let predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1

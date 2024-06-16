@@ -11,6 +11,7 @@ import CoreData
 
 
 extension Contact {
+    
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Contact> {
         return NSFetchRequest<Contact>(entityName: "Contact")
     }
@@ -18,6 +19,7 @@ extension Contact {
     @NSManaged public var jobPosition: String?
     @NSManaged public var email: String?
     @NSManaged public var photo: UIImage?
+    
 }
 
 extension Contact : Identifiable {}
