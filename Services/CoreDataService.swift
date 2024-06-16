@@ -66,7 +66,6 @@ final class CoreDataService {
     func fetchContact(by email: String) -> Contact? {
         self.fetchRequest.predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.fetchLimit = 1
-        
         do {
             let contacts = try self.context.fetch(self.fetchRequest)
             let contact = contacts.first
