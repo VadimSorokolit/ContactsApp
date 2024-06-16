@@ -20,5 +20,4 @@ extension Contact {
     @NSManaged public var photo: UIImage?
 }
 
-extension Contact : Identifiable {
-}
+extension Contact : Identifiable {}

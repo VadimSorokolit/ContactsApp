@@ -32,19 +32,6 @@ final class CoreDataService {
     
     private init() {}
     
-    // Create contact
-    func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) {
-        if self.isContactExist(by: email) {
-            return
-        }
-        let contact = Contact(context: self.context)
-        contact.fullName = fullName
-        contact.jobPosition = jobPosition
-        contact.email = email
-        contact.photo = photo
-        self.appDelegate.saveContext()
-    }
-    
     // Fetch contacts
     func fetchContacts() -> [Contact] {
         do {
@@ -63,8 +50,9 @@ final class CoreDataService {
     }
     
     // Fetch contact by email
-    func fetchContact(by email: String) -> Contact? {
-        self.fetchRequest.predicate = NSPredicate(format: "email == %@", email)
+    func fetchContact(byEmail email: String) -> Contact? {
+        let predicate = NSPredicate(format: "email == %@", email)
+        self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
         do {
             let contacts = try self.context.fetch(self.fetchRequest)
@@ -74,6 +62,19 @@ final class CoreDataService {
             print("Error fetching contact by email: \(error.localizedDescription)")
             return nil
         }
+    }
+    
+    // Create contact
+    func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) {
+        if self.isContactExist(byEmail: email) {
+            return
+        }
+        let contact = Contact(context: self.context)
+        contact.fullName = fullName
+        contact.jobPosition = jobPosition
+        contact.email = email
+        contact.photo = photo
+        self.appDelegate.saveContext()
     }
     
     // Update contact
@@ -96,7 +97,7 @@ final class CoreDataService {
     func deleteAllContacts() {
         do {
             let contacts = try self.context.fetch(self.fetchRequest)
-            contacts.forEach({ contact in
+            contacts.forEach({ (contact: Contact) -> Void in
                 self.context.delete(contact)
             })
             self.appDelegate.saveContext()
@@ -106,7 +107,7 @@ final class CoreDataService {
     }
     
     // Delete contact by email
-    func deleteContact(by email: String) {
+    func deleteContact(byEmail email: String) {
         let predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
@@ -124,8 +125,9 @@ final class CoreDataService {
     }
     
     // Check contact by email
-    func isContactExist(by email: String) -> Bool {
-        self.fetchRequest.predicate = NSPredicate(format: "email == %@", email)
+    func isContactExist(byEmail email: String) -> Bool {
+        let predicate = NSPredicate(format: "email == %@", email)
+        self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
         do {
             let contacts = try self.context.fetch(self.fetchRequest)
