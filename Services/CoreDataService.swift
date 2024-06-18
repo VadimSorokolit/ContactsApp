@@ -13,29 +13,34 @@ final class CoreDataService {
     
     // MARK: - Properties
     
-    static let shared = CoreDataService()
-    
+    private var persistentContainer: NSPersistentContainer!
     private var appDelegate: AppDelegate {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             fatalError("Could not cast UIApplication.shared.delegate to AppDelegate")
         }
         return appDelegate
     }
-    
-    private var context: NSManagedObjectContext {
-        self.appDelegate.persistentContainer.viewContext
+    private var db: NSManagedObjectContext {
+        self.persistentContainer.viewContext
     }
-    
     private let fetchRequest = Contact.fetchRequest()
     
-    // MARK: - Methods
+    // Default initializer
+    init() {
+        self.persistentContainer = appDelegate.persistentContainer
+    }
     
-    private init() {}
+    // For tests initializer
+    init(pc: NSPersistentContainer!) {
+        self.persistentContainer = pc
+    }
+    
+    // MARK: - Methods
     
     // Fetch contacts
     func fetchContacts() -> [Contact] {
         do {
-            let contacts = try self.context.fetch(self.fetchRequest)
+            let contacts = try self.db.fetch(self.fetchRequest)
             if !contacts.isEmpty {
                 return contacts
             } else {
@@ -55,7 +60,7 @@ final class CoreDataService {
         self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
         do {
-            let contacts = try self.context.fetch(self.fetchRequest)
+            let contacts = try self.db.fetch(self.fetchRequest)
             let contact = contacts.first
             return contact
         } catch {
@@ -69,7 +74,7 @@ final class CoreDataService {
         if self.isContactExist(byEmail: email) {
             return
         }
-        let contact = Contact(context: self.context)
+        let contact = Contact(context: self.db)
         contact.fullName = fullName
         contact.jobPosition = jobPosition
         contact.email = email
@@ -83,7 +88,7 @@ final class CoreDataService {
         self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
         do {
-            let contacts = try self.context.fetch(self.fetchRequest)
+            let contacts = try self.db.fetch(self.fetchRequest)
             if let contact = contacts.first {
                 contact.jobPosition = jobPosition
                 self.appDelegate.saveContext()
@@ -96,9 +101,9 @@ final class CoreDataService {
     // Delete all contacts
     func deleteAllContacts() {
         do {
-            let contacts = try self.context.fetch(self.fetchRequest)
+            let contacts = try self.db.fetch(self.fetchRequest)
             contacts.forEach({ (contact: Contact) -> Void in
-                self.context.delete(contact)
+                self.db.delete(contact)
             })
             self.appDelegate.saveContext()
         } catch {
@@ -112,9 +117,9 @@ final class CoreDataService {
         self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
         do {
-            let contacts = try self.context.fetch(self.fetchRequest)
+            let contacts = try self.db.fetch(self.fetchRequest)
             if let contact = contacts.first {
-                self.context.delete(contact)
+                self.db.delete(contact)
                 self.appDelegate.saveContext()
             } else {
                 print("Contact does not exist")
@@ -130,7 +135,7 @@ final class CoreDataService {
         self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
         do {
-            let contacts = try self.context.fetch(self.fetchRequest)
+            let contacts = try self.db.fetch(self.fetchRequest)
             if !contacts.isEmpty {
                 return true
             }
