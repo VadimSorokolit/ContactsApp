@@ -14,24 +14,20 @@ final class CoreDataService {
     // MARK: - Properties
     
     private var persistentContainer: NSPersistentContainer!
-    private var appDelegate: AppDelegate {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            fatalError("Could not cast UIApplication.shared.delegate to AppDelegate")
-        }
-        return appDelegate
-    }
-    private var db: NSManagedObjectContext {
-        self.persistentContainer.viewContext
+
+    private var context: NSManagedObjectContext {
+        return self.persistentContainer.viewContext
     }
     private let fetchRequest = Contact.fetchRequest()
     
     // Default initializer
     init() {
-        self.persistentContainer = appDelegate.persistentContainer
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        self.persistentContainer = appDelegate?.persistentContainer
     }
     
     // For tests initializer
-    init(pc: NSPersistentContainer!) {
+    init(pc: NSPersistentContainer) {
         self.persistentContainer = pc
     }
     
@@ -40,7 +36,7 @@ final class CoreDataService {
     // Fetch contacts
     func fetchContacts() -> [Contact] {
         do {
-            let contacts = try self.db.fetch(self.fetchRequest)
+            let contacts = try self.context.fetch(self.fetchRequest)
             if !contacts.isEmpty {
                 return contacts
             } else {
@@ -60,7 +56,7 @@ final class CoreDataService {
         self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
         do {
-            let contacts = try self.db.fetch(self.fetchRequest)
+            let contacts = try self.context.fetch(self.fetchRequest)
             let contact = contacts.first
             return contact
         } catch {
@@ -74,12 +70,16 @@ final class CoreDataService {
         if self.isContactExist(byEmail: email) {
             return
         }
-        let contact = Contact(context: self.db)
+        let contact = Contact(context: self.context)
         contact.fullName = fullName
         contact.jobPosition = jobPosition
         contact.email = email
         contact.photo = photo
-        self.appDelegate.saveContext()
+        do {
+            try self.context.save()
+         } catch {
+             print("Failed to save the contact: \(error.localizedDescription)")
+         }
     }
     
     // Update contact
@@ -88,10 +88,10 @@ final class CoreDataService {
         self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
         do {
-            let contacts = try self.db.fetch(self.fetchRequest)
+            let contacts = try self.self.context.fetch(self.fetchRequest)
             if let contact = contacts.first {
                 contact.jobPosition = jobPosition
-                self.appDelegate.saveContext()
+                try self.context.save()
             }
         } catch {
             print("Error fetching or updating contact: \(error.localizedDescription)")
@@ -101,11 +101,11 @@ final class CoreDataService {
     // Delete all contacts
     func deleteAllContacts() {
         do {
-            let contacts = try self.db.fetch(self.fetchRequest)
+            let contacts = try self.self.context.fetch(self.fetchRequest)
             contacts.forEach({ (contact: Contact) -> Void in
-                self.db.delete(contact)
+                self.self.context.delete(contact)
             })
-            self.appDelegate.saveContext()
+            try self.context.save()
         } catch {
             print("Error fetching contacts: \(error.localizedDescription)")
         }
@@ -117,10 +117,10 @@ final class CoreDataService {
         self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
         do {
-            let contacts = try self.db.fetch(self.fetchRequest)
+            let contacts = try self.context.fetch(self.fetchRequest)
             if let contact = contacts.first {
-                self.db.delete(contact)
-                self.appDelegate.saveContext()
+                self.context.delete(contact)
+                try context.save()
             } else {
                 print("Contact does not exist")
             }
@@ -135,7 +135,7 @@ final class CoreDataService {
         self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
         do {
-            let contacts = try self.db.fetch(self.fetchRequest)
+            let contacts = try self.context.fetch(self.fetchRequest)
             if !contacts.isEmpty {
                 return true
             }
