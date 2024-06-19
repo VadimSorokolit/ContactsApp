@@ -20,15 +20,15 @@ class CoreDataService {
     }
     private let fetchRequest = Contact.fetchRequest()
     
-    // Default initializer
+    // MARK: - Initializers
+    
     init() {
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         self.persistentContainer = appDelegate?.persistentContainer
     }
     
-    // For tests initializer
-    init(pc: NSPersistentContainer!) {
-        self.persistentContainer = pc
+    init(persistentContainer: NSPersistentContainer!) {
+        self.persistentContainer = persistentContainer
     }
     
     // MARK: - Methods
@@ -77,9 +77,9 @@ class CoreDataService {
         contact.photo = photo
         do {
             try self.context.save()
-         } catch {
-             print("Failed to save the contact: \(error.localizedDescription)")
-         }
+        } catch {
+            print("Failed to save the contact: \(error.localizedDescription)")
+        }
     }
     
     // Update contact
