@@ -57,9 +57,10 @@ class ContactsAppTests: XCTestCase {
     }
     
     func test_FetchContact() {
+        self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
         let contact = self.coreDataService.fetchContact(byEmail: self.testEmail)
         
-        XCTAssertEqual(contact?.email, nil)
+        XCTAssertEqual(contact?.email, self.testEmail)
     }
     
     func test_CreateContact() {
@@ -79,18 +80,18 @@ class ContactsAppTests: XCTestCase {
         XCTAssertNotEqual(contact?.jobPosition, self.testJobPosition)
     }
     
+    func test_DeleteContact() {
+        self.coreDataService.deleteContact(byEmail: self.testEmail)
+        let contact = self.coreDataService.fetchContact(byEmail: self.testEmail)
+        
+        XCTAssertEqual(contact, nil)
+    }
+    
     func test_DeleteAllContacts() {
         self.coreDataService.deleteAllContacts()
         let contacts = self.coreDataService.fetchContacts()
         
         XCTAssertTrue(contacts.isEmpty)
-    }
-    
-    func test_DeleteContact() {
-        self.coreDataService.deleteContact(byEmail: self.testEmail)
-        let contact = self.coreDataService.fetchContact(byEmail: self.testEmail)
-        
-        XCTAssertEqual(contact?.email, nil)
     }
     
 }
