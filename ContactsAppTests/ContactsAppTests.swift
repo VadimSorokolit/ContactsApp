@@ -79,7 +79,7 @@ class ContactsAppTests: XCTestCase {
         XCTAssertNotEqual(contact?.jobPosition, self.testJobPosition)
     }
     
-    func test_DelteAllContacts() {
+    func test_DeleteAllContacts() {
         self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
         self.coreDataService.deleteAllContacts()
         let contacts = self.coreDataService.fetchContacts()
