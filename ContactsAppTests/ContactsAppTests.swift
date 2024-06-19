@@ -41,20 +41,20 @@ class ContactsAppTests: XCTestCase {
     }
     
     func test_FetchContacts() {
-        let contacts = clientsService.fetchContacts()
+        let contacts = self.clientsService.fetchContacts()
         let firstContact = contacts.first
         XCTAssertNil(firstContact)
         XCTAssertEqual(contacts.count, 0, "Expected no contacts initially")
     }
     
     func test_FetchContact() {
-        let contact = clientsService.fetchContact(byEmail: self.email)
+        let contact = self.clientsService.fetchContact(byEmail: self.email)
         XCTAssertNil(contact)
     }
     
     func test_CreateContact() {
-        clientsService.createContact(fullName: self.fullName, jobPosition: self.jobPosition, email: self.email, photo: nil)
-        let contact = clientsService.fetchContact(byEmail: self.email)
+        self.clientsService.createContact(fullName: self.fullName, jobPosition: self.jobPosition, email: self.email, photo: self.photo)
+        let contact = self.clientsService.fetchContact(byEmail: self.email)
                 XCTAssertNotNil(contact, "Expected to find the contact after adding")
         XCTAssertEqual(contact?.email, self.email, "Fetched contact's email should match the provided email")
         XCTAssertEqual(contact?.fullName, self.fullName, "Fetched contact's full name should match the provided full name")
@@ -62,23 +62,23 @@ class ContactsAppTests: XCTestCase {
     }
     
     func test_UpdateContact() {
-        clientsService.updateContact(byEmail: self.email, jobPosition: "Developer")
-        let contact = clientsService.fetchContact(byEmail: self.email)
+        self.clientsService.updateContact(byEmail: self.email, jobPosition: "Developer")
+        let contact = self.clientsService.fetchContact(byEmail: self.email)
         XCTAssertNotEqual(contact?.jobPosition, self.jobPosition, "Fetched contact's job position should not match the provided job position")
     }
     
     func test_DelteAllContacts() {
-        clientsService.createContact(fullName: self.fullName, jobPosition: self.jobPosition, email: self.email, photo: nil)
-        clientsService.deleteAllContacts()
-        let contacts = clientsService.fetchContacts()
+        self.clientsService.createContact(fullName: self.fullName, jobPosition: self.jobPosition, email: self.email, photo: nil)
+        self.clientsService.deleteAllContacts()
+        let contacts = self.clientsService.fetchContacts()
         XCTAssertTrue(contacts.isEmpty, "Expected all contacts to be deleted")
     }
     
     func test_DeleteContact() {
-        clientsService.createContact(fullName: self.fullName, jobPosition: self.jobPosition, email: self.email, photo: nil)
-        clientsService.createContact(fullName: self.fullName, jobPosition: self.jobPosition, email: "macintosh@ukr.net", photo: nil)
-        clientsService.deleteContact(byEmail: self.email)
-        let contact = clientsService.fetchContact(byEmail: self.email)
+        self.clientsService.createContact(fullName: self.fullName, jobPosition: self.jobPosition, email: self.email, photo: nil)
+        self.clientsService.createContact(fullName: self.fullName, jobPosition: self.jobPosition, email: "macintosh@ukr.net", photo: nil)
+        self.clientsService.deleteContact(byEmail: self.email)
+        let contact = self.clientsService.fetchContact(byEmail: self.email)
         XCTAssertNil(contact, "Expected the contact to be deleted")
     }
     
