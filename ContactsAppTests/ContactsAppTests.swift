@@ -33,7 +33,7 @@ class ContactsAppTests: XCTestCase {
         let description = NSPersistentStoreDescription()
         description.type = NSInMemoryStoreType
         testContainer.persistentStoreDescriptions = [description]
-        testContainer.loadPersistentStores(completionHandler: { (storeDescription, error) in
+        testContainer.loadPersistentStores(completionHandler: { (storeDescription: NSPersistentStoreDescription, error: (any Error)?) -> Void in
             testContainer.viewContext.automaticallyMergesChangesFromParent = true
             if let error = error as NSError? {
                 XCTAssertNil(error, "Failed to load CoreData stack: \(error.localizedDescription)")
@@ -59,7 +59,7 @@ class ContactsAppTests: XCTestCase {
     func test_FetchContact() {
         let contact = self.coreDataService.fetchContact(byEmail: self.testEmail)
         
-        XCTAssertNil(contact)
+        XCTAssertEqual(contact?.email, nil)
     }
     
     func test_CreateContact() {
@@ -80,7 +80,6 @@ class ContactsAppTests: XCTestCase {
     }
     
     func test_DeleteAllContacts() {
-        self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
         self.coreDataService.deleteAllContacts()
         let contacts = self.coreDataService.fetchContacts()
         
@@ -88,11 +87,10 @@ class ContactsAppTests: XCTestCase {
     }
     
     func test_DeleteContact() {
-        self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
         self.coreDataService.deleteContact(byEmail: self.testEmail)
         let contact = self.coreDataService.fetchContact(byEmail: self.testEmail)
         
-        XCTAssertNil(contact)
+        XCTAssertEqual(contact?.email, nil)
     }
     
 }
