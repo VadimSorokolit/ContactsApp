@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import CoreData
 
-final class CoreDataService {
+class CoreDataService {
     
     // MARK: - Properties
     
@@ -27,7 +27,7 @@ final class CoreDataService {
     }
     
     // For tests initializer
-    init(pc: NSPersistentContainer) {
+    init(pc: NSPersistentContainer!) {
         self.persistentContainer = pc
     }
     
