@@ -27,11 +27,23 @@ class ContactsViewModel {
         }
     }
     
+    private func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) {
+        do {
+            if let contact = try self.coreDataService.createContact(fullName: fullName, jobPosition: jobPosition, email: email, photo: photo) {
+                self.contacts.append(contact)
+                self.notify(name: .contactCreatedNotification)
+            }
+        } catch {
+            self.notify(name: .errorNotification, error: error.localizedDescription)
+        }
+    }
+    
     private func updateContact(byEmail email: String, jobPosition: String) {
         do {
             if let updatedContact = try self.coreDataService.updateContact(byEmail: email, jobPosition: jobPosition) {
                 if let index = self.contacts.firstIndex(where: { $0.email == email }) {
                     self.contacts[index] = updatedContact
+                    self.notify(name: .contactUpdatedNotification)
                 }
             }
         } catch {
@@ -39,24 +51,13 @@ class ContactsViewModel {
         }
     }
     
-    private func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) {
-        do {
-            if let contact = try self.coreDataService.createContact(fullName: fullName, jobPosition: jobPosition, email: email, photo: photo) {
-                self.contacts.append(contact)
-                notify(name: .contactCreatedNotification)
-            }
-        } catch {
-            self.notify(name: .errorNotification, error: error.localizedDescription)
-        }
-    }
-
     private func deleteContact(byEmail email: String) {
         do {
             if let contact = try self.self.coreDataService.deleteContact(byEmail: email) {
                 if let index = self.contacts.firstIndex(of: contact) {
                     self.contacts.remove(at: index)
+                    self.notify(name: .contactDeletedNotification)
                 }
-                self.notify(name: .contactDeletedNotification)
             }
         } catch {
             self.notify(name: .errorNotification, error: error.localizedDescription)
@@ -64,7 +65,11 @@ class ContactsViewModel {
     }
     
     private func notify(name: Notification.Name, error: String? = nil) {
-        NotificationCenter.default.post(name: name, object: nil)
+        var userInfo: [AnyHashable: Any]? = nil
+        if let error = error {
+            userInfo = ["error": error]
+        }
+        NotificationCenter.default.post(name: name, object: nil, userInfo: userInfo)
     }
     
 }
