@@ -27,7 +27,7 @@ class CoreDataService {
         self.persistentContainer = appDelegate?.persistentContainer
     }
     
-    init(persistentContainer: NSPersistentContainer!) {
+    init(persistentContainer: NSPersistentContainer) {
         self.persistentContainer = persistentContainer
     }
     
