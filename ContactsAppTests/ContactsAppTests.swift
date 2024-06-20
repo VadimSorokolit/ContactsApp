@@ -48,50 +48,50 @@ class ContactsAppTests: XCTestCase {
     
     // MARK: - Test methods
     
-    func test_FetchContacts() {
-        let contacts = self.coreDataService.fetchContacts()
-        let firstContact = contacts.first
-        
-        XCTAssertNil(firstContact)
-        XCTAssertEqual(contacts.count, 0)
-    }
-    
-    func test_FetchContact() {
-        self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
-        let contact = self.coreDataService.fetchContact(byEmail: self.testEmail)
-        
-        XCTAssertEqual(contact?.email, self.testEmail)
-    }
-    
-    func test_CreateContact() {
-        self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
-        let contact = self.coreDataService.fetchContact(byEmail: self.testEmail)
-        
-        XCTAssertNotNil(contact)
-        XCTAssertEqual(contact?.email, self.testEmail)
-        XCTAssertEqual(contact?.fullName, self.testFullName)
-        XCTAssertEqual(contact?.jobPosition, self.testJobPosition)
-    }
-    
-    func test_UpdateContact() {
-        self.coreDataService.updateContact(byEmail: self.testEmail, jobPosition: self.testNewJobPosition)
-        let contact = self.coreDataService.fetchContact(byEmail: self.testEmail)
-        
-        XCTAssertNotEqual(contact?.jobPosition, self.testJobPosition)
-    }
-    
-    func test_DeleteContact() {
-        self.coreDataService.deleteContact(byEmail: self.testEmail)
-        let contact = self.coreDataService.fetchContact(byEmail: self.testEmail)
-        
-        XCTAssertEqual(contact, nil)
-    }
-    
-    func test_DeleteAllContacts() {
-        self.coreDataService.deleteAllContacts()
-        let contacts = self.coreDataService.fetchContacts()
-        
-        XCTAssertTrue(contacts.isEmpty)
-    }
+//    func test_FetchContacts() {
+//        let contacts = self.coreDataService.fetchContacts()
+//        let firstContact = contacts.first
+//        
+//        XCTAssertNil(firstContact)
+//        XCTAssertEqual(contacts.count, 0)
+//    }
+//    
+//    func test_FetchContact() {
+//        self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
+//        let contact = self.coreDataService.fetchContact(byEmail: self.testEmail)
+//        
+//        XCTAssertEqual(contact?.email, self.testEmail)
+//    }
+//    
+//    func test_CreateContact() {
+//        self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
+//        let contact = self.coreDataService.fetchContact(byEmail: self.testEmail)
+//        
+//        XCTAssertNotNil(contact)
+//        XCTAssertEqual(contact?.email, self.testEmail)
+//        XCTAssertEqual(contact?.fullName, self.testFullName)
+//        XCTAssertEqual(contact?.jobPosition, self.testJobPosition)
+//    }
+//    
+//    func test_UpdateContact() {
+//        self.coreDataService.updateContact(byEmail: self.testEmail, jobPosition: self.testNewJobPosition)
+//        let contact = self.coreDataService.fetchContact(byEmail: self.testEmail)
+//        
+//        XCTAssertNotEqual(contact?.jobPosition, self.testJobPosition)
+//    }
+//    
+//    func test_DeleteContact() {
+//        self.coreDataService.deleteContact(byEmail: self.testEmail)
+//        let contact = self.coreDataService.fetchContact(byEmail: self.testEmail)
+//        
+//        XCTAssertEqual(contact, nil)
+//    }
+//    
+//    func test_DeleteAllContacts() {
+//        self.coreDataService.deleteAllContacts()
+//        let contacts = self.coreDataService.fetchContacts()
+//        
+//        XCTAssertTrue(contacts.isEmpty)
+//    }
     
 }

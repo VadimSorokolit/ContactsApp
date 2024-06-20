@@ -16,35 +16,56 @@ class ContactsViewModel {
     
     // MARK: - Methods
     
-    func fetchContacts() -> [Contact] {
-        let contacts = self.coreDataService.fetchContacts()
-        NotificationCenter.default.post(name: .contactsFetchedNotification, object: nil)
-        return contacts
+    private func fetchContacts() -> [Contact] {
+        do {
+            let contacts = try self.coreDataService.fetchContacts()
+            notify(name: .contactsFetchedNotification)
+            return contacts
+        } catch {
+            notifyError(error: error.localizedDescription)
+            return []
+        }
     }
     
-    func fetchContact(byEmail email: String) -> Contact? {
-        let contact = self.coreDataService.fetchContact(byEmail: email)
-        if contact != nil {
-            NotificationCenter.default.post(name: .contactFetchedNotification, object: nil)
+    private func fetchContact(byEmail email: String) -> Contact? {
+        do {
+            let contact = try self.coreDataService.fetchContact(byEmail: email)
+            if contact != nil {
+                notify(name: .contactFetchedNotification)
+            }
+            return contact
+        } catch {
+            notifyError(error: error.localizedDescription)
+            return nil
         }
-        return contact
     }
     
     private func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) {
-        self.coreDataService.createContact(fullName: fullName, jobPosition: jobPosition, email: email, photo: photo)
-        NotificationCenter.default.post(name: .contactCreatedNotification, object: nil)
+        do {
+            try self.coreDataService.updateContact(byEmail: email, jobPosition: jobPosition)
+            notify(name: .contactUpdatedNotification)
+        } catch {
+            notifyError(error: error.localizedDescription)
+        }
     }
-    
-    private func updateContact(byEmail email: String, jobPostion: String) {
-        self.coreDataService.updateContact(byEmail: email, jobPosition: jobPostion)
-        NotificationCenter.default.post(name: .contactUpdatedNotification, object: nil)
-    }
-    
+
     private func deleteContact(byEmail email: String) {
-        self.coreDataService.deleteContact(byEmail: email)
-        NotificationCenter.default.post(name: .contactDeletedNotification, object: nil)
+        do {
+            try self.coreDataService.deleteContact(byEmail: email)
+            notify(name: .contactDeletedNotification)
+        } catch {
+            notifyError(error: error.localizedDescription)
+        }
     }
     
+    private func notify(name: Notification.Name) {
+        NotificationCenter.default.post(name: name, object: nil)
+    }
+    
+    private func notifyError(error: String) {
+        NotificationCenter.default.post(name: .errorNotification, object: error)
+    }
+
 }
 
 extension Notification.Name {
@@ -54,6 +75,7 @@ extension Notification.Name {
     static let contactCreatedNotification = Notification.Name("contactCreatedNotification")
     static let contactUpdatedNotification = Notification.Name("contactUpdatedNotification")
     static let contactDeletedNotification = Notification.Name("contactDeletedNotification")
+    static let errorNotification = Notification.Name("errorNotification")
     
 }
 

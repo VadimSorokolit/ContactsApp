@@ -34,7 +34,7 @@ class CoreDataService {
     // MARK: - Methods
     
     // Fetch contacts
-    func fetchContacts() -> [Contact] {
+    func fetchContacts() throws -> [Contact] {
         do {
             let contacts = try self.context.fetch(self.fetchRequest)
             if !contacts.isEmpty {
@@ -45,13 +45,12 @@ class CoreDataService {
             }
         }
         catch {
-            print("Error fetching contacts: \(error.localizedDescription)")
-            return []
+            throw error
         }
     }
     
     // Fetch contact by email
-    func fetchContact(byEmail email: String) -> Contact? {
+    func fetchContact(byEmail email: String) throws -> Contact? {
         let predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
@@ -60,14 +59,13 @@ class CoreDataService {
             let contact = contacts.first
             return contact
         } catch {
-            print("Error fetching contact by email: \(error.localizedDescription)")
-            return nil
+            throw error
         }
     }
     
     // Create contact
-    func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) {
-        if self.isContactExist(byEmail: email) {
+    func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) throws {
+        if try self.isContactExist(byEmail: email) {
             return
         }
         let contact = Contact(context: self.context)
@@ -78,12 +76,12 @@ class CoreDataService {
         do {
             try self.context.save()
         } catch {
-            print("Failed to save the contact: \(error.localizedDescription)")
+            throw error
         }
     }
     
     // Update contact
-    func updateContact(byEmail email: String, jobPosition: String) {
+    func updateContact(byEmail email: String, jobPosition: String) throws {
         let predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
@@ -94,12 +92,12 @@ class CoreDataService {
                 try self.context.save()
             }
         } catch {
-            print("Error fetching or updating contact: \(error.localizedDescription)")
+            throw error
         }
     }
     
     // Delete all contacts
-    func deleteAllContacts() {
+    func deleteAllContacts() throws {
         do {
             let contacts = try self.self.context.fetch(self.fetchRequest)
             contacts.forEach({ (contact: Contact) -> Void in
@@ -107,12 +105,12 @@ class CoreDataService {
             })
             try self.context.save()
         } catch {
-            print("Error fetching contacts: \(error.localizedDescription)")
+            throw error
         }
     }
     
     // Delete contact by email
-    func deleteContact(byEmail email: String) {
+    func deleteContact(byEmail email: String) throws {
         let predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
@@ -125,12 +123,12 @@ class CoreDataService {
                 print("Contact does not exist")
             }
         } catch {
-            print("Error fetching or deleting contact: \(error.localizedDescription)")
+            throw error
         }
     }
     
     // Check contact by email
-    func isContactExist(byEmail email: String) -> Bool {
+    func isContactExist(byEmail email: String) throws -> Bool {
         let predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
@@ -140,7 +138,7 @@ class CoreDataService {
                 return true
             }
         } catch {
-            print("Error fetching contact by email: \(error.localizedDescription)")
+            throw error
         }
         return false
     }
