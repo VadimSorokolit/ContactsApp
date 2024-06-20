@@ -29,8 +29,8 @@ class ContactsViewModel {
     
     private func updateContact(byEmail email: String, jobPosition: String) {
         do {
-            if let updatedContact = try coreDataService.fetchContact(byEmail: email) {
-                if let index = contacts.firstIndex(where: { $0.email == email }) {
+            if let updatedContact = try self.coreDataService.updateContact(byEmail: email, jobPosition: jobPosition) {
+                if let index = self.contacts.firstIndex(where: { $0.email == email }) {
                     self.contacts[index] = updatedContact
                 }
             }
@@ -41,7 +41,7 @@ class ContactsViewModel {
     
     private func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) {
         do {
-            if let contact = try coreDataService.createContact(fullName: fullName, jobPosition: jobPosition, email: email, photo: photo) {
+            if let contact = try self.coreDataService.createContact(fullName: fullName, jobPosition: jobPosition, email: email, photo: photo) {
                 self.contacts.append(contact)
                 notify(name: .contactCreatedNotification)
             }
@@ -52,7 +52,7 @@ class ContactsViewModel {
 
     private func deleteContact(byEmail email: String) {
         do {
-            if let contact = try self.coreDataService.deleteContact(byEmail: email) {
+            if let contact = try self.self.coreDataService.deleteContact(byEmail: email) {
                 if let index = self.contacts.firstIndex(of: contact) {
                     self.contacts.remove(at: index)
                 }
