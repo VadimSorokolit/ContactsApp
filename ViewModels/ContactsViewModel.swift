@@ -32,6 +32,10 @@ class ContactsViewModel {
         self.coreDataService.updateContact(byEmail: email, jobPosition: jobPostion)
     }
     
+    private func deleteContact(byEmail email: String) {
+        self.coreDataService.deleteContact(byEmail: email)
+    }
+    
 }
 
 
