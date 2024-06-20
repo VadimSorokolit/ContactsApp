@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DD09348C2C245FE300FD84FF /* ContactsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD09348B2C245FE300FD84FF /* ContactsViewModel.swift */; };
 		DD0991202C1A36DF009DEBA0 /* ContactsApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DD09911E2C1A36DF009DEBA0 /* ContactsApp.xcdatamodeld */; };
 		DD0991232C1A37F0009DEBA0 /* Contact+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0991212C1A37F0009DEBA0 /* Contact+CoreDataClass.swift */; };
 		DD0991242C1A37F0009DEBA0 /* Contact+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0991222C1A37F0009DEBA0 /* Contact+CoreDataProperties.swift */; };
@@ -40,6 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DD09348B2C245FE300FD84FF /* ContactsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewModel.swift; sourceTree = "<group>"; };
 		DD09911F2C1A36DF009DEBA0 /* ContactsApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ContactsApp.xcdatamodel; sourceTree = "<group>"; };
 		DD0991212C1A37F0009DEBA0 /* Contact+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Contact+CoreDataClass.swift"; sourceTree = "<group>"; };
 		DD0991222C1A37F0009DEBA0 /* Contact+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Contact+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -84,12 +86,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DD09348D2C245FF700FD84FF /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				DD09348B2C245FE300FD84FF /* ContactsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		DD12233D2C10CF9300A5C93B = {
 			isa = PBXGroup;
 			children = (
 				DD72B98E2C18CD9F003FBB46 /* Services */,
 				DD0991212C1A37F0009DEBA0 /* Contact+CoreDataClass.swift */,
 				DD0991222C1A37F0009DEBA0 /* Contact+CoreDataProperties.swift */,
+				DD09348D2C245FF700FD84FF /* ViewModels */,
 				DD1223482C10CF9300A5C93B /* ContactsApp */,
 				DD1223622C10CF9500A5C93B /* ContactsAppTests */,
 				DD12236C2C10CF9500A5C93B /* ContactsAppUITests */,
@@ -283,6 +294,7 @@
 				DD0991232C1A37F0009DEBA0 /* Contact+CoreDataClass.swift in Sources */,
 				DD0991242C1A37F0009DEBA0 /* Contact+CoreDataProperties.swift in Sources */,
 				DD12234E2C10CF9300A5C93B /* ViewController.swift in Sources */,
+				DD09348C2C245FE300FD84FF /* ContactsViewModel.swift in Sources */,
 				DD12234A2C10CF9300A5C93B /* AppDelegate.swift in Sources */,
 				DD12234C2C10CF9300A5C93B /* SceneDelegate.swift in Sources */,
 			);
