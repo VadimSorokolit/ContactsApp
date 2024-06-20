@@ -2,7 +2,7 @@
 //  ContactsViewModel.swift
 //  ContactsApp
 //
-//  Created by Vadym Sorokolit on 20.06.2024.
+//  Created by Vadim Sorokolit on 20.06.2024.
 //
 
 import Foundation
@@ -12,71 +12,63 @@ class ContactsViewModel {
     
     // MARK: - Properties
     
-    private let coreDataService = CoreDataService()
+    private let coreDataService: CoreDataService = CoreDataService()
+    private var contacts: [Contact] = []
     
     // MARK: - Methods
     
-    private func fetchContacts() -> [Contact] {
+    private func fetchContacts() {
         do {
             let contacts = try self.coreDataService.fetchContacts()
-            notify(name: .contactsFetchedNotification)
-            return contacts
+            self.contacts = contacts
+            self.notify(name: .contactsFetchedNotification)
         } catch {
-            notifyError(error: error.localizedDescription)
-            return []
+            self.notify(name: .errorNotification, error: error.localizedDescription)
         }
     }
     
-    private func fetchContact(byEmail email: String) -> Contact? {
+    private func updateContact(byEmail email: String, jobPosition: String) {
         do {
-            let contact = try self.coreDataService.fetchContact(byEmail: email)
-            if contact != nil {
-                notify(name: .contactFetchedNotification)
+            if let updatedContact = try coreDataService.fetchContact(byEmail: email) {
+                if let index = contacts.firstIndex(where: { $0.email == email }) {
+                    self.contacts[index] = updatedContact
+                }
             }
-            return contact
         } catch {
-            notifyError(error: error.localizedDescription)
-            return nil
+            self.notify(name: .errorNotification, error: error.localizedDescription)
         }
     }
     
     private func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) {
         do {
-            try self.coreDataService.updateContact(byEmail: email, jobPosition: jobPosition)
-            notify(name: .contactUpdatedNotification)
+            if let contact = try coreDataService.createContact(fullName: fullName, jobPosition: jobPosition, email: email, photo: photo) {
+                self.contacts.append(contact)
+                notify(name: .contactCreatedNotification)
+            }
         } catch {
-            notifyError(error: error.localizedDescription)
+            self.notify(name: .errorNotification, error: error.localizedDescription)
         }
     }
 
     private func deleteContact(byEmail email: String) {
         do {
-            try self.coreDataService.deleteContact(byEmail: email)
-            notify(name: .contactDeletedNotification)
+            if let contact = try self.coreDataService.deleteContact(byEmail: email) {
+                if let index = self.contacts.firstIndex(of: contact) {
+                    self.contacts.remove(at: index)
+                }
+                self.notify(name: .contactDeletedNotification)
+            }
         } catch {
-            notifyError(error: error.localizedDescription)
+            self.notify(name: .errorNotification, error: error.localizedDescription)
         }
     }
     
-    private func notify(name: Notification.Name) {
+    private func notify(name: Notification.Name, error: String? = nil) {
         NotificationCenter.default.post(name: name, object: nil)
     }
     
-    private func notifyError(error: String) {
-        NotificationCenter.default.post(name: .errorNotification, object: error)
-    }
-
 }
 
-extension Notification.Name {
-    
-    static let contactsFetchedNotification = Notification.Name("contactsFetchedNotification")
-    static let contactFetchedNotification = Notification.Name("contactFetchedNotification")
-    static let contactCreatedNotification = Notification.Name("contactCreatedNotification")
-    static let contactUpdatedNotification = Notification.Name("contactUpdatedNotification")
-    static let contactDeletedNotification = Notification.Name("contactDeletedNotification")
-    static let errorNotification = Notification.Name("errorNotification")
-    
-}
+
 
 

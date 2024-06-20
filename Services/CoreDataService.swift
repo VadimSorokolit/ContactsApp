@@ -2,7 +2,7 @@
 //  CoreDataService.swift
 //  ContactsApp
 //
-//  Created by Vadym Sorokolit on 12.06.2024.
+//  Created by Vadim Sorokolit on 12.06.2024.
 //
 
 import Foundation
@@ -64,9 +64,9 @@ class CoreDataService {
     }
     
     // Create contact
-    func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) throws {
+    func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) throws -> Contact? {
         if try self.isContactExist(byEmail: email) {
-            return
+            return nil
         }
         let contact = Contact(context: self.context)
         contact.fullName = fullName
@@ -75,13 +75,14 @@ class CoreDataService {
         contact.photo = photo
         do {
             try self.context.save()
+            return contact
         } catch {
             throw error
         }
     }
     
     // Update contact
-    func updateContact(byEmail email: String, jobPosition: String) throws {
+    func updateContact(byEmail email: String, jobPosition: String) throws -> Contact? {
         let predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
@@ -90,10 +91,12 @@ class CoreDataService {
             if let contact = contacts.first {
                 contact.jobPosition = jobPosition
                 try self.context.save()
+                return contact
             }
         } catch {
             throw error
         }
+        return nil
     }
     
     // Delete all contacts
@@ -110,7 +113,7 @@ class CoreDataService {
     }
     
     // Delete contact by email
-    func deleteContact(byEmail email: String) throws {
+    func deleteContact(byEmail email: String) throws -> Contact? {
         let predicate = NSPredicate(format: "email == %@", email)
         self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
@@ -119,12 +122,14 @@ class CoreDataService {
             if let contact = contacts.first {
                 self.context.delete(contact)
                 try context.save()
+                return contact
             } else {
                 print("Contact does not exist")
             }
         } catch {
             throw error
         }
+        return nil
     }
     
     // Check contact by email
