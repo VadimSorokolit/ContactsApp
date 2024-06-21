@@ -65,7 +65,7 @@ class ContactsViewModel {
     }
     
     private func notify(name: Notification.Name, error: String? = nil) {
-        var userInfo: [AnyHashable: Any]? = nil
+        var userInfo: [String: String]? = nil
         if let error = error {
             userInfo = ["error": error]
         }
