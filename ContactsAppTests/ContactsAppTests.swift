@@ -91,7 +91,7 @@ class ContactsAppTests: XCTestCase {
     
     func test_UpdateContact() {
         do {
-            let createdContact = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
+            _ = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
             let contact = try self.coreDataService.updateContact(byEmail: self.testEmail, jobPosition: self.testNewJobPosition)
             
             XCTAssertEqual(contact?.jobPosition, self.testNewJobPosition)
@@ -104,8 +104,8 @@ class ContactsAppTests: XCTestCase {
     
     func test_DeleteContact() {
         do {
-            let createdContact = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
-            let deletedContact = try self.coreDataService.deleteContact(byEmail: self.testEmail)
+            _ = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
+            _ = try self.coreDataService.deleteContact(byEmail: self.testEmail)
             let contact = try self.coreDataService.fetchContact(byEmail: self.testEmail)
             
             XCTAssertEqual(contact, nil)
@@ -118,7 +118,7 @@ class ContactsAppTests: XCTestCase {
     
     func test_DeleteAllContacts() {
         do {
-            let createdContact = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
+            _ = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
             try self.coreDataService.deleteAllContacts()
             let contacts = try self.coreDataService.fetchContacts()
             
