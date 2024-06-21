@@ -87,7 +87,7 @@ class CoreDataService {
         self.fetchRequest.predicate = predicate
         self.fetchRequest.fetchLimit = 1
         do {
-            let contacts = try self.self.context.fetch(self.fetchRequest)
+            let contacts = try self.context.fetch(self.fetchRequest)
             if let contact = contacts.first {
                 contact.jobPosition = jobPosition
                 try self.context.save()
@@ -102,9 +102,9 @@ class CoreDataService {
     // Delete all contacts
     func deleteAllContacts() throws {
         do {
-            let contacts = try self.self.context.fetch(self.fetchRequest)
+            let contacts = try self.context.fetch(self.fetchRequest)
             contacts.forEach({ (contact: Contact) -> Void in
-                self.self.context.delete(contact)
+                self.context.delete(contact)
             })
             try self.context.save()
         } catch {

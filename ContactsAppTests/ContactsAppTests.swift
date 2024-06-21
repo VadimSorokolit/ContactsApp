@@ -48,50 +48,86 @@ class ContactsAppTests: XCTestCase {
     
     // MARK: - Test methods
     
-//    func test_FetchContacts() {
-//        let contacts = self.coreDataService.fetchContacts()
-//        let firstContact = contacts.first
-//        
-//        XCTAssertNil(firstContact)
-//        XCTAssertEqual(contacts.count, 0)
-//    }
-//    
-//    func test_FetchContact() {
-//        self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
-//        let contact = self.coreDataService.fetchContact(byEmail: self.testEmail)
-//        
-//        XCTAssertEqual(contact?.email, self.testEmail)
-//    }
-//    
-//    func test_CreateContact() {
-//        self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
-//        let contact = self.coreDataService.fetchContact(byEmail: self.testEmail)
-//        
-//        XCTAssertNotNil(contact)
-//        XCTAssertEqual(contact?.email, self.testEmail)
-//        XCTAssertEqual(contact?.fullName, self.testFullName)
-//        XCTAssertEqual(contact?.jobPosition, self.testJobPosition)
-//    }
-//    
-//    func test_UpdateContact() {
-//        self.coreDataService.updateContact(byEmail: self.testEmail, jobPosition: self.testNewJobPosition)
-//        let contact = self.coreDataService.fetchContact(byEmail: self.testEmail)
-//        
-//        XCTAssertNotEqual(contact?.jobPosition, self.testJobPosition)
-//    }
-//    
-//    func test_DeleteContact() {
-//        self.coreDataService.deleteContact(byEmail: self.testEmail)
-//        let contact = self.coreDataService.fetchContact(byEmail: self.testEmail)
-//        
-//        XCTAssertEqual(contact, nil)
-//    }
-//    
-//    func test_DeleteAllContacts() {
-//        self.coreDataService.deleteAllContacts()
-//        let contacts = self.coreDataService.fetchContacts()
-//        
-//        XCTAssertTrue(contacts.isEmpty)
-//    }
+    func test_FetchContacts() {
+        do {
+            let contacts = try self.coreDataService.fetchContacts()
+            let firstContact = contacts.first
+            
+            XCTAssertNil(firstContact)
+            XCTAssertEqual(contacts.count, 0)
+        } catch {
+            let error = error
+            
+            XCTAssertThrowsError(error)
+        }
+    }
+
+    func test_FetchContact() {
+        do {
+            let contact = try self.coreDataService.fetchContact(byEmail: self.testEmail)
+            
+            XCTAssertNotEqual(contact?.email, self.testEmail)
+        } catch {
+            let error = error
+            
+            XCTAssertThrowsError(error)
+        }
+    }
+
+    func test_CreateContact() {
+        do {
+            let contact = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
+            
+            XCTAssertNotNil(contact)
+            XCTAssertEqual(contact?.email, self.testEmail)
+            XCTAssertEqual(contact?.fullName, self.testFullName)
+            XCTAssertEqual(contact?.jobPosition, self.testJobPosition)
+        } catch {
+            let error = error
+            
+            XCTAssertThrowsError(error)
+        }
+    }
+    
+    func test_UpdateContact() {
+        do {
+            let createdContact = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
+            let contact = try self.coreDataService.updateContact(byEmail: self.testEmail, jobPosition: self.testNewJobPosition)
+            
+            XCTAssertEqual(contact?.jobPosition, self.testNewJobPosition)
+        } catch {
+            let error = error
+            
+            XCTAssertThrowsError(error)
+        }
+    }
+    
+    func test_DeleteContact() {
+        do {
+            let createdContact = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
+            let deletedContact = try self.coreDataService.deleteContact(byEmail: self.testEmail)
+            let contact = try self.coreDataService.fetchContact(byEmail: self.testEmail)
+            
+            XCTAssertEqual(contact, nil)
+        } catch {
+            let error = error
+            
+            XCTAssertThrowsError(error)
+        }
+    }
+    
+    func test_DeleteAllContacts() {
+        do {
+            let createdContact = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
+            try self.coreDataService.deleteAllContacts()
+            let contacts = try self.coreDataService.fetchContacts()
+            
+            XCTAssertTrue(contacts.isEmpty)
+        } catch {
+            let error = error
+            
+            XCTAssertThrowsError(error)
+        }
+    }
     
 }
