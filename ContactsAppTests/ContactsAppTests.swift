@@ -16,6 +16,7 @@ class ContactsAppTests: XCTestCase {
     private var coreDataService: CoreDataService!
     
     private var testFullName: String = "Vadim Sorokolit"
+    private var testNewFullName: String = "Alex Sorokolit"
     private var testJobPosition: String = "iOS Developer"
     private var testNewJobPosition: String = "Developer"
     private var testEmail: String = "macintosh@email.ua"
@@ -81,6 +82,21 @@ class ContactsAppTests: XCTestCase {
                 XCTAssertEqual(fetchedContact, createdContact)
             }
         } catch {
+            XCTAssertThrowsError(error)
+        }
+    }
+    
+    func test_FetchContactByPredicates() {
+        do {
+            let createdContact = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
+            let createdContact1 = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testNewJobPosition, email: self.testEmail, photo: self.testPhoto)
+            let createdContact2 = try self.coreDataService.createContact(fullName: self.testNewFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
+            let fetchedContactsByPredicates = try self.coreDataService.fetchContacts(byEmail: nil, jobPosition: self.testJobPosition)
+            
+            XCTAssertFalse(fetchedContactsByPredicates.isEmpty)
+            XCTAssertEqual(fetchedContactsByPredicates.count, 1)
+        }
+        catch {
             XCTAssertThrowsError(error)
         }
     }

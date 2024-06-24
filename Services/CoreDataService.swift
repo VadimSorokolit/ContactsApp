@@ -63,6 +63,26 @@ class CoreDataService {
         }
     }
     
+    func fetchContacts(byEmail email: String?, jobPosition: String?) throws -> [Contact] {
+        var predicates: [NSPredicate] = []
+        if let email = email {
+            let emailPredicate = NSPredicate(format: "email == %@", email)
+            predicates.append(emailPredicate)
+        }
+        if let jobPosition = jobPosition {
+            let jobPositionPredicate = NSPredicate(format: "jobPosition == %@", jobPosition)
+            predicates.append(jobPositionPredicate)
+        }
+        let compoundPredicate = NSCompoundPredicate(type: .and, subpredicates: predicates)
+        self.fetchRequest.predicate = compoundPredicate
+        do {
+            let fetchedContactsByPredicates = try self.context.fetch(fetchRequest)
+            return fetchedContactsByPredicates
+        } catch {
+            throw error
+        }
+    }
+    
     // Create contact
     func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) throws -> Contact? {
         if try self.isContactExist(byEmail: email) {

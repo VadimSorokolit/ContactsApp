@@ -26,7 +26,7 @@ class ContactsViewModel {
             self.notify(name: .errorNotification, error: error.localizedDescription)
         }
     }
-    
+
     private func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) {
         do {
             if let contact = try self.coreDataService.createContact(fullName: fullName, jobPosition: jobPosition, email: email, photo: photo) {
