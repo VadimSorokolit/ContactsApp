@@ -63,21 +63,22 @@ class CoreDataService {
         }
     }
     
-    func fetchContacts(byEmail email: String?, jobPosition: String?) throws -> [Contact] {
+    func searchContacts(byFullName fullName: String?, jobPosition: String?) throws -> [Contact] {
         var predicates: [NSPredicate] = []
-        if let email = email {
-            let emailPredicate = NSPredicate(format: "email == %@", email)
-            predicates.append(emailPredicate)
+        if let fullName {
+            let fullNamePredicate = NSPredicate(format: "fullName == %@", fullName)
+            predicates.append(fullNamePredicate)
         }
-        if let jobPosition = jobPosition {
+        if let jobPosition {
             let jobPositionPredicate = NSPredicate(format: "jobPosition == %@", jobPosition)
             predicates.append(jobPositionPredicate)
         }
-        let compoundPredicate = NSCompoundPredicate(type: .and, subpredicates: predicates)
+        let compoundPredicateType = NSCompoundPredicate.LogicalType.or
+        let compoundPredicate = NSCompoundPredicate(type: compoundPredicateType, subpredicates: predicates)
         self.fetchRequest.predicate = compoundPredicate
         do {
-            let fetchedContactsByPredicates = try self.context.fetch(fetchRequest)
-            return fetchedContactsByPredicates
+            let fetchedContacts = try self.context.fetch(self.fetchRequest)
+            return fetchedContacts
         } catch {
             throw error
         }
