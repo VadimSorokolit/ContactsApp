@@ -49,6 +49,32 @@ class CoreDataService {
         }
     }
     
+    // Fetch contacts by fullName and jobPosition
+    func fetchContacts(byFullName fullName: String?, jobPosition: String?) throws -> [Contact] {
+        var predicates: [NSPredicate] = []
+        if let fullName = fullName?.trimmingCharacters(in: .whitespacesAndNewlines), !fullName.isEmpty {
+            let fullNamePredicate = NSPredicate(format: "fullName CONTAINS[cd] %@", fullName)
+            predicates.append(fullNamePredicate)
+        }
+        if let jobPosition = jobPosition?.trimmingCharacters(in: .whitespacesAndNewlines), !jobPosition.isEmpty {
+            let jobPositionPredicate = NSPredicate(format: "jobPosition CONTAINS[cd] %@", jobPosition)
+            predicates.append(jobPositionPredicate)
+        }
+        if predicates.isEmpty {
+            return []
+        } else {
+            let compoundPredicateType = NSCompoundPredicate.LogicalType.or
+            let compoundPredicate = NSCompoundPredicate(type: compoundPredicateType, subpredicates: predicates)
+            self.fetchRequest.predicate = compoundPredicate
+            do {
+                let foundContacts = try context.fetch(self.fetchRequest)
+                return foundContacts
+            } catch {
+                throw error
+            }
+        }
+    }
+
     // Fetch contact by email
     func fetchContact(byEmail email: String) throws -> Contact? {
         let predicate = NSPredicate(format: "email == %@", email)
@@ -58,27 +84,6 @@ class CoreDataService {
             let contacts = try self.context.fetch(self.fetchRequest)
             let contact = contacts.first
             return contact
-        } catch {
-            throw error
-        }
-    }
-    
-    func searchContacts(byFullName fullName: String?, jobPosition: String?) throws -> [Contact] {
-        var predicates: [NSPredicate] = []
-        if let fullName {
-            let fullNamePredicate = NSPredicate(format: "fullName == %@", fullName)
-            predicates.append(fullNamePredicate)
-        }
-        if let jobPosition {
-            let jobPositionPredicate = NSPredicate(format: "jobPosition == %@", jobPosition)
-            predicates.append(jobPositionPredicate)
-        }
-        let compoundPredicateType = NSCompoundPredicate.LogicalType.or
-        let compoundPredicate = NSCompoundPredicate(type: compoundPredicateType, subpredicates: predicates)
-        self.fetchRequest.predicate = compoundPredicate
-        do {
-            let fetchedContacts = try self.context.fetch(self.fetchRequest)
-            return fetchedContacts
         } catch {
             throw error
         }
