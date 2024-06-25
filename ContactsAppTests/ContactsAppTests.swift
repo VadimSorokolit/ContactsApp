@@ -20,6 +20,7 @@ class ContactsAppTests: XCTestCase {
     private var testJobPosition: String = "iOS Developer"
     private var testNewJobPosition: String = "Developer"
     private var testEmail: String = "macintosh@email.ua"
+    private var testNewEmail: String = "macintosh@ukr.net"
     private var testPhoto: UIImage? = nil
     
     // MARK: - SetUp methods
@@ -86,17 +87,17 @@ class ContactsAppTests: XCTestCase {
         }
     }
     
-    func test_FetchContactByPredicates() {
+    func test_SearchContacts() {
         do {
-            let createdContact = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
-            let createdContact1 = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testNewJobPosition, email: self.testEmail, photo: self.testPhoto)
-            let createdContact2 = try self.coreDataService.createContact(fullName: self.testNewFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
-            let fetchedContactsByPredicates = try self.coreDataService.fetchContacts(byEmail: nil, jobPosition: self.testJobPosition)
-            
-            XCTAssertFalse(fetchedContactsByPredicates.isEmpty)
-            XCTAssertEqual(fetchedContactsByPredicates.count, 1)
-        }
-        catch {
+            _ = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
+            _ = try self.coreDataService.createContact(fullName: self.testNewFullName, jobPosition: self.testNewJobPosition, email: self.testNewEmail, photo: self.testPhoto)
+            let foundContacts = try self.coreDataService.searchContacts(byFullName: self.testFullName, jobPosition: self.testNewJobPosition)
+            print("Found Contacts:")
+            for contact in foundContacts {
+                print("\(contact.fullName ?? "<empty>") - \(contact.jobPosition ?? "<empty>")")
+            }
+            XCTAssertEqual(foundContacts.count, 2)
+        } catch {
             XCTAssertThrowsError(error)
         }
     }
