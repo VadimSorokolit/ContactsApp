@@ -64,7 +64,8 @@ class CoreDataService {
            if predicates.isEmpty {
                return []
            } else {
-               let compoundPredicate = NSCompoundPredicate(type: .or, subpredicates: predicates)
+               let compoundPredicateType = NSCompoundPredicate.LogicalType.or
+               let compoundPredicate = NSCompoundPredicate(type: compoundPredicateType, subpredicates: predicates)
                fetchRequest.predicate = compoundPredicate
                do {
                    let foundContacts = try context.fetch(fetchRequest)
