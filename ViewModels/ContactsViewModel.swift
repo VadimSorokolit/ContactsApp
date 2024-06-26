@@ -26,6 +26,16 @@ class ContactsViewModel {
             self.notify(name: .errorNotification, error: error.localizedDescription)
         }
     }
+    
+    private func searchContacts(byQuery query: String) {
+        do {
+            let contacts = try self.coreDataService.searchContacts(byFullName: query, jobPosition: query)
+            self.notify(name: .contactsSerchedNotification)
+            self.contacts = contacts
+        } catch {
+            self.notify(name: .errorNotification, error: error.localizedDescription)
+        }
+    }
 
     private func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) {
         do {
