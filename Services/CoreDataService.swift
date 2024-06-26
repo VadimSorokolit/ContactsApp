@@ -52,14 +52,16 @@ class CoreDataService {
     func searchContacts(byFullName fullName: String?, jobPosition: String?) throws -> [Contact] {
         let fetchRequest = Contact.fetchRequest()
         var predicates: [NSPredicate] = []
-        if let trimmedFullName = fullName?.trimmingCharacters(in: .whitespacesAndNewlines), !trimmedFullName.isEmpty {
-            let fullNameWithoutInternalSpaces = trimmedFullName.replacingOccurrences(of: " ", with: "")
-            let fullNamePredicate = NSPredicate(format: "fullName CONTAINS[c] %@", fullNameWithoutInternalSpaces)
+        if let fullName = fullName,!fullName.isEmpty {
+            let trimmedFullName = fullName.trimmingCharacters(in: .whitespacesAndNewlines)
+            let fullNameWithoutTabs = trimmedFullName.replacingOccurrences(of: "\t", with: "")
+            let fullNamePredicate = NSPredicate(format: "fullName CONTAINS[c] %@", fullNameWithoutTabs)
             predicates.append(fullNamePredicate)
         }
-        if let trimmedJobPosition = jobPosition?.trimmingCharacters(in: .whitespacesAndNewlines), !trimmedJobPosition.isEmpty {
-            let jobPositionWithoutInternalSpaces = trimmedJobPosition.replacingOccurrences(of: " ", with: "")
-            let jobPositionPredicate = NSPredicate(format: "jobPosition CONTAINS[c] %@", jobPositionWithoutInternalSpaces)
+        if let jobPosition = jobPosition, !jobPosition.isEmpty {
+            let trimmedJobPosition = jobPosition.trimmingCharacters(in: .whitespacesAndNewlines)
+            let jobPositionWithoutTabs = trimmedJobPosition.replacingOccurrences(of: "\t", with: "")
+            let jobPositionPredicate = NSPredicate(format: "jobPosition CONTAINS[c] %@", jobPositionWithoutTabs)
             predicates.append(jobPositionPredicate)
         }
         if predicates.isEmpty {
