@@ -34,6 +34,7 @@ class CoreDataService {
     // Fetch contacts
     func fetchContacts() throws -> [Contact] {
         let fetchRequest = Contact.fetchRequest()
+        
         do {
             let contacts = try self.context.fetch(fetchRequest)
             if !contacts.isEmpty {
@@ -52,26 +53,28 @@ class CoreDataService {
     func searchContacts(byFullName fullName: String?, jobPosition: String?) throws -> [Contact] {
         let fetchRequest = Contact.fetchRequest()
         var predicates: [NSPredicate] = []
+        
         if let fullName = fullName,!fullName.isEmpty {
             let trimmedFullName = fullName.trimmingCharacters(in: .whitespacesAndNewlines)
-            let fullNameWithoutTabs = trimmedFullName.replacingOccurrences(of: "\t", with: "")
-            let fullNamePredicate = NSPredicate(format: "fullName CONTAINS[c] %@", fullNameWithoutTabs)
+            let fullNamePredicate = NSPredicate(format: "fullName CONTAINS[c] %@", trimmedFullName)
             predicates.append(fullNamePredicate)
         }
+        
         if let jobPosition = jobPosition, !jobPosition.isEmpty {
             let trimmedJobPosition = jobPosition.trimmingCharacters(in: .whitespacesAndNewlines)
-            let jobPositionWithoutTabs = trimmedJobPosition.replacingOccurrences(of: "\t", with: "")
-            let jobPositionPredicate = NSPredicate(format: "jobPosition CONTAINS[c] %@", jobPositionWithoutTabs)
+            let jobPositionPredicate = NSPredicate(format: "jobPosition CONTAINS[c] %@", trimmedJobPosition)
             predicates.append(jobPositionPredicate)
         }
+        
         if predicates.isEmpty {
             return []
         } else {
             let compoundPredicateType = NSCompoundPredicate.LogicalType.or
             let compoundPredicate = NSCompoundPredicate(type: compoundPredicateType, subpredicates: predicates)
             fetchRequest.predicate = compoundPredicate
+            
             do {
-                let foundContacts = try context.fetch(fetchRequest)
+                let foundContacts = try self.context.fetch(fetchRequest)
                 return foundContacts
             } catch {
                 throw error
@@ -85,6 +88,7 @@ class CoreDataService {
         let predicate = NSPredicate(format: "email == %@", email)
         fetchRequest.predicate = predicate
         fetchRequest.fetchLimit = 1
+        
         do {
             let contacts = try self.context.fetch(fetchRequest)
             let contact = contacts.first
@@ -99,11 +103,13 @@ class CoreDataService {
         if try self.isContactExist(byEmail: email) {
             return nil
         }
+        
         let contact = Contact(context: self.context)
         contact.fullName = fullName
         contact.jobPosition = jobPosition
         contact.email = email
         contact.photo = photo
+        
         do {
             try self.context.save()
             return contact
@@ -118,6 +124,7 @@ class CoreDataService {
         let predicate = NSPredicate(format: "email == %@", email)
         fetchRequest.predicate = predicate
         fetchRequest.fetchLimit = 1
+        
         do {
             let contacts = try self.context.fetch(fetchRequest)
             if let contact = contacts.first {
@@ -134,6 +141,7 @@ class CoreDataService {
     // Delete all contacts
     func deleteAllContacts() throws {
         let fetchRequest = Contact.fetchRequest()
+        
         do {
             let contacts = try self.context.fetch(fetchRequest)
             contacts.forEach({ (contact: Contact) -> Void in
@@ -151,11 +159,12 @@ class CoreDataService {
         let predicate = NSPredicate(format: "email == %@", email)
         fetchRequest.predicate = predicate
         fetchRequest.fetchLimit = 1
+        
         do {
             let contacts = try self.context.fetch(fetchRequest)
             if let contact = contacts.first {
                 self.context.delete(contact)
-                try context.save()
+                try self.context.save()
                 return contact
             } else {
                 print("Contact does not exist")
@@ -172,6 +181,7 @@ class CoreDataService {
         let predicate = NSPredicate(format: "email == %@", email)
         fetchRequest.predicate = predicate
         fetchRequest.fetchLimit = 1
+        
         do {
             let contacts = try self.context.fetch(fetchRequest)
             if !contacts.isEmpty {
