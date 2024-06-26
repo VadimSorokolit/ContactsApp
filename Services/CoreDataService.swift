@@ -54,7 +54,7 @@ class CoreDataService {
         let fetchRequest = Contact.fetchRequest()
         var predicates: [NSPredicate] = []
         
-        if let fullName = fullName,!fullName.isEmpty {
+        if let fullName = fullName, !fullName.isEmpty {
             let trimmedFullName = fullName.trimmingCharacters(in: .whitespacesAndNewlines)
             let fullNamePredicate = NSPredicate(format: "fullName CONTAINS[c] %@", trimmedFullName)
             predicates.append(fullNamePredicate)
