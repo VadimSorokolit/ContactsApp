@@ -92,7 +92,7 @@ class ContactsAppTests: XCTestCase {
         do {
             _ = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
             _ = try self.coreDataService.createContact(fullName: self.testNewFullName, jobPosition: self.testNewJobPosition, email: self.testNewEmail, photo: self.testPhoto)
-            let foundContacts = try self.coreDataService.searchContacts(byFullName: self.query, jobPosition: query)
+            let foundContacts = try self.coreDataService.searchContacts(byFullName: self.query, jobPosition: self.query)
             print("Found Contacts:")
             for contact in foundContacts {
                 print("\(contact.fullName ?? "<empty>") - \(contact.jobPosition ?? "<empty>")")
