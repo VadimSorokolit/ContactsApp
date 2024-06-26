@@ -15,13 +15,14 @@ class ContactsAppTests: XCTestCase {
     
     private var coreDataService: CoreDataService!
     
-    private var testFullName: String = "Vadim Sorokolit"
-    private var testNewFullName: String = "Alex Sorokolit"
+    private var testFullName: String = "Ivan Sorokolit"
+    private var testNewFullName: String = "Igor Sorokolit"
     private var testJobPosition: String = "iOS Developer"
     private var testNewJobPosition: String = "Developer"
     private var testEmail: String = "macintosh@email.ua"
     private var testNewEmail: String = "macintosh@ukr.net"
     private var testPhoto: UIImage? = nil
+    private let query: String = "i"
     
     // MARK: - SetUp methods
     
@@ -91,7 +92,7 @@ class ContactsAppTests: XCTestCase {
         do {
             _ = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
             _ = try self.coreDataService.createContact(fullName: self.testNewFullName, jobPosition: self.testNewJobPosition, email: self.testNewEmail, photo: self.testPhoto)
-            let foundContacts = try self.coreDataService.searchContacts(byFullName: self.testFullName, jobPosition: self.testNewJobPosition)
+            let foundContacts = try self.coreDataService.searchContacts(byFullName: self.query, jobPosition: query)
             print("Found Contacts:")
             for contact in foundContacts {
                 print("\(contact.fullName ?? "<empty>") - \(contact.jobPosition ?? "<empty>")")
