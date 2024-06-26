@@ -13,11 +13,11 @@ class ContactsViewModel {
     // MARK: - Properties
     
     private let coreDataService: CoreDataService = CoreDataService()
-    private var contacts: [Contact] = []
+    var contacts: [Contact] = []
     
     // MARK: - Methods
     
-    private func fetchContacts() {
+    func fetchContacts() {
         do {
             let contacts = try self.coreDataService.fetchContacts()
             self.contacts = contacts
@@ -27,7 +27,7 @@ class ContactsViewModel {
         }
     }
     
-    private func searchContacts(byQuery query: String) {
+    func searchContacts(byQuery query: String) {
         do {
             let contacts = try self.coreDataService.searchContacts(byFullName: query, jobPosition: query)
             self.notify(name: .contactsSerchedNotification)
@@ -37,7 +37,7 @@ class ContactsViewModel {
         }
     }
 
-    private func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) {
+    func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) {
         do {
             if let contact = try self.coreDataService.createContact(fullName: fullName, jobPosition: jobPosition, email: email, photo: photo) {
                 self.contacts.append(contact)
@@ -48,7 +48,7 @@ class ContactsViewModel {
         }
     }
     
-    private func updateContact(byEmail email: String, jobPosition: String) {
+    func updateContact(byEmail email: String, jobPosition: String) {
         do {
             if let updatedContact = try self.coreDataService.updateContact(byEmail: email, jobPosition: jobPosition) {
                 if let index = self.contacts.firstIndex(where: { $0.email == email }) {
@@ -61,7 +61,7 @@ class ContactsViewModel {
         }
     }
     
-    private func deleteContact(byEmail email: String) {
+    func deleteContact(byEmail email: String) {
         do {
             if let contact = try self.self.coreDataService.deleteContact(byEmail: email) {
                 if let index = self.contacts.firstIndex(of: contact) {
