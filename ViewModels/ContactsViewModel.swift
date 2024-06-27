@@ -30,8 +30,8 @@ class ContactsViewModel {
     func searchContacts(byQuery query: String) {
         do {
             let contacts = try self.coreDataService.searchContacts(byFullName: query, jobPosition: query)
-            self.notify(name: .contactsSerchedNotification)
             self.contacts = contacts
+            self.notify(name: .contactsSerchedNotification)
         } catch {
             self.notify(name: .errorNotification, error: error.localizedDescription)
         }
