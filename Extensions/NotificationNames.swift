@@ -10,7 +10,7 @@ import Foundation
 extension Notification.Name {
     
     static let contactsFetchedNotification = Notification.Name("contactsFetchedNotification")
-    static let contactsSerchedNotification = Notification.Name("contactsSerchedNotification")
+    static let contactsSearchedNotification = Notification.Name("contactsSerchedNotification")
     static let contactFetchedNotification = Notification.Name("contactFetchedNotification")
     static let contactCreatedNotification = Notification.Name("contactCreatedNotification")
     static let contactUpdatedNotification = Notification.Name("contactUpdatedNotification")
