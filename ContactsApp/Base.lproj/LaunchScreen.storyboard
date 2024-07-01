@@ -16,7 +16,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="SplashScreenImage" translatesAutoresizingMaskIntoConstraints="NO" id="2xC-De-QZB">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="splashScreenImage" translatesAutoresizingMaskIntoConstraints="NO" id="2xC-De-QZB">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="864"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -31,7 +31,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="SplashScreenImage" width="856" height="1852"/>
+        <image name="splashScreenImage" width="856" height="1852"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
