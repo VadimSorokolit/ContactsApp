@@ -68,7 +68,7 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
     
     private func setupLabel() {
         let label = UILabel()
-        label.text = NSLocalizedString("Swipe to delete contact from list", comment: "")
+        label.text = NSLocalizedString("💡 Swipe to delete contact from list", comment: "")
         label.font = UIFont.systemFont(ofSize: 14.0, weight: .medium)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
