@@ -9,7 +9,7 @@ import UIKit
 
 class ContactsViewController: UIViewController, UISearchResultsUpdating {
     
-    lazy var searchController: UISearchController = {
+    private lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -23,7 +23,7 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setup()
+        self.setup()
     }
     
     // MARK: - Methods
