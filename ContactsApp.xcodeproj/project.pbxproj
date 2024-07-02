@@ -21,6 +21,7 @@
 		DD1223642C10CF9500A5C93B /* ContactsAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1223632C10CF9500A5C93B /* ContactsAppTests.swift */; };
 		DD12236E2C10CF9500A5C93B /* ContactsAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD12236D2C10CF9500A5C93B /* ContactsAppUITests.swift */; };
 		DD1223702C10CF9500A5C93B /* ContactsAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD12236F2C10CF9500A5C93B /* ContactsAppUITestsLaunchTests.swift */; };
+		DD66DD012C3496A800EA3EDB /* GlobalConstans.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD66DD002C3496A800EA3EDB /* GlobalConstans.swift */; };
 		DD72B98D2C18C998003FBB46 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD72B98C2C18C998003FBB46 /* CoreDataService.swift */; };
 /* End PBXBuildFile section */
 
@@ -60,6 +61,7 @@
 		DD1223692C10CF9500A5C93B /* ContactsAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ContactsAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD12236D2C10CF9500A5C93B /* ContactsAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsAppUITests.swift; sourceTree = "<group>"; };
 		DD12236F2C10CF9500A5C93B /* ContactsAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		DD66DD002C3496A800EA3EDB /* GlobalConstans.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstans.swift; sourceTree = "<group>"; };
 		DD72B98C2C18C998003FBB46 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -112,6 +114,8 @@
 				DD0991222C1A37F0009DEBA0 /* Contact+CoreDataProperties.swift */,
 				DD0DB21B2C24A7820058A001 /* Extensions */,
 				DD09348D2C245FF700FD84FF /* ViewModels */,
+				DD66DCFD2C3493E000EA3EDB /* Views */,
+				DD66DCFF2C34956C00EA3EDB /* Constants */,
 				DD1223482C10CF9300A5C93B /* ContactsApp */,
 				DD1223622C10CF9500A5C93B /* ContactsAppTests */,
 				DD12236C2C10CF9500A5C93B /* ContactsAppUITests */,
@@ -135,7 +139,6 @@
 				DD09911E2C1A36DF009DEBA0 /* ContactsApp.xcdatamodeld */,
 				DD1223492C10CF9300A5C93B /* AppDelegate.swift */,
 				DD12234B2C10CF9300A5C93B /* SceneDelegate.swift */,
-				DD12234D2C10CF9300A5C93B /* ContactsViewController.swift */,
 				DD12234F2C10CF9300A5C93B /* Main.storyboard */,
 				DD1223552C10CF9400A5C93B /* Assets.xcassets */,
 				DD1223572C10CF9400A5C93B /* LaunchScreen.storyboard */,
@@ -159,6 +162,30 @@
 				DD12236F2C10CF9500A5C93B /* ContactsAppUITestsLaunchTests.swift */,
 			);
 			path = ContactsAppUITests;
+			sourceTree = "<group>";
+		};
+		DD66DCFD2C3493E000EA3EDB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				DD66DCFE2C34949500EA3EDB /* Controllers */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		DD66DCFE2C34949500EA3EDB /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				DD12234D2C10CF9300A5C93B /* ContactsViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		DD66DCFF2C34956C00EA3EDB /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				DD66DD002C3496A800EA3EDB /* GlobalConstans.swift */,
+			);
+			path = Constants;
 			sourceTree = "<group>";
 		};
 		DD72B98E2C18CD9F003FBB46 /* Services */ = {
@@ -305,6 +332,7 @@
 				DD0991232C1A37F0009DEBA0 /* Contact+CoreDataClass.swift in Sources */,
 				DD0991242C1A37F0009DEBA0 /* Contact+CoreDataProperties.swift in Sources */,
 				DD12234E2C10CF9300A5C93B /* ContactsViewController.swift in Sources */,
+				DD66DD012C3496A800EA3EDB /* GlobalConstans.swift in Sources */,
 				DD09348C2C245FE300FD84FF /* ContactsViewModel.swift in Sources */,
 				DD12234A2C10CF9300A5C93B /* AppDelegate.swift in Sources */,
 				DD0DB21A2C24A6880058A001 /* NotificationNames.swift in Sources */,
