@@ -9,6 +9,15 @@ import UIKit
 
 class ContactsViewController: UIViewController, UISearchResultsUpdating {
     
+    // MARK: - Objects
+    
+    private struct LocalConstants {
+        static let defaultWidth: CGFloat = 30.0
+        static let defaultHeight: CGFloat = 40.0
+    }
+    
+    // MARK: - Properties
+
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
@@ -17,7 +26,7 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
         searchController.hidesNavigationBarDuringPresentation = false
         return searchController
     }()
-    
+
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -40,7 +49,7 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("Contacts", comment: "")
         titleLabel.textAlignment = .left
-        titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        titleLabel.font = UIFont.systemFont(ofSize: 28.0, weight: .bold)
         
         let titleContainerView = UIView()
         titleContainerView.addSubview(titleLabel)
@@ -51,7 +60,7 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
             titleLabel.trailingAnchor.constraint(equalTo: titleContainerView.trailingAnchor),
             titleLabel.topAnchor.constraint(equalTo: titleContainerView.topAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: titleContainerView.bottomAnchor),
-            titleContainerView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30)
+            titleContainerView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - LocalConstants.defaultWidth * 2)
         ])
         
         self.navigationItem.titleView = titleContainerView
@@ -65,6 +74,15 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
         self.navigationItem.searchController = self.searchController
         self.definesPresentationContext = true
         
+        if let searchBarTextField = self.searchController.searchBar.value(forKey: "searchField") as? UITextField {
+            searchBarTextField.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                searchBarTextField.leadingAnchor.constraint(equalTo: self.searchController.searchBar.leadingAnchor, constant: LocalConstants.defaultWidth),
+                searchBarTextField.trailingAnchor.constraint(equalTo: self.searchController.searchBar.trailingAnchor, constant: -LocalConstants.defaultWidth),
+                searchBarTextField.heightAnchor.constraint(equalToConstant: LocalConstants.defaultHeight)
+            ])
+        }
+        
         self.searchController.searchBar.showsCancelButton = false
     }
     
@@ -75,5 +93,5 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
             print(searchText)
         }
     }
-    
+        
 }
