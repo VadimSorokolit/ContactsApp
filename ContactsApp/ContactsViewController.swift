@@ -66,8 +66,26 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
         self.navigationItem.titleView = titleContainerView
     }
     
+    private func setupLabel() {
+        let label = UILabel()
+        label.text = NSLocalizedString("Swipe to delete contact from list", comment: "")
+        label.font = UIFont.systemFont(ofSize: 14.0, weight: .medium)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.view.addSubview(label)
+        
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: LocalConstants.defaultWidth),
+            label.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -LocalConstants.defaultWidth),
+            label.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            label.heightAnchor.constraint(equalToConstant: LocalConstants.defaultHeight)
+        ])
+    }
+    
     private func setupViews() {
-        self.view.backgroundColor = .gray
+        self.view.backgroundColor = .white
+        self.setupLabel()
     }
     
     private func setupSearchController() {
