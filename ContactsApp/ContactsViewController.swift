@@ -62,8 +62,8 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
     }
     
     private func setupSearchController() {
-        navigationItem.searchController = self.searchController
-        definesPresentationContext = true
+        self.navigationItem.searchController = self.searchController
+        self.definesPresentationContext = true
         
         self.searchController.searchBar.showsCancelButton = false
     }
