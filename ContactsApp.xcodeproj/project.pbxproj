@@ -102,8 +102,8 @@
 		DD0DB21B2C24A7820058A001 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				DD66DD042C352A4C00EA3EDB /* UIColor+hexString.swift */,
 				DD0DB2192C24A6880058A001 /* NotificationNames.swift */,
+				DD66DD042C352A4C00EA3EDB /* UIColor+hexString.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -132,10 +132,11 @@
 			isa = PBXGroup;
 			children = (
 				DD72B98E2C18CD9F003FBB46 /* Services */,
-				DD0DB21B2C24A7820058A001 /* Extensions */,
 				DD09348D2C245FF700FD84FF /* ViewModels */,
 				DD66DCFD2C3493E000EA3EDB /* Views */,
 				DD66DCFF2C34956C00EA3EDB /* Constants */,
+				DD0DB21B2C24A7820058A001 /* Extensions */,
+				DD5DCF222C35D60D007A33BC /* Resources */,
 				DD66DD062C35A44400EA3EDB /* SupportingFiles */,
 			);
 			path = ContactsApp;
@@ -156,6 +157,21 @@
 				DD12236F2C10CF9500A5C93B /* ContactsAppUITestsLaunchTests.swift */,
 			);
 			path = ContactsAppUITests;
+			sourceTree = "<group>";
+		};
+		DD5DCF222C35D60D007A33BC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DD5DCF232C35D647007A33BC /* Fonts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		DD5DCF232C35D647007A33BC /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		DD66DCFD2C3493E000EA3EDB /* Views */ = {
