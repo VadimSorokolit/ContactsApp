@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ContactsViewController: UIViewController, UISearchResultsUpdating {
+class ContactsViewController: UIViewController {
     
     // MARK: - Objects
     
@@ -15,6 +15,7 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
         static let defaultWidth: CGFloat = 30.0
         static let defaultHeight: CGFloat = 40.0
         static let defaultButtonHeight: CGFloat = 70.0
+        static let infoLabeltext = "💡 Swipe to delete contact from list"
     }
     
     // MARK: - Properties
@@ -30,7 +31,7 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
     
     private lazy var infoLabel: UILabel = {
         let label = UILabel()
-        label.text = NSLocalizedString("💡 Swipe to delete contact from list", comment: "")
+        label.text = NSLocalizedString(LocalConstants.infoLabeltext, comment: "")
         label.font = UIFont.systemFont(ofSize: 14.0, weight: .medium)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -134,7 +135,11 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
         self.searchController.searchBar.showsCancelButton = false
     }
     
-    // MARK: - UISearchResultsUpdating
+}
+
+// MARK: - UISearchResultsUpdating
+
+extension ContactsViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.text, !searchText.isEmpty {

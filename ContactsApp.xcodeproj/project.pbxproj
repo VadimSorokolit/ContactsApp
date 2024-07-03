@@ -194,12 +194,12 @@
 			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
-		DD66DD072C35A4BD00EA3EDB /* Entites */ = {
+		DD66DD072C35A4BD00EA3EDB /* Entities */ = {
 			isa = PBXGroup;
 			children = (
 				DD09911E2C1A36DF009DEBA0 /* ContactsApp.xcdatamodeld */,
 			);
-			path = Entites;
+			path = Entities;
 			sourceTree = "<group>";
 		};
 		DD72B98E2C18CD9F003FBB46 /* Services */ = {
@@ -208,7 +208,7 @@
 				DD72B98C2C18C998003FBB46 /* CoreDataService.swift */,
 				DD0991222C1A37F0009DEBA0 /* Contact+CoreDataProperties.swift */,
 				DD0991212C1A37F0009DEBA0 /* Contact+CoreDataClass.swift */,
-				DD66DD072C35A4BD00EA3EDB /* Entites */,
+				DD66DD072C35A4BD00EA3EDB /* Entities */,
 			);
 			path = Services;
 			sourceTree = "<group>";
