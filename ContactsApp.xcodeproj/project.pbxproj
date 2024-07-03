@@ -97,7 +97,8 @@
 			children = (
 				DD09348B2C245FE300FD84FF /* ContactsViewModel.swift */,
 			);
-			path = ViewModels;
+			name = ViewModels;
+			path = ../ViewModels;
 			sourceTree = "<group>";
 		};
 		DD0DB21B2C24A7820058A001 /* Extensions */ = {
@@ -112,13 +113,6 @@
 		DD12233D2C10CF9300A5C93B = {
 			isa = PBXGroup;
 			children = (
-				DD72B98E2C18CD9F003FBB46 /* Services */,
-				DD0991212C1A37F0009DEBA0 /* Contact+CoreDataClass.swift */,
-				DD0991222C1A37F0009DEBA0 /* Contact+CoreDataProperties.swift */,
-				DD0DB21B2C24A7820058A001 /* Extensions */,
-				DD09348D2C245FF700FD84FF /* ViewModels */,
-				DD66DCFD2C3493E000EA3EDB /* Views */,
-				DD66DCFF2C34956C00EA3EDB /* Constants */,
 				DD1223482C10CF9300A5C93B /* ContactsApp */,
 				DD1223622C10CF9500A5C93B /* ContactsAppTests */,
 				DD12236C2C10CF9500A5C93B /* ContactsAppUITests */,
@@ -139,7 +133,11 @@
 		DD1223482C10CF9300A5C93B /* ContactsApp */ = {
 			isa = PBXGroup;
 			children = (
-				DD09911E2C1A36DF009DEBA0 /* ContactsApp.xcdatamodeld */,
+				DD72B98E2C18CD9F003FBB46 /* Services */,
+				DD0DB21B2C24A7820058A001 /* Extensions */,
+				DD09348D2C245FF700FD84FF /* ViewModels */,
+				DD66DCFD2C3493E000EA3EDB /* Views */,
+				DD66DCFF2C34956C00EA3EDB /* Constants */,
 				DD1223492C10CF9300A5C93B /* AppDelegate.swift */,
 				DD12234B2C10CF9300A5C93B /* SceneDelegate.swift */,
 				DD12234F2C10CF9300A5C93B /* Main.storyboard */,
@@ -195,6 +193,9 @@
 			isa = PBXGroup;
 			children = (
 				DD72B98C2C18C998003FBB46 /* CoreDataService.swift */,
+				DD0991222C1A37F0009DEBA0 /* Contact+CoreDataProperties.swift */,
+				DD0991212C1A37F0009DEBA0 /* Contact+CoreDataClass.swift */,
+				DD09911E2C1A36DF009DEBA0 /* ContactsApp.xcdatamodeld */,
 			);
 			path = Services;
 			sourceTree = "<group>";
