@@ -14,6 +14,7 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
     private struct LocalConstants {
         static let defaultWidth: CGFloat = 30.0
         static let defaultHeight: CGFloat = 40.0
+        static let defaultButtonHeight: CGFloat = 70.0
     }
     
     // MARK: - Properties
@@ -41,6 +42,14 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
         tableView.backgroundColor = .darkGray
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
+    }()
+    
+    private lazy var button: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = GlobalConstants.defaultColor
+        button.layer.cornerRadius = LocalConstants.defaultButtonHeight / 2
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
 
     // MARK: - Lifecycle
@@ -87,6 +96,7 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
         self.view.backgroundColor = .white
         self.view.addSubview(self.infoLabel)
         self.view.addSubview(self.tableView)
+        self.view.addSubview(self.button)
     }
     
     private func setupLayout() {
@@ -99,7 +109,12 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
             self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             self.tableView.topAnchor.constraint(equalTo: self.infoLabel.bottomAnchor),
-            self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+            self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            
+            self.button.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -27.0),
+            self.button.heightAnchor.constraint(equalToConstant: LocalConstants.defaultButtonHeight),
+            self.button.widthAnchor.constraint(equalTo: self.button.heightAnchor),
+            self.button.bottomAnchor.constraint(equalTo: self.tableView.bottomAnchor, constant: -17.0)
         ])
     }
     
