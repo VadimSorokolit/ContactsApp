@@ -22,6 +22,7 @@
 		DD12236E2C10CF9500A5C93B /* ContactsAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD12236D2C10CF9500A5C93B /* ContactsAppUITests.swift */; };
 		DD1223702C10CF9500A5C93B /* ContactsAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD12236F2C10CF9500A5C93B /* ContactsAppUITestsLaunchTests.swift */; };
 		DD66DD012C3496A800EA3EDB /* GlobalConstans.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD66DD002C3496A800EA3EDB /* GlobalConstans.swift */; };
+		DD66DD052C352A4C00EA3EDB /* UIColor+hexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD66DD042C352A4C00EA3EDB /* UIColor+hexString.swift */; };
 		DD72B98D2C18C998003FBB46 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD72B98C2C18C998003FBB46 /* CoreDataService.swift */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +63,7 @@
 		DD12236D2C10CF9500A5C93B /* ContactsAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsAppUITests.swift; sourceTree = "<group>"; };
 		DD12236F2C10CF9500A5C93B /* ContactsAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		DD66DD002C3496A800EA3EDB /* GlobalConstans.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstans.swift; sourceTree = "<group>"; };
+		DD66DD042C352A4C00EA3EDB /* UIColor+hexString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+hexString.swift"; sourceTree = "<group>"; };
 		DD72B98C2C18C998003FBB46 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -101,6 +103,7 @@
 		DD0DB21B2C24A7820058A001 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				DD66DD042C352A4C00EA3EDB /* UIColor+hexString.swift */,
 				DD0DB2192C24A6880058A001 /* NotificationNames.swift */,
 			);
 			path = Extensions;
@@ -336,6 +339,7 @@
 				DD09348C2C245FE300FD84FF /* ContactsViewModel.swift in Sources */,
 				DD12234A2C10CF9300A5C93B /* AppDelegate.swift in Sources */,
 				DD0DB21A2C24A6880058A001 /* NotificationNames.swift in Sources */,
+				DD66DD052C352A4C00EA3EDB /* UIColor+hexString.swift in Sources */,
 				DD12234C2C10CF9300A5C93B /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
