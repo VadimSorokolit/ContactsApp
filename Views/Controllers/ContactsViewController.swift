@@ -26,6 +26,22 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
         searchController.hidesNavigationBarDuringPresentation = false
         return searchController
     }()
+    
+    private lazy var infoLabel: UILabel = {
+        let label = UILabel()
+        label.text = NSLocalizedString("💡 Swipe to delete contact from list", comment: "")
+        label.font = UIFont.systemFont(ofSize: 14.0, weight: .medium)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = .darkGray
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
 
     // MARK: - Lifecycle
     
@@ -41,6 +57,7 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
         self.setupNavBar()
         self.setupSearchController()
         self.setupViews()
+        self.setupLayout()
     }
     
     private func setupNavBar() {
@@ -66,26 +83,24 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
         self.navigationItem.titleView = titleContainerView
     }
     
-    private func setupLabel() {
-        let label = UILabel()
-        label.text = NSLocalizedString("💡 Swipe to delete contact from list", comment: "")
-        label.font = UIFont.systemFont(ofSize: 14.0, weight: .medium)
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.view.addSubview(label)
-        
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: LocalConstants.defaultWidth),
-            label.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -LocalConstants.defaultWidth),
-            label.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0),
-            label.heightAnchor.constraint(equalToConstant: LocalConstants.defaultHeight)
-        ])
-    }
-    
     private func setupViews() {
         self.view.backgroundColor = .white
-        self.setupLabel()
+        self.view.addSubview(self.infoLabel)
+        self.view.addSubview(self.tableView)
+    }
+    
+    private func setupLayout() {
+        NSLayoutConstraint.activate([
+            self.infoLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: LocalConstants.defaultWidth),
+            self.infoLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -LocalConstants.defaultWidth),
+            self.infoLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            self.infoLabel.heightAnchor.constraint(equalToConstant: LocalConstants.defaultHeight),
+            
+            self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            self.tableView.topAnchor.constraint(equalTo: self.infoLabel.bottomAnchor),
+            self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
     
     private func setupSearchController() {
