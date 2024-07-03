@@ -12,6 +12,8 @@ class ContactsViewController: UIViewController {
     // MARK: - Objects
     
     private struct LocalConstants {
+        static let titleLabelFont: UIFont? = UIFont(name: "Manrope-Bold", size: 28.0) ?? UIFont(name: "SF Compact", size: 28.0)
+        static let infoLabelFont: UIFont? = UIFont(name: "Manrope-Medium", size: 14.0) ?? UIFont(name: "SF Compact", size: 14.0)
         static let contactsScreenBackgroundColor: UIColor = UIColor(hexString: "FFFFFF")
         static let contactsScreenAddButtonColor: UIColor = UIColor(hexString: "447BF1")
         static let labelPadding: CGFloat = 30.0
@@ -38,7 +40,7 @@ class ContactsViewController: UIViewController {
     private lazy var infoLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString(LocalConstants.infoLabeltext, comment: "")
-        label.font = UIFont.systemFont(ofSize: 14.0, weight: .medium)
+        label.font = LocalConstants.infoLabelFont
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -83,7 +85,7 @@ class ContactsViewController: UIViewController {
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString(LocalConstants.titleLabelText, comment: "")
         titleLabel.textAlignment = .left
-        titleLabel.font = UIFont.systemFont(ofSize: 28.0, weight: .bold)
+        titleLabel.font = LocalConstants.titleLabelFont
         
         let titleContainerView = UIView()
         titleContainerView.addSubview(titleLabel)

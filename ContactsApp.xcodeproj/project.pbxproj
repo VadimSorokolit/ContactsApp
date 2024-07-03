@@ -20,6 +20,8 @@
 		DD1223642C10CF9500A5C93B /* ContactsAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1223632C10CF9500A5C93B /* ContactsAppTests.swift */; };
 		DD12236E2C10CF9500A5C93B /* ContactsAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD12236D2C10CF9500A5C93B /* ContactsAppUITests.swift */; };
 		DD1223702C10CF9500A5C93B /* ContactsAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD12236F2C10CF9500A5C93B /* ContactsAppUITestsLaunchTests.swift */; };
+		DD5DCF292C35D8A8007A33BC /* Manrope-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DD5DCF282C35D8A8007A33BC /* Manrope-Bold.ttf */; };
+		DD5DCF2B2C35D8C7007A33BC /* Manrope-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DD5DCF2A2C35D8C7007A33BC /* Manrope-Medium.ttf */; };
 		DD66DD012C3496A800EA3EDB /* GlobalConstans.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD66DD002C3496A800EA3EDB /* GlobalConstans.swift */; };
 		DD66DD052C352A4C00EA3EDB /* UIColor+hexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD66DD042C352A4C00EA3EDB /* UIColor+hexString.swift */; };
 		DD72B98D2C18C998003FBB46 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD72B98C2C18C998003FBB46 /* CoreDataService.swift */; };
@@ -60,6 +62,8 @@
 		DD1223692C10CF9500A5C93B /* ContactsAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ContactsAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD12236D2C10CF9500A5C93B /* ContactsAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsAppUITests.swift; sourceTree = "<group>"; };
 		DD12236F2C10CF9500A5C93B /* ContactsAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		DD5DCF282C35D8A8007A33BC /* Manrope-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Manrope-Bold.ttf"; sourceTree = "<group>"; };
+		DD5DCF2A2C35D8C7007A33BC /* Manrope-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Manrope-Medium.ttf"; sourceTree = "<group>"; };
 		DD66DD002C3496A800EA3EDB /* GlobalConstans.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstans.swift; sourceTree = "<group>"; };
 		DD66DD042C352A4C00EA3EDB /* UIColor+hexString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+hexString.swift"; sourceTree = "<group>"; };
 		DD72B98C2C18C998003FBB46 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
@@ -170,6 +174,8 @@
 		DD5DCF232C35D647007A33BC /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				DD5DCF282C35D8A8007A33BC /* Manrope-Bold.ttf */,
+				DD5DCF2A2C35D8C7007A33BC /* Manrope-Medium.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -334,6 +340,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD1223562C10CF9400A5C93B /* Assets.xcassets in Resources */,
+				DD5DCF292C35D8A8007A33BC /* Manrope-Bold.ttf in Resources */,
+				DD5DCF2B2C35D8C7007A33BC /* Manrope-Medium.ttf in Resources */,
 				DD1223592C10CF9400A5C93B /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
