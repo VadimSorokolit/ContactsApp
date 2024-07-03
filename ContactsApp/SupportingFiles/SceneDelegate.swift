@@ -12,7 +12,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     
     private func setupNavigationController() -> UINavigationController {
-        let navController = UINavigationController(rootViewController: ContactsViewController())
+        let bootViewController = ContactsViewController()
+        let navController = UINavigationController(rootViewController: bootViewController)
         
         let appearance = UINavigationBarAppearance()
         appearance.configureWithDefaultBackground()
@@ -29,7 +30,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = setupNavigationController()
+        window.rootViewController = self.setupNavigationController()
         window.makeKeyAndVisible()
         self.window = window
     }
