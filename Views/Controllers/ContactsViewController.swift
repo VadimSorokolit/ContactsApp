@@ -45,7 +45,7 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
     }()
     
     private lazy var button: UIButton = {
-        let button = UIButton(type: .system)
+        let button = UIButton()
         button.backgroundColor = GlobalConstants.defaultColor
         button.tintColor = GlobalConstants.defaultCustomColor
         button.setImage(UIImage(systemName: "plus"), for: .normal)
