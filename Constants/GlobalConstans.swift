@@ -5,4 +5,10 @@
 //  Created by Vadim Sorokolit on 02.07.2024.
 //
 
-import Foundation
+import UIKit
+
+struct GlobalConstants {
+    
+    static let defaultColor: UIColor = UIColor(hexString: "447BF1")
+    
+}
