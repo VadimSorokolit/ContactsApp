@@ -18,7 +18,7 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
     }
     
     // MARK: - Properties
-
+    
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
@@ -45,13 +45,15 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
     }()
     
     private lazy var button: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.backgroundColor = GlobalConstants.defaultColor
+        button.tintColor = GlobalConstants.defaultCustomColor
+        button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.layer.cornerRadius = LocalConstants.defaultButtonHeight / 2
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -88,12 +90,11 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
             titleLabel.bottomAnchor.constraint(equalTo: titleContainerView.bottomAnchor),
             titleContainerView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - LocalConstants.defaultWidth * 2)
         ])
-        
         self.navigationItem.titleView = titleContainerView
     }
     
     private func setupViews() {
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = GlobalConstants.defaultCustomColor
         self.view.addSubview(self.infoLabel)
         self.view.addSubview(self.tableView)
         self.view.addSubview(self.button)
@@ -130,7 +131,6 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
                 searchBarTextField.heightAnchor.constraint(equalToConstant: LocalConstants.defaultHeight)
             ])
         }
-        
         self.searchController.searchBar.showsCancelButton = false
     }
     
@@ -141,5 +141,5 @@ class ContactsViewController: UIViewController, UISearchResultsUpdating {
             print(searchText)
         }
     }
-        
+    
 }

@@ -10,5 +10,6 @@ import UIKit
 struct GlobalConstants {
     
     static let defaultColor: UIColor = UIColor(hexString: "447BF1")
+    static let defaultCustomColor: UIColor = UIColor(hexString: "FFFFFF")
     
 }
