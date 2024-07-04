@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class ContactsViewController: UIViewController {
     
@@ -16,6 +17,7 @@ class ContactsViewController: UIViewController {
         static let infoLabelFont: UIFont? = UIFont(name: "Manrope-Medium", size: 14.0) ?? UIFont(name: "SF Compact", size: 14.0)
         static let contactsScreenBackgroundColor: UIColor = UIColor(hexString: "FFFFFF")
         static let contactsScreenAddButtonColor: UIColor = UIColor(hexString: "447BF1")
+        static let titleLabelTopPadding: CGFloat = 60.0
         static let labelPadding: CGFloat = 30.0
         static let heightLabels: CGFloat = 40.0
         static let addButtonHeight: CGFloat = 70.0
@@ -28,13 +30,22 @@ class ContactsViewController: UIViewController {
     
     // MARK: - Properties
     
-    private lazy var searchController: UISearchController = {
-        let searchController = UISearchController(searchResultsController: nil)
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = LocalConstants.searchBarPlaceholder
-        searchController.hidesNavigationBarDuringPresentation = false
-        return searchController
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = NSLocalizedString(LocalConstants.titleLabelText, comment: "")
+        label.textAlignment = .left
+        label.font = LocalConstants.titleLabelFont
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.placeholder = LocalConstants.searchBarPlaceholder
+        searchBar.backgroundImage = UIImage()
+        searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        return searchBar
     }()
     
     private lazy var infoLabel: UILabel = {
@@ -48,7 +59,6 @@ class ContactsViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = LocalConstants.contactsScreenBackgroundColor
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -74,43 +84,31 @@ class ContactsViewController: UIViewController {
     // MARK: - Methods
     
     private func setup() {
-        self.setupNavBar()
-        self.setupSearchController()
         self.setupViews()
-    }
-    
-    private func setupNavBar() {
-        self.navigationItem.largeTitleDisplayMode = .always
-        
-        let titleLabel = UILabel()
-        titleLabel.text = NSLocalizedString(LocalConstants.titleLabelText, comment: "")
-        titleLabel.textAlignment = .left
-        titleLabel.font = LocalConstants.titleLabelFont
-        
-        let titleContainerView = UIView()
-        titleContainerView.addSubview(titleLabel)
-        
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: titleContainerView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: titleContainerView.trailingAnchor),
-            titleLabel.topAnchor.constraint(equalTo: titleContainerView.topAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: titleContainerView.bottomAnchor),
-            titleContainerView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - LocalConstants.labelPadding * 2)
-        ])
-        self.navigationItem.titleView = titleContainerView
     }
     
     private func setupViews() {
         self.view.backgroundColor = LocalConstants.contactsScreenBackgroundColor
+        self.view.addSubview(self.titleLabel)
+        self.view.addSubview(self.searchBar)
         self.view.addSubview(self.infoLabel)
         self.view.addSubview(self.tableView)
         self.view.addSubview(self.addButton)
         
         NSLayoutConstraint.activate([
+            self.titleLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: LocalConstants.labelPadding),
+            self.titleLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -LocalConstants.labelPadding),
+            self.titleLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: LocalConstants.titleLabelTopPadding),
+            self.titleLabel.heightAnchor.constraint(equalToConstant: LocalConstants.heightLabels),
+            
+            self.searchBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: LocalConstants.labelPadding - CGFloat(LocalConstants.searchBarPlaceholder.count)),
+            self.searchBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -LocalConstants.labelPadding),
+            self.searchBar.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor),
+            self.searchBar.heightAnchor.constraint(equalToConstant: LocalConstants.heightLabels),
+            
             self.infoLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: LocalConstants.labelPadding),
             self.infoLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -LocalConstants.labelPadding),
-            self.infoLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            self.infoLabel.topAnchor.constraint(equalTo: self.searchBar.bottomAnchor),
             self.infoLabel.heightAnchor.constraint(equalToConstant: LocalConstants.heightLabels),
             
             self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
@@ -123,33 +121,6 @@ class ContactsViewController: UIViewController {
             self.addButton.widthAnchor.constraint(equalTo: self.addButton.heightAnchor),
             self.addButton.bottomAnchor.constraint(equalTo: self.tableView.bottomAnchor, constant: -LocalConstants.addButtonInsets.bottom)
         ])
-    }
-
-    private func setupSearchController() {
-        self.navigationItem.searchController = self.searchController
-        self.definesPresentationContext = true
-        
-        if let searchBarTextField = self.searchController.searchBar.value(forKey: "searchField") as? UITextField {
-            searchBarTextField.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                searchBarTextField.leadingAnchor.constraint(equalTo: self.searchController.searchBar.leadingAnchor, constant: LocalConstants.labelPadding),
-                searchBarTextField.trailingAnchor.constraint(equalTo: self.searchController.searchBar.trailingAnchor, constant: -LocalConstants.labelPadding),
-                searchBarTextField.heightAnchor.constraint(equalToConstant: LocalConstants.heightLabels)
-            ])
-        }
-        self.searchController.searchBar.showsCancelButton = false
-    }
-    
-}
-
-// MARK: - UISearchResultsUpdating
-
-extension ContactsViewController: UISearchResultsUpdating {
-    
-    func updateSearchResults(for searchController: UISearchController) {
-        if let searchText = searchController.searchBar.text, !searchText.isEmpty {
-            print(searchText)
-        }
     }
     
 }
