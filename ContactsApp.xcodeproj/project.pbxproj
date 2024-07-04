@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		ABA8BEC5FF3ED5155393ADB8 /* Pods_ContactsApp_ContactsAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01B077C5BF960A46A307FDCF /* Pods_ContactsApp_ContactsAppUITests.framework */; };
-		D13ED7302B6D2CC2A0AD98B1 /* Pods_ContactsApp_ContactsAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CFE38CC3666A8EC24610D5C /* Pods_ContactsApp_ContactsAppTests.framework */; };
 		DD09348C2C245FE300FD84FF /* ContactsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD09348B2C245FE300FD84FF /* ContactsViewModel.swift */; };
 		DD0991202C1A36DF009DEBA0 /* ContactsApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DD09911E2C1A36DF009DEBA0 /* ContactsApp.xcdatamodeld */; };
 		DD0991232C1A37F0009DEBA0 /* Contact+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0991212C1A37F0009DEBA0 /* Contact+CoreDataClass.swift */; };
@@ -28,6 +27,7 @@
 		DD66DD052C352A4C00EA3EDB /* UIColor+hexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD66DD042C352A4C00EA3EDB /* UIColor+hexString.swift */; };
 		DD72B98D2C18C998003FBB46 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD72B98C2C18C998003FBB46 /* CoreDataService.swift */; };
 		E8B335379D4445D2FCC312F2 /* Pods_ContactsApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D06CA5A949831E6A2DDE750 /* Pods_ContactsApp.framework */; };
+		F978449275FF4795A13FBFA8 /* Pods_ContactsAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39DB43FB58512A6EA8D8B6C2 /* Pods_ContactsAppTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,10 +49,12 @@
 
 /* Begin PBXFileReference section */
 		01B077C5BF960A46A307FDCF /* Pods_ContactsApp_ContactsAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ContactsApp_ContactsAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		04B028FDC41AA1ECB37B2E02 /* Pods-ContactsAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactsAppTests.debug.xcconfig"; path = "Target Support Files/Pods-ContactsAppTests/Pods-ContactsAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		1130A582B3483608C9BFF669 /* Pods-ContactsApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactsApp.debug.xcconfig"; path = "Target Support Files/Pods-ContactsApp/Pods-ContactsApp.debug.xcconfig"; sourceTree = "<group>"; };
+		1EC91540B630CD1EA4EDDC63 /* Pods-ContactsAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactsAppTests.release.xcconfig"; path = "Target Support Files/Pods-ContactsAppTests/Pods-ContactsAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		205BDE4033F9E76C265BCCE8 /* Pods-ContactsApp-ContactsAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactsApp-ContactsAppUITests.release.xcconfig"; path = "Target Support Files/Pods-ContactsApp-ContactsAppUITests/Pods-ContactsApp-ContactsAppUITests.release.xcconfig"; sourceTree = "<group>"; };
 		2D06CA5A949831E6A2DDE750 /* Pods_ContactsApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ContactsApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4CFE38CC3666A8EC24610D5C /* Pods_ContactsApp_ContactsAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ContactsApp_ContactsAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		39DB43FB58512A6EA8D8B6C2 /* Pods_ContactsAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ContactsAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5059F97C04259629C25F6B60 /* Pods-ContactsApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactsApp.release.xcconfig"; path = "Target Support Files/Pods-ContactsApp/Pods-ContactsApp.release.xcconfig"; sourceTree = "<group>"; };
 		C3E67EFA978D4DE40B8613E9 /* Pods-ContactsApp-ContactsAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactsApp-ContactsAppUITests.debug.xcconfig"; path = "Target Support Files/Pods-ContactsApp-ContactsAppUITests/Pods-ContactsApp-ContactsAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		CA353E2B77B7D5060FB58374 /* Pods-ContactsApp-ContactsAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactsApp-ContactsAppTests.debug.xcconfig"; path = "Target Support Files/Pods-ContactsApp-ContactsAppTests/Pods-ContactsApp-ContactsAppTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -94,7 +96,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D13ED7302B6D2CC2A0AD98B1 /* Pods_ContactsApp_ContactsAppTests.framework in Frameworks */,
+				F978449275FF4795A13FBFA8 /* Pods_ContactsAppTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,6 +120,8 @@
 				205BDE4033F9E76C265BCCE8 /* Pods-ContactsApp-ContactsAppUITests.release.xcconfig */,
 				CA353E2B77B7D5060FB58374 /* Pods-ContactsApp-ContactsAppTests.debug.xcconfig */,
 				E271E04A40827F4886BD885E /* Pods-ContactsApp-ContactsAppTests.release.xcconfig */,
+				04B028FDC41AA1ECB37B2E02 /* Pods-ContactsAppTests.debug.xcconfig */,
+				1EC91540B630CD1EA4EDDC63 /* Pods-ContactsAppTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -127,7 +131,7 @@
 			children = (
 				2D06CA5A949831E6A2DDE750 /* Pods_ContactsApp.framework */,
 				01B077C5BF960A46A307FDCF /* Pods_ContactsApp_ContactsAppUITests.framework */,
-				4CFE38CC3666A8EC24610D5C /* Pods_ContactsApp_ContactsAppTests.framework */,
+				39DB43FB58512A6EA8D8B6C2 /* Pods_ContactsAppTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -305,7 +309,6 @@
 				DD12235B2C10CF9500A5C93B /* Sources */,
 				DD12235C2C10CF9500A5C93B /* Frameworks */,
 				DD12235D2C10CF9500A5C93B /* Resources */,
-				4699158B53CBB35BCFDD0E0F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -431,23 +434,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		4699158B53CBB35BCFDD0E0F /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ContactsApp-ContactsAppTests/Pods-ContactsApp-ContactsAppTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ContactsApp-ContactsAppTests/Pods-ContactsApp-ContactsAppTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ContactsApp-ContactsAppTests/Pods-ContactsApp-ContactsAppTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		6E707196E6A6734894BDB9E3 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -519,7 +505,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ContactsApp-ContactsAppTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-ContactsAppTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -770,7 +756,7 @@
 		};
 		DD1223772C10CF9500A5C93B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CA353E2B77B7D5060FB58374 /* Pods-ContactsApp-ContactsAppTests.debug.xcconfig */;
+			baseConfigurationReference = 04B028FDC41AA1ECB37B2E02 /* Pods-ContactsAppTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -791,7 +777,7 @@
 		};
 		DD1223782C10CF9500A5C93B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E271E04A40827F4886BD885E /* Pods-ContactsApp-ContactsAppTests.release.xcconfig */;
+			baseConfigurationReference = 1EC91540B630CD1EA4EDDC63 /* Pods-ContactsAppTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";

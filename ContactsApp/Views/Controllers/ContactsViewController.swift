@@ -35,7 +35,6 @@ class ContactsViewController: UIViewController {
         label.text = NSLocalizedString(LocalConstants.titleLabelText, comment: "")
         label.textAlignment = .left
         label.font = LocalConstants.titleLabelFont
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -44,7 +43,6 @@ class ContactsViewController: UIViewController {
         searchBar.placeholder = LocalConstants.searchBarPlaceholder
         searchBar.backgroundImage = UIImage()
         searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
         return searchBar
     }()
     
@@ -53,13 +51,11 @@ class ContactsViewController: UIViewController {
         label.text = NSLocalizedString(LocalConstants.infoLabeltext, comment: "")
         label.font = LocalConstants.infoLabelFont
         label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
     
@@ -95,32 +91,36 @@ class ContactsViewController: UIViewController {
         self.view.addSubview(self.tableView)
         self.view.addSubview(self.addButton)
         
-        NSLayoutConstraint.activate([
-            self.titleLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: LocalConstants.labelPadding),
-            self.titleLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -LocalConstants.labelPadding),
-            self.titleLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: LocalConstants.titleLabelTopPadding),
-            self.titleLabel.heightAnchor.constraint(equalToConstant: LocalConstants.heightLabels),
-            
-            self.searchBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: LocalConstants.labelPadding - CGFloat(LocalConstants.searchBarPlaceholder.count)),
-            self.searchBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -LocalConstants.labelPadding),
-            self.searchBar.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor),
-            self.searchBar.heightAnchor.constraint(equalToConstant: LocalConstants.heightLabels),
-            
-            self.infoLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: LocalConstants.labelPadding),
-            self.infoLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -LocalConstants.labelPadding),
-            self.infoLabel.topAnchor.constraint(equalTo: self.searchBar.bottomAnchor),
-            self.infoLabel.heightAnchor.constraint(equalToConstant: LocalConstants.heightLabels),
-            
-            self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            self.tableView.topAnchor.constraint(equalTo: self.infoLabel.bottomAnchor),
-            self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-            
-            self.addButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -LocalConstants.addButtonInsets.right),
-            self.addButton.heightAnchor.constraint(equalToConstant: LocalConstants.addButtonHeight),
-            self.addButton.widthAnchor.constraint(equalTo: self.addButton.heightAnchor),
-            self.addButton.bottomAnchor.constraint(equalTo: self.tableView.bottomAnchor, constant: -LocalConstants.addButtonInsets.bottom)
-        ])
+        self.titleLabel.snp.makeConstraints { (make) -> Void in
+            make.top.equalTo(self.view.snp.top).inset(LocalConstants.titleLabelTopPadding)
+            make.leading.trailing.equalTo(self.view).inset(LocalConstants.labelPadding)
+            make.height.equalTo(LocalConstants.heightLabels)
+        }
+        
+        self.searchBar.snp.makeConstraints { (make) -> Void in
+            make.top.equalTo(self.titleLabel.snp.bottom)
+            make.leading.trailing.equalTo(self.view).inset(LocalConstants.labelPadding - CGFloat(LocalConstants.searchBarPlaceholder.count))
+            make.height.equalTo(LocalConstants.heightLabels)
+        }
+        
+        self.infoLabel.snp.makeConstraints { (make) -> Void  in
+            make.top.equalTo(self.searchBar.snp.bottom)
+            make.leading.trailing.equalTo(self.view).inset(LocalConstants.labelPadding)
+            make.height.equalTo(LocalConstants.heightLabels)
+        }
+        
+        self.tableView.snp.makeConstraints { (make) -> Void in
+            make.top.equalTo(self.infoLabel.snp.bottom)
+            make.leading.trailing.equalTo(self.view)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        self.addButton.snp.makeConstraints { (make) -> Void in
+            make.trailing.equalTo(self.view).inset(LocalConstants.addButtonInsets.right)
+            make.height.equalTo(LocalConstants.addButtonHeight)
+            make.width.equalTo(LocalConstants.addButtonHeight)
+            make.bottom.equalTo(self.tableView.snp.bottom).inset(LocalConstants.addButtonInsets.bottom)
+        }
     }
     
 }
