@@ -19,15 +19,17 @@ class ContactsViewController: UIViewController {
         static let backgroundColor: UIColor = UIColor(hexString: "FFFFFF")
         static let addButtonColor: UIColor = UIColor(hexString: "447BF1")
         static let infoLabelBackgroundColor: UIColor = UIColor(hexString: "F0F5FF")
+        static let infoLabelCornerRadius: CGFloat = 5.0
         static let titleLabelTopPadding: CGFloat = 80.0
         static let defaultPaddingLabels: CGFloat = 30.0
         static let defaultHeightLabels: CGFloat = 40.0
         static let defaultTopInsetLabels: CGFloat = 15.0
         static let addButtonHeight: CGFloat = 70.0
         static let addButtonInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 39.0, right: 27.0)
+        static let plusSize: CGSize = CGSize(width: 30.0, height: 30.0)
         static let searchBarPlaceholder = "Search"
         static let infoLabelText = "💡 Swipe to delete contact from list"
-        static let addButtonIconName = "plus"
+        static let addButtonAssetsIconName = "plus"
         static let titleLabelText = "Contacts"
     }
     
@@ -58,7 +60,7 @@ class ContactsViewController: UIViewController {
     private lazy var infoLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = LocalConstants.infoLabelBackgroundColor
-        label.layer.cornerRadius  = 5.0
+        label.layer.cornerRadius = LocalConstants.infoLabelCornerRadius
         label.clipsToBounds = true
         label.text = NSLocalizedString(LocalConstants.infoLabelText, comment: "")
         label.font = LocalConstants.infoLabelFont
@@ -75,14 +77,14 @@ class ContactsViewController: UIViewController {
         let button = UIButton()
         button.backgroundColor = LocalConstants.addButtonColor
         button.tintColor = LocalConstants.backgroundColor
-        if let plusImage = UIImage(named: LocalConstants.addButtonIconName) {
-            let image = plusImage.resized(to: CGSize(width: 30.0, height: 30.0))
+        if let plusImage = UIImage(named: LocalConstants.addButtonAssetsIconName) {
+            let image = plusImage.resized(to: LocalConstants.plusSize)
             button.setImage(image, for: .normal)
         }
         button.layer.cornerRadius = LocalConstants.addButtonHeight / 2
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowOpacity = 0.15
-        button.layer.shadowOffset = CGSize(width: 0, height: 4)
+        button.layer.shadowOffset = CGSize(width: 0.0, height: 4.0)
         return button
     }()
     
