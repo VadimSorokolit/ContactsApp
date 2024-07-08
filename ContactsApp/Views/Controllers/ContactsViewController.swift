@@ -19,13 +19,16 @@ class ContactsViewController: UIViewController {
         static let backgroundColor: UIColor = UIColor(hexString: "FFFFFF")
         static let addButtonColor: UIColor = UIColor(hexString: "447BF1")
         static let infoLabelBackgroundColor: UIColor = UIColor(hexString: "F0F5FF")
+        static let lineViewHeight: CGFloat = 1.0
         static let infoLabelCornerRadius: CGFloat = 5.0
         static let titleLabelTopPadding: CGFloat = 80.0
         static let defaultPaddingLabels: CGFloat = 30.0
         static let defaultHeightLabels: CGFloat = 40.0
         static let defaultTopInsetLabels: CGFloat = 15.0
         static let addButtonHeight: CGFloat = 70.0
-        static let addButtonInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 39.0, right: 27.0)
+        static let addButtonInsets: UIEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 39.0, right: 27.0)
+        static let addButtonShadowOpacity: Float = 0.15
+        static let addButtonShadowOffSet: CGSize = CGSize(width: 0.0, height: 4.0)
         static let plusSize: CGSize = CGSize(width: 30.0, height: 30.0)
         static let searchBarPlaceholder = "Search"
         static let infoLabelText = "💡 Swipe to delete contact from list"
@@ -83,8 +86,8 @@ class ContactsViewController: UIViewController {
         }
         button.layer.cornerRadius = LocalConstants.addButtonHeight / 2
         button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOpacity = 0.15
-        button.layer.shadowOffset = CGSize(width: 0.0, height: 4.0)
+        button.layer.shadowOpacity = LocalConstants.addButtonShadowOpacity
+        button.layer.shadowOffset = LocalConstants.addButtonShadowOffSet
         return button
     }()
     
@@ -127,7 +130,7 @@ class ContactsViewController: UIViewController {
         self.lineView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.searchBar.snp.bottom).inset(-LocalConstants.defaultTopInsetLabels)
             make.leading.trailing.equalTo(self.view)
-            make.height.equalTo(1.0)
+            make.height.equalTo(LocalConstants.lineViewHeight)
         })
         
         self.infoLabel.snp.makeConstraints({ (make: ConstraintMaker) -> Void  in
