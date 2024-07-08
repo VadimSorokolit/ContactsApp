@@ -5,6 +5,7 @@
 //  Created by Vadim Sorokolit on 05.06.2024.
 //
 
+import Foundation
 import UIKit
 import CoreData
 

@@ -5,6 +5,7 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>Manrope-Medium.ttf</string>
+		<string>Manrope-ExtraBold.ttf</string>
 		<string>Manrope-Bold.ttf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>

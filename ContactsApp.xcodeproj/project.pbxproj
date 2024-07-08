@@ -26,6 +26,7 @@
 		DD66DD012C3496A800EA3EDB /* GlobalConstans.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD66DD002C3496A800EA3EDB /* GlobalConstans.swift */; };
 		DD66DD052C352A4C00EA3EDB /* UIColor+hexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD66DD042C352A4C00EA3EDB /* UIColor+hexString.swift */; };
 		DD72B98D2C18C998003FBB46 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD72B98C2C18C998003FBB46 /* CoreDataService.swift */; };
+		DD73768C2C3C53B300791B0E /* Manrope-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DD73768B2C3C53B300791B0E /* Manrope-ExtraBold.ttf */; };
 		E8B335379D4445D2FCC312F2 /* Pods_ContactsApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D06CA5A949831E6A2DDE750 /* Pods_ContactsApp.framework */; };
 		F978449275FF4795A13FBFA8 /* Pods_ContactsAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39DB43FB58512A6EA8D8B6C2 /* Pods_ContactsAppTests.framework */; };
 /* End PBXBuildFile section */
@@ -80,6 +81,7 @@
 		DD66DD002C3496A800EA3EDB /* GlobalConstans.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstans.swift; sourceTree = "<group>"; };
 		DD66DD042C352A4C00EA3EDB /* UIColor+hexString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+hexString.swift"; sourceTree = "<group>"; };
 		DD72B98C2C18C998003FBB46 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
+		DD73768B2C3C53B300791B0E /* Manrope-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Manrope-ExtraBold.ttf"; sourceTree = "<group>"; };
 		E271E04A40827F4886BD885E /* Pods-ContactsApp-ContactsAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactsApp-ContactsAppTests.release.xcconfig"; path = "Target Support Files/Pods-ContactsApp-ContactsAppTests/Pods-ContactsApp-ContactsAppTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -219,6 +221,7 @@
 			isa = PBXGroup;
 			children = (
 				DD5DCF282C35D8A8007A33BC /* Manrope-Bold.ttf */,
+				DD73768B2C3C53B300791B0E /* Manrope-ExtraBold.ttf */,
 				DD5DCF2A2C35D8C7007A33BC /* Manrope-Medium.ttf */,
 			);
 			path = Fonts;
@@ -388,6 +391,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD73768C2C3C53B300791B0E /* Manrope-ExtraBold.ttf in Resources */,
 				DD1223562C10CF9400A5C93B /* Assets.xcassets in Resources */,
 				DD5DCF292C35D8A8007A33BC /* Manrope-Bold.ttf in Resources */,
 				DD5DCF2B2C35D8C7007A33BC /* Manrope-Medium.ttf in Resources */,
