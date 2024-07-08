@@ -124,7 +124,7 @@ class ContactsViewController: UIViewController {
         
         self.searchBar.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.titleLabel.snp.bottom).inset(-Constants.defaultTopInsetLabels / 1.3)
-            make.leading.trailing.equalTo(self.view).inset(Constants.defaultPaddingLabels - CGFloat(Constants.searchBarPlaceholder.count))
+            make.leading.trailing.equalTo(self.view).inset(Constants.defaultPaddingLabels - CGFloat(Constants.searchBarPlaceholder.count) - 2.0)
             make.height.equalTo(Constants.defaultHeightLabels)
         })
         
