@@ -18,9 +18,11 @@ class ContactsViewController: UIViewController {
         static let infoLabelFont: UIFont = UIFont(name: "Manrope-Medium", size: 14.0) ?? UIFont.systemFont(ofSize: 14.0)
         static let backgroundColor: UIColor = UIColor(hexString: "FFFFFF")
         static let addButtonColor: UIColor = UIColor(hexString: "447BF1")
+        static let infoLabelBackgroundColor: UIColor = UIColor(hexString: "F0F5FF")
         static let titleLabelTopPadding: CGFloat = 80.0
         static let defaultPaddingLabels: CGFloat = 30.0
         static let defaultHeightLabels: CGFloat = 40.0
+        static let defaultTopInsetLabels: CGFloat = 15.0
         static let addButtonHeight: CGFloat = 70.0
         static let addButtonInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 39.0, right: 27.0)
         static let searchBarPlaceholder = "Search"
@@ -47,8 +49,17 @@ class ContactsViewController: UIViewController {
         return searchBar
     }()
     
+    private lazy var lineView: UIView = {
+        let lineView = UIView()
+        lineView.backgroundColor = .black
+        return lineView
+    }()
+    
     private lazy var infoLabel: UILabel = {
         let label = UILabel()
+        label.backgroundColor = LocalConstants.infoLabelBackgroundColor
+        label.layer.cornerRadius  = 5.0
+        label.clipsToBounds = true
         label.text = NSLocalizedString(LocalConstants.infoLabelText, comment: "")
         label.font = LocalConstants.infoLabelFont
         label.textAlignment = .center
@@ -64,8 +75,14 @@ class ContactsViewController: UIViewController {
         let button = UIButton()
         button.backgroundColor = LocalConstants.addButtonColor
         button.tintColor = LocalConstants.backgroundColor
-        button.setImage(UIImage(systemName: LocalConstants.addButtonIconName), for: .normal)
+        if let plusImage = UIImage(named: LocalConstants.addButtonIconName) {
+            let image = plusImage.resized(to: CGSize(width: 30.0, height: 30.0))
+            button.setImage(image, for: .normal)
+        }
         button.layer.cornerRadius = LocalConstants.addButtonHeight / 2
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.15
+        button.layer.shadowOffset = CGSize(width: 0, height: 4)
         return button
     }()
     
@@ -88,6 +105,7 @@ class ContactsViewController: UIViewController {
         
         self.view.addSubview(self.titleLabel)
         self.view.addSubview(self.searchBar)
+        self.view.addSubview(self.lineView)
         self.view.addSubview(self.infoLabel)
         self.view.addSubview(self.tableView)
         self.view.addSubview(self.addButton)
@@ -99,13 +117,19 @@ class ContactsViewController: UIViewController {
         })
         
         self.searchBar.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.titleLabel.snp.bottom)
+            make.top.equalTo(self.titleLabel.snp.bottom).inset(-LocalConstants.defaultTopInsetLabels / 6.0)
             make.leading.trailing.equalTo(self.view).inset(LocalConstants.defaultPaddingLabels - CGFloat(LocalConstants.searchBarPlaceholder.count))
             make.height.equalTo(LocalConstants.defaultHeightLabels)
         })
         
+        self.lineView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.searchBar.snp.bottom).inset(-LocalConstants.defaultTopInsetLabels)
+            make.leading.trailing.equalTo(self.view)
+            make.height.equalTo(1.0)
+        })
+        
         self.infoLabel.snp.makeConstraints({ (make: ConstraintMaker) -> Void  in
-            make.top.equalTo(self.searchBar.snp.bottom)
+            make.top.equalTo(self.lineView.snp.bottom).inset(-LocalConstants.defaultTopInsetLabels)
             make.leading.trailing.equalTo(self.view).inset(LocalConstants.defaultPaddingLabels)
             make.height.equalTo(LocalConstants.defaultHeightLabels)
         })
