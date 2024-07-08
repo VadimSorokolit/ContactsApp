@@ -55,7 +55,13 @@ class ContactsViewController: UIViewController {
         return searchBar
     }()
     
-    private lazy var lineView: UIView = {
+    private lazy var navBarLineView: UIView = {
+        let lineView = UIView()
+        lineView.backgroundColor = Constants.lineViewBackgroundColor
+        return lineView
+    }()
+    
+    private lazy var tableViewlineView: UIView = {
         let lineView = UIView()
         lineView.backgroundColor = Constants.lineViewBackgroundColor
         return lineView
@@ -111,8 +117,9 @@ class ContactsViewController: UIViewController {
         
         self.view.addSubview(self.titleLabel)
         self.view.addSubview(self.searchBar)
-        self.view.addSubview(self.lineView)
+        self.view.addSubview(self.navBarLineView)
         self.view.addSubview(self.infoLabel)
+        self.view.addSubview(self.tableViewlineView)
         self.view.addSubview(self.tableView)
         self.view.addSubview(self.addButton)
         
@@ -128,20 +135,26 @@ class ContactsViewController: UIViewController {
             make.height.equalTo(Constants.defaultHeightLabels)
         })
         
-        self.lineView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
+        self.navBarLineView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.searchBar.snp.bottom).inset(-Constants.defaultTopInsetLabels)
             make.leading.trailing.equalTo(self.view)
             make.height.equalTo(Constants.lineViewHeight)
         })
         
         self.infoLabel.snp.makeConstraints({ (make: ConstraintMaker) -> Void  in
-            make.top.equalTo(self.lineView.snp.bottom).inset(-Constants.defaultTopInsetLabels)
+            make.top.equalTo(self.navBarLineView.snp.bottom).inset(-Constants.defaultTopInsetLabels)
             make.leading.trailing.equalTo(self.view).inset(Constants.defaultPaddingLabels)
             make.height.equalTo(Constants.defaultHeightLabels)
         })
         
-        self.tableView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
+        self.tableViewlineView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.infoLabel.snp.bottom).inset(-Constants.defaultTopInsetLabels)
+            make.leading.trailing.equalTo(self.view)
+            make.height.equalTo(Constants.lineViewHeight)
+        })
+        
+        self.tableView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.tableViewlineView.snp.bottom).inset(-Constants.defaultTopInsetLabels)
             make.leading.trailing.equalTo(self.view)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
         })
