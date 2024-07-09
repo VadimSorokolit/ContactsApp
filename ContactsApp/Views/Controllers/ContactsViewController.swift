@@ -20,10 +20,10 @@ class ContactsViewController: UIViewController {
         static let infoLabelBackgroundColor: UIColor = UIColor(hexString: "F0F5FF")
         static let searchBarBackgroundColor: UIColor = UIColor(hexString: "E1E6F0")
         static let addButtonColor: UIColor = UIColor(hexString: "447BF1")
-        static let backgroundColorViewLines: UIColor = UIColor(hexString: "E5E5E5")
+        static let separatorBackgroundColor: UIColor = UIColor(hexString: "E5E5E5")
         static let heightViewLines: CGFloat = 1.0
         static let infoLabelCornerRadius: CGFloat = 5.0
-        static let searchBarCornerRadius: CGFloat = 16.0
+        static let searchBarCornerRadius: CGFloat = 10.0
         static let titleLabelTopPadding: CGFloat = 80.0
         static let defaultPaddingLabels: CGFloat = 30.0
         static let defaultHeightLabels: CGFloat = 40.0
@@ -61,12 +61,6 @@ class ContactsViewController: UIViewController {
         return searchBar
     }()
     
-    private lazy var navBarLineView: UIView = {
-        let lineView = UIView()
-        lineView.backgroundColor = Constants.backgroundColorViewLines
-        return lineView
-    }()
-    
     private lazy var infoLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = Constants.infoLabelBackgroundColor
@@ -78,9 +72,9 @@ class ContactsViewController: UIViewController {
         return label
     }()
     
-    private lazy var tableViewlineView: UIView = {
+    private lazy var navBarSeparator: UIView = {
         let lineView = UIView()
-        lineView.backgroundColor = Constants.backgroundColorViewLines
+        lineView.backgroundColor = Constants.separatorBackgroundColor
         return lineView
     }()
     
@@ -104,6 +98,11 @@ class ContactsViewController: UIViewController {
         return button
     }()
     
+    private lazy var headerContainerView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -120,47 +119,48 @@ class ContactsViewController: UIViewController {
     
     private func setupViews() {
         self.view.backgroundColor = Constants.backgroundColor
+        self.view.addSubview(self.headerContainerView)
         
-        self.view.addSubview(self.titleLabel)
-        self.view.addSubview(self.searchBar)
-        self.view.addSubview(self.navBarLineView)
-        self.view.addSubview(self.infoLabel)
-        self.view.addSubview(self.tableViewlineView)
+        self.headerContainerView.addSubview(self.titleLabel)
+        self.headerContainerView.addSubview(self.searchBar)
+        self.headerContainerView.addSubview(self.infoLabel)
+        
+        self.view.addSubview(self.navBarSeparator)
         self.view.addSubview(self.tableView)
         self.view.addSubview(self.addButton)
         
-        self.titleLabel.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
+        self.headerContainerView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.view.snp.top).inset(Constants.titleLabelTopPadding)
             make.leading.trailing.equalTo(self.view).inset(Constants.defaultPaddingLabels)
+        })
+        
+        self.titleLabel.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.headerContainerView.snp.top)
+            make.leading.trailing.equalTo(self.headerContainerView)
             make.height.equalTo(Constants.defaultHeightLabels)
         })
         
         self.searchBar.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.titleLabel.snp.bottom).inset(-Constants.defaultTopInsetLabels / 1.3)
-            make.leading.trailing.equalTo(self.view).inset(Constants.defaultPaddingLabels)
+            make.leading.trailing.equalTo(self.headerContainerView)
             make.height.equalTo(Constants.defaultHeightLabels)
-        })
-        
-        self.navBarLineView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.searchBar.snp.bottom).inset(-Constants.defaultTopInsetLabels)
-            make.leading.trailing.equalTo(self.view)
-            make.height.equalTo(Constants.heightViewLines)
         })
         
         self.infoLabel.snp.makeConstraints({ (make: ConstraintMaker) -> Void  in
-            make.top.equalTo(self.navBarLineView.snp.bottom).inset(-Constants.defaultTopInsetLabels)
-            make.leading.trailing.equalTo(self.view).inset(Constants.defaultPaddingLabels)
+            make.top.equalTo(self.searchBar.snp.bottom).inset(-Constants.defaultTopInsetLabels)
+            make.leading.trailing.equalTo(self.headerContainerView)
             make.height.equalTo(Constants.defaultHeightLabels)
+            make.bottom.equalTo(self.headerContainerView.snp.bottom)
         })
         
-        self.tableViewlineView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.infoLabel.snp.bottom).inset(-Constants.defaultTopInsetLabels)
+        self.navBarSeparator.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.headerContainerView.snp.bottom).inset(-Constants.defaultTopInsetLabels)
             make.leading.trailing.equalTo(self.view)
             make.height.equalTo(Constants.heightViewLines)
         })
         
         self.tableView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.tableViewlineView.snp.bottom).inset(-Constants.defaultTopInsetLabels)
+            make.top.equalTo(self.navBarSeparator.snp.bottom).inset(-Constants.defaultTopInsetLabels)
             make.leading.trailing.equalTo(self.view)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
         })
