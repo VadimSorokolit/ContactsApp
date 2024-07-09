@@ -17,10 +17,10 @@ class ContactsViewController: UIViewController {
         static let titleLabelFont: UIFont = UIFont(name: "Manrope-ExtraBold", size: 28.0) ?? UIFont.systemFont(ofSize: 28.0)
         static let infoLabelFont: UIFont = UIFont(name: "Manrope-Medium", size: 14.0) ?? UIFont.systemFont(ofSize: 14.0)
         static let backgroundColor: UIColor = UIColor(hexString: "FFFFFF")
-        static let addButtonColor: UIColor = UIColor(hexString: "447BF1")
         static let infoLabelBackgroundColor: UIColor = UIColor(hexString: "F0F5FF")
-        static let lineViewBackgroundColor: UIColor = UIColor(hexString: "e5e5e5")
-        static let lineViewHeight: CGFloat = 1.0
+        static let addButtonColor: UIColor = UIColor(hexString: "447BF1")
+        static let backgroundColorViewLines: UIColor = UIColor(hexString: "e5e5e5")
+        static let heightViewLines: CGFloat = 1.0
         static let infoLabelCornerRadius: CGFloat = 5.0
         static let titleLabelTopPadding: CGFloat = 80.0
         static let defaultPaddingLabels: CGFloat = 30.0
@@ -57,13 +57,13 @@ class ContactsViewController: UIViewController {
     
     private lazy var navBarLineView: UIView = {
         let lineView = UIView()
-        lineView.backgroundColor = Constants.lineViewBackgroundColor
+        lineView.backgroundColor = Constants.backgroundColorViewLines
         return lineView
     }()
     
     private lazy var tableViewlineView: UIView = {
         let lineView = UIView()
-        lineView.backgroundColor = Constants.lineViewBackgroundColor
+        lineView.backgroundColor = Constants.backgroundColorViewLines
         return lineView
     }()
     
@@ -138,7 +138,7 @@ class ContactsViewController: UIViewController {
         self.navBarLineView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.searchBar.snp.bottom).inset(-Constants.defaultTopInsetLabels)
             make.leading.trailing.equalTo(self.view)
-            make.height.equalTo(Constants.lineViewHeight)
+            make.height.equalTo(Constants.heightViewLines)
         })
         
         self.infoLabel.snp.makeConstraints({ (make: ConstraintMaker) -> Void  in
@@ -150,7 +150,7 @@ class ContactsViewController: UIViewController {
         self.tableViewlineView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.infoLabel.snp.bottom).inset(-Constants.defaultTopInsetLabels)
             make.leading.trailing.equalTo(self.view)
-            make.height.equalTo(Constants.lineViewHeight)
+            make.height.equalTo(Constants.heightViewLines)
         })
         
         self.tableView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
