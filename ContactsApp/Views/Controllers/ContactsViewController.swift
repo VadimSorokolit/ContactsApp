@@ -18,10 +18,12 @@ class ContactsViewController: UIViewController {
         static let infoLabelFont: UIFont = UIFont(name: "Manrope-Medium", size: 14.0) ?? UIFont.systemFont(ofSize: 14.0)
         static let backgroundColor: UIColor = UIColor(hexString: "FFFFFF")
         static let infoLabelBackgroundColor: UIColor = UIColor(hexString: "F0F5FF")
+        static let searchBarBackgroundColor: UIColor = UIColor(hexString: "E1E6F0")
         static let addButtonColor: UIColor = UIColor(hexString: "447BF1")
-        static let backgroundColorViewLines: UIColor = UIColor(hexString: "e5e5e5")
+        static let backgroundColorViewLines: UIColor = UIColor(hexString: "E5E5E5")
         static let heightViewLines: CGFloat = 1.0
         static let infoLabelCornerRadius: CGFloat = 5.0
+        static let searchBarCornerRadius: CGFloat = 16.0
         static let titleLabelTopPadding: CGFloat = 80.0
         static let defaultPaddingLabels: CGFloat = 30.0
         static let defaultHeightLabels: CGFloat = 40.0
@@ -52,6 +54,10 @@ class ContactsViewController: UIViewController {
         searchBar.placeholder = Constants.searchBarPlaceholder
         searchBar.backgroundImage = UIImage()
         searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
+        searchBar.backgroundColor = Constants.searchBarBackgroundColor
+        searchBar.layer.cornerRadius = Constants.searchBarCornerRadius
+        searchBar.layer.masksToBounds = true
+        searchBar.searchTextField.borderStyle = .none
         return searchBar
     }()
     
@@ -131,7 +137,7 @@ class ContactsViewController: UIViewController {
         
         self.searchBar.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.titleLabel.snp.bottom).inset(-Constants.defaultTopInsetLabels / 1.3)
-            make.leading.trailing.equalTo(self.view).inset(Constants.defaultPaddingLabels - CGFloat(Constants.searchBarPlaceholder.count) - 2.0)
+            make.leading.trailing.equalTo(self.view).inset(Constants.defaultPaddingLabels)
             make.height.equalTo(Constants.defaultHeightLabels)
         })
         
