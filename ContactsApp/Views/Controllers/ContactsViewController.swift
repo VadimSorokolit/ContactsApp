@@ -35,7 +35,7 @@ class ContactsViewController: UIViewController {
         static let iconPlusSize: CGSize = CGSize(width: 30.0, height: 30.0)
         static let searchBarPlaceholder = "Search"
         static let infoLabelText = "💡 Swipe to delete contact from list"
-        static let addButtonAssetsIconName = "plus"
+        static let addButtonIconName = "plus"
         static let titleLabelText = "Contacts"
     }
     
@@ -67,12 +67,6 @@ class ContactsViewController: UIViewController {
         return lineView
     }()
     
-    private lazy var tableViewlineView: UIView = {
-        let lineView = UIView()
-        lineView.backgroundColor = Constants.backgroundColorViewLines
-        return lineView
-    }()
-    
     private lazy var infoLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = Constants.infoLabelBackgroundColor
@@ -84,6 +78,12 @@ class ContactsViewController: UIViewController {
         return label
     }()
     
+    private lazy var tableViewlineView: UIView = {
+        let lineView = UIView()
+        lineView.backgroundColor = Constants.backgroundColorViewLines
+        return lineView
+    }()
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         return tableView
@@ -93,7 +93,7 @@ class ContactsViewController: UIViewController {
         let button = UIButton()
         button.backgroundColor = Constants.addButtonColor
         button.tintColor = Constants.backgroundColor
-        if let plusImage = UIImage(named: Constants.addButtonAssetsIconName) {
+        if let plusImage = UIImage(named: Constants.addButtonIconName) {
             let image = plusImage.resized(to: Constants.iconPlusSize)
             button.setImage(image, for: .normal)
         }
