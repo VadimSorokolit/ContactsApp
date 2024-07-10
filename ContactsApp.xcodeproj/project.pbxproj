@@ -28,6 +28,7 @@
 		DD72B98D2C18C998003FBB46 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD72B98C2C18C998003FBB46 /* CoreDataService.swift */; };
 		DD73768C2C3C53B300791B0E /* Manrope-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DD73768B2C3C53B300791B0E /* Manrope-ExtraBold.ttf */; };
 		DD73768E2C3C6F0600791B0E /* ResizeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD73768D2C3C6F0600791B0E /* ResizeImage.swift */; };
+		DD7376912C3E64AF00791B0E /* FetchContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7376902C3E64AF00791B0E /* FetchContactCell.swift */; };
 		E8B335379D4445D2FCC312F2 /* Pods_ContactsApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D06CA5A949831E6A2DDE750 /* Pods_ContactsApp.framework */; };
 		F978449275FF4795A13FBFA8 /* Pods_ContactsAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39DB43FB58512A6EA8D8B6C2 /* Pods_ContactsAppTests.framework */; };
 /* End PBXBuildFile section */
@@ -84,6 +85,7 @@
 		DD72B98C2C18C998003FBB46 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		DD73768B2C3C53B300791B0E /* Manrope-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Manrope-ExtraBold.ttf"; sourceTree = "<group>"; };
 		DD73768D2C3C6F0600791B0E /* ResizeImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizeImage.swift; sourceTree = "<group>"; };
+		DD7376902C3E64AF00791B0E /* FetchContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchContactCell.swift; sourceTree = "<group>"; };
 		E271E04A40827F4886BD885E /* Pods-ContactsApp-ContactsAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactsApp-ContactsAppTests.release.xcconfig"; path = "Target Support Files/Pods-ContactsApp-ContactsAppTests/Pods-ContactsApp-ContactsAppTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -233,6 +235,7 @@
 		DD66DCFD2C3493E000EA3EDB /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DD73768F2C3E61A000791B0E /* Cells */,
 				DD66DCFE2C34949500EA3EDB /* Controllers */,
 			);
 			path = Views;
@@ -283,6 +286,14 @@
 				DD66DD072C35A4BD00EA3EDB /* Entities */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		DD73768F2C3E61A000791B0E /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				DD7376902C3E64AF00791B0E /* FetchContactCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -537,6 +548,7 @@
 				DD12234A2C10CF9300A5C93B /* AppDelegate.swift in Sources */,
 				DD0DB21A2C24A6880058A001 /* NotificationNames.swift in Sources */,
 				DD66DD052C352A4C00EA3EDB /* UIColor+hexString.swift in Sources */,
+				DD7376912C3E64AF00791B0E /* FetchContactCell.swift in Sources */,
 				DD12234C2C10CF9300A5C93B /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

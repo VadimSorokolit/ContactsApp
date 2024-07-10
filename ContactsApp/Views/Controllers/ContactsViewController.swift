@@ -41,6 +41,8 @@ class ContactsViewController: UIViewController {
     
     // MARK: - Properties
     
+    private let contactsViewModel: ContactsViewModel
+    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString(Constants.titleLabelText, comment: "")
@@ -103,11 +105,29 @@ class ContactsViewController: UIViewController {
         return view
     }()
     
+    // MARK: - Initializer
+    
+    required init(contactsViewModel: ContactsViewModel) {
+        self.contactsViewModel = contactsViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError(GlobalConstants.fatalError)
+    }
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // self.contactsViewModel.deleteAllContacts()
+        self.contactsViewModel.fetchContacts()
+        if self.contactsViewModel.contacts.isEmpty {
+            self.contactsViewModel.testCreateContacts()
+        } else {
+            print("Database doesn't empty")
+        }
         self.setup()
     }
     

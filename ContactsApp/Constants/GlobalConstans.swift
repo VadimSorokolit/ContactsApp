@@ -9,4 +9,7 @@ import Foundation
 import UIKit
 
 struct GlobalConstants {
+    
+    static let fatalError: String = "init(coder:) has not been implemented"
+    
 }

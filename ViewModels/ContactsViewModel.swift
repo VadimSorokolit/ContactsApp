@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 class ContactsViewModel {
     
@@ -21,6 +22,9 @@ class ContactsViewModel {
         do {
             let contacts = try self.coreDataService.fetchContacts()
             self.contacts = contacts
+            print(contacts.map({ contact in
+                contact.email
+            }))
             self.notify(name: .contactsFetchedNotification)
         } catch {
             self.notify(name: .errorNotification, error: error.localizedDescription)
@@ -43,6 +47,26 @@ class ContactsViewModel {
                 self.contacts.append(contact)
                 self.notify(name: .contactCreatedNotification)
             }
+        } catch {
+            self.notify(name: .errorNotification, error: error.localizedDescription)
+        }
+    }
+    
+    // !!!! Only for test create contacts
+    func testCreateContacts() {
+        self.createContact(fullName: "Vadim Sorokolit", jobPosition: "iOS Developer", email: "macintosh@ukr.net", photo: nil)
+        self.createContact(fullName: "Vasyl Petrenko", jobPosition: "Developer", email: "macintosh@email.ua", photo: nil)
+        self.createContact(fullName: "Viktor Shroyko", jobPosition: "Driver", email: "kotik@ukr.net", photo: nil)
+        let image = UIImage(named: "splashScreenImage")
+        self.createContact(fullName: "Marina Nazarenko", jobPosition: "Teacher", email: "everest@i.ua", photo: image)
+    }
+    
+    // !!!! Only for test delete all contacts
+    func deleteAllContacts() {
+        do {
+            try self.coreDataService.deleteAllContacts()
+            self.contacts.removeAll()
+            self.notify(name: .contactDeletedNotification)
         } catch {
             self.notify(name: .errorNotification, error: error.localizedDescription)
         }
