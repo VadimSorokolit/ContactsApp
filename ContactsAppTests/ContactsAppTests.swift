@@ -21,7 +21,8 @@ class ContactsAppTests: XCTestCase {
     private let testNewJobPosition: String = "Developer"
     private let testEmail: String = "macintosh@email.ua"
     private let testNewEmail: String = "macintosh@ukr.net"
-    private let testPhoto: UIImage? = nil
+    private let testPhoto: UIImage? = UIImage(systemName: "photo")
+    private let testNewPhoto: UIImage? = UIImage(systemName: "person")
     private let testQuery: String = "i"
     
     // MARK: - SetUp methods
@@ -91,7 +92,7 @@ class ContactsAppTests: XCTestCase {
     func test_SearchContacts() {
         do {
             _ = try self.coreDataService.createContact(fullName: self.testFullName, jobPosition: self.testJobPosition, email: self.testEmail, photo: self.testPhoto)
-            _ = try self.coreDataService.createContact(fullName: self.testNewFullName, jobPosition: self.testNewJobPosition, email: self.testNewEmail, photo: self.testPhoto)
+            _ = try self.coreDataService.createContact(fullName: self.testNewFullName, jobPosition: self.testNewJobPosition, email: self.testNewEmail, photo: self.testNewPhoto)
             let foundContacts = try self.coreDataService.searchContacts(byFullName: self.testQuery, jobPosition: self.testQuery)
 
             XCTAssertEqual(foundContacts.count, 2)
