@@ -42,6 +42,7 @@ class ContactsViewController: UIViewController {
     // MARK: - Properties
     
     private let contactsViewModel: ContactsViewModel
+    private var isSearching: Bool = false
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -53,6 +54,7 @@ class ContactsViewController: UIViewController {
     
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
+        searchBar.delegate = self
         searchBar.placeholder = Constants.searchBarPlaceholder
         searchBar.backgroundImage = UIImage()
         searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
@@ -194,6 +196,31 @@ class ContactsViewController: UIViewController {
             make.width.equalTo(Constants.addButtonHeight)
             make.bottom.equalTo(self.tableView.snp.bottom).inset(Constants.addButtonInsets.bottom)
         })
+    }
+    
+}
+
+// MARK: - UISearchBarDelegate
+
+extension ContactsViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.count >= 3 {
+            self.isSearching = true
+            contactsViewModel.searchContacts(byQuery: searchText)
+        } else {
+            self.isSearching = false
+            self.contactsViewModel.filteredContacts.removeAll()
+        }
+        self.tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
+        self.isSearching = false
+        self.contactsViewModel.filteredContacts.removeAll()
+        self.tableView.reloadData()
     }
     
 }

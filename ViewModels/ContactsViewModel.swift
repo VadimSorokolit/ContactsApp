@@ -15,6 +15,7 @@ class ContactsViewModel {
     
     private let coreDataService: CoreDataService = CoreDataService()
     var contacts: [Contact] = []
+    var filteredContacts: [Contact] = []
     
     // MARK: - Methods
     
