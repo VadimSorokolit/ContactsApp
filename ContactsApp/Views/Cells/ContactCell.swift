@@ -22,7 +22,7 @@ class ContactCell: UITableViewCell {
         static let jobPositionHeight: CGFloat = 19.0
         static let photoImageViewInsets: UIEdgeInsets = UIEdgeInsets(top: 15.0, left: 30.0, bottom: 17.0, right: 0.0)
         static let fullNameLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 18.0, left: 14.0, bottom: 0.0, right: 37.0)
-        static let jobPositionInsets: UIEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+        static let jobPositionInsets: UIEdgeInsets = UIEdgeInsets(top: 3.0, left: 14.0, bottom: 0.0, right: 37.0)
     }
     
     // MARK: - Properties
@@ -45,6 +45,7 @@ class ContactCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = Constants.imageViewWidth / 2
         imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
@@ -103,7 +104,7 @@ class ContactCell: UITableViewCell {
         if let photoImage = contactPhoto {
             self.photoImageView.image = photoImage
         } else {
-            self.photoImageView.image = UIImage(systemName: "photo")
+            self.photoImageView.image = UIImage(named: "placeholder")
         }
     }
     

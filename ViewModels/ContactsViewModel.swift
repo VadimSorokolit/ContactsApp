@@ -55,7 +55,6 @@ class ContactsViewModel {
     // !!!! Only for test create contacts
     func testCreateContacts() {
         self.createContact(fullName: "Vadim Sorokolit", jobPosition: "iOS Developer", email: "macintosh@ukr.net", photo: nil)
-        self.createContact(fullName: "Vasyl Petrenko", jobPosition: "Developer", email: "macintosh@email.ua", photo: nil)
         self.createContact(fullName: "Viktor Shroyko", jobPosition: "Driver", email: "kotik@ukr.net", photo: nil)
         let image = UIImage(named: "splashScreenImage")
         self.createContact(fullName: "Marina Nazarenko", jobPosition: "Teacher", email: "everest@i.ua", photo: image)

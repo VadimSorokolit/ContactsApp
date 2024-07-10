@@ -82,6 +82,9 @@ class ContactsViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
+        tableView.register(ContactCell.self, forCellReuseIdentifier: ContactCell.reuseID)
+        tableView.delegate = self
+        tableView.dataSource = self
         return tableView
     }()
     
@@ -180,7 +183,7 @@ class ContactsViewController: UIViewController {
         })
         
         self.tableView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.navBarSeparator.snp.bottom).inset(-Constants.defaultTopInsetLabels)
+            make.top.equalTo(self.navBarSeparator.snp.bottom)
             make.leading.trailing.equalTo(self.view)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
         })
@@ -191,6 +194,36 @@ class ContactsViewController: UIViewController {
             make.width.equalTo(Constants.addButtonHeight)
             make.bottom.equalTo(self.tableView.snp.bottom).inset(Constants.addButtonInsets.bottom)
         })
+    }
+    
+}
+
+// MARK: - UITableViewDelegate
+
+extension ContactsViewController: UITableViewDelegate {
+    
+}
+
+// MARK: - UITableViewDataSource
+
+extension ContactsViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.contactsViewModel.contacts.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ContactCell.reuseID, for: indexPath) as? ContactCell else {
+            return UITableViewCell()
+        }
+        
+        let contact = self.contactsViewModel.contacts[indexPath.row]
+        cell.setupCell(with: contact)
+        return cell
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
     
 }
