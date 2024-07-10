@@ -1,5 +1,5 @@
 //
-//  FetchContactCell.swift
+//  ContactCell.swift
 //  ContactsApp
 //
 //  Created by Vadim Sorokolit on 10.07.2024.
@@ -9,12 +9,12 @@ import Foundation
 import UIKit
 import SnapKit
 
-class FetchContactCell: UITableViewCell {
+class ContactCell: UITableViewCell {
     
     // MARK: - Objects
     
     private struct LocalConstants {
-        static let reuseIDName: String = "FetchContactCell"
+        static let reuseIDName: String = "ContactCell"
     }
     
     // MARK: - Properties
