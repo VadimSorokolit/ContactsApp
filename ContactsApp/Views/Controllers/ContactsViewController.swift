@@ -210,7 +210,6 @@ extension ContactsViewController: UISearchBarDelegate {
             contactsViewModel.searchContacts(byQuery: searchText)
         } else {
             self.isSearching = false
-            self.contactsViewModel.filteredContacts.removeAll()
         }
         self.tableView.reloadData()
     }
@@ -219,7 +218,6 @@ extension ContactsViewController: UISearchBarDelegate {
         searchBar.text = ""
         searchBar.resignFirstResponder()
         self.isSearching = false
-        self.contactsViewModel.filteredContacts.removeAll()
         self.tableView.reloadData()
     }
     
