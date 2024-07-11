@@ -14,14 +14,14 @@ class ContactsViewController: UIViewController {
     // MARK: - Objects
     
     private struct Constants {
-        static let titleLabelFont: UIFont = UIFont(name: "Manrope-ExtraBold", size: 28.0) ?? UIFont.systemFont(ofSize: 28.0)
-        static let infoLabelFont: UIFont = UIFont(name: "Manrope-Medium", size: 14.0) ?? UIFont.systemFont(ofSize: 14.0)
+        static let titleLabelFont: UIFont? = UIFont(name: "Manrope-ExtraBold", size: 28.0)
+        static let infoLabelFont: UIFont? = UIFont(name: "Manrope-Medium", size: 14.0)
         static let backgroundColor: UIColor = UIColor(hexString: "FFFFFF")
         static let infoLabelBackgroundColor: UIColor = UIColor(hexString: "F0F5FF")
         static let searchBarBackgroundColor: UIColor = UIColor(hexString: "E1E6F0")
         static let addButtonColor: UIColor = UIColor(hexString: "447BF1")
         static let separatorBackgroundColor: UIColor = UIColor(hexString: "E5E5E5")
-        static let heightViewLines: CGFloat = 1.0
+        static let separatorHeight: CGFloat = 1.0
         static let infoLabelCornerRadius: CGFloat = 5.0
         static let searchBarCornerRadius: CGFloat = 10.0
         static let titleLabelTopPadding: CGFloat = 80.0
@@ -33,10 +33,10 @@ class ContactsViewController: UIViewController {
         static let addButtonShadowOpacity: Float = 0.15
         static let addButtonShadowOffSet: CGSize = CGSize(width: 0.0, height: 4.0)
         static let iconPlusSize: CGSize = CGSize(width: 30.0, height: 30.0)
-        static let searchBarPlaceholder = "Search"
-        static let infoLabelText = "💡 Swipe to delete contact from list"
-        static let addButtonIconName = "plus"
-        static let titleLabelText = "Contacts"
+        static let searchBarPlaceholder: String = "Search"
+        static let infoLabelText: String = "💡 Swipe to delete contact from list"
+        static let addButtonIconName: String = "plus"
+        static let titleLabelText: String = "Contacts"
     }
     
     // MARK: - Properties
@@ -85,7 +85,6 @@ class ContactsViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ContactCell.self, forCellReuseIdentifier: ContactCell.reuseID)
-        tableView.delegate = self
         tableView.dataSource = self
         return tableView
     }()
@@ -114,6 +113,7 @@ class ContactsViewController: UIViewController {
     
     required init(contactsViewModel: ContactsViewModel) {
         self.contactsViewModel = contactsViewModel
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -126,13 +126,6 @@ class ContactsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // self.contactsViewModel.deleteAllContacts()
-        self.contactsViewModel.fetchContacts()
-        if self.contactsViewModel.contacts.isEmpty {
-            self.contactsViewModel.testCreateContacts()
-        } else {
-            print("Database doesn't empty")
-        }
         self.setup()
     }
     
@@ -140,17 +133,18 @@ class ContactsViewController: UIViewController {
     
     private func setup() {
         self.setupViews()
+        self.getData()
     }
     
     private func setupViews() {
         self.view.backgroundColor = Constants.backgroundColor
-        self.view.addSubview(self.headerContainerView)
         
         self.headerContainerView.addSubview(self.titleLabel)
         self.headerContainerView.addSubview(self.searchBar)
         self.headerContainerView.addSubview(self.infoLabel)
+        self.headerContainerView.addSubview(self.navBarSeparator)
         
-        self.view.addSubview(self.navBarSeparator)
+        self.view.addSubview(self.headerContainerView)
         self.view.addSubview(self.tableView)
         self.view.addSubview(self.addButton)
         
@@ -175,17 +169,17 @@ class ContactsViewController: UIViewController {
             make.top.equalTo(self.searchBar.snp.bottom).inset(-Constants.defaultTopInsetLabels)
             make.leading.trailing.equalTo(self.headerContainerView)
             make.height.equalTo(Constants.defaultHeightLabels)
-            make.bottom.equalTo(self.headerContainerView.snp.bottom)
         })
         
         self.navBarSeparator.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.headerContainerView.snp.bottom).inset(-Constants.defaultTopInsetLabels)
+            make.top.equalTo(self.infoLabel.snp.bottom).inset(-Constants.defaultTopInsetLabels)
             make.leading.trailing.equalTo(self.view)
-            make.height.equalTo(Constants.heightViewLines)
+            make.height.equalTo(Constants.separatorHeight)
+            make.bottom.equalTo(self.headerContainerView.snp.bottom)
         })
         
         self.tableView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.navBarSeparator.snp.bottom)
+            make.top.equalTo(self.headerContainerView.snp.bottom)
             make.leading.trailing.equalTo(self.view)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
         })
@@ -198,6 +192,16 @@ class ContactsViewController: UIViewController {
         })
     }
     
+    private func getData() {
+        // self.contactsViewModel.deleteAllContacts()
+        self.contactsViewModel.fetchContacts()
+        if self.contactsViewModel.contacts.isEmpty {
+            self.contactsViewModel.testCreateContacts()
+        } else {
+            print("Database doesn't empty")
+        }
+    }
+    
 }
 
 // MARK: - UISearchBarDelegate
@@ -207,7 +211,7 @@ extension ContactsViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.count >= 3 {
             self.isSearching = true
-            contactsViewModel.searchContacts(byQuery: searchText)
+            self.contactsViewModel.searchContacts(byQuery: searchText)
         } else {
             self.isSearching = false
         }
@@ -217,15 +221,10 @@ extension ContactsViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
         searchBar.resignFirstResponder()
+        
         self.isSearching = false
         self.tableView.reloadData()
     }
-    
-}
-
-// MARK: - UITableViewDelegate
-
-extension ContactsViewController: UITableViewDelegate {
     
 }
 
@@ -234,7 +233,8 @@ extension ContactsViewController: UITableViewDelegate {
 extension ContactsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.contactsViewModel.contacts.count
+        let contactsCount = self.contactsViewModel.contacts.count
+        return contactsCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -245,10 +245,6 @@ extension ContactsViewController: UITableViewDataSource {
         let contact = self.contactsViewModel.contacts[indexPath.row]
         cell.setupCell(with: contact)
         return cell
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
     }
     
 }
