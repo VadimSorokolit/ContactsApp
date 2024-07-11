@@ -74,6 +74,10 @@ class ContactCell: UITableViewCell {
         self.contentView.addSubview(self.jobPositionLabel)
         self.contentView.addSubview(self.photoImageView)
         
+        self.preservesSuperviewLayoutMargins = false
+        self.separatorInset = UIEdgeInsets(top: 0, left: 30.0, bottom: 0, right: 30.0)
+        self.layoutMargins = UIEdgeInsets(top: 0, left: 30.0, bottom: 0, right: 30.0)
+            
         self.photoImageView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.contentView.snp.top).offset(Constants.photoImageViewInsets.top)
             make.leading.equalTo(self.contentView.snp.leading).offset(Constants.photoImageViewInsets.left)
@@ -109,6 +113,10 @@ class ContactCell: UITableViewCell {
         } else {
             self.photoImageView.image = UIImage(named: Constants.placeholderImageName)
         }
+    }
+    
+    func hideSeparator() {
+        self.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: UIScreen.main.bounds.width)
     }
     
 }

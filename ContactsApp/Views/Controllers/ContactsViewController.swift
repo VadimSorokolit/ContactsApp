@@ -86,6 +86,7 @@ class ContactsViewController: UIViewController {
         let tableView = UITableView()
         tableView.register(ContactCell.self, forCellReuseIdentifier: ContactCell.reuseID)
         tableView.dataSource = self
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: Constants.defaultPaddingLabels, bottom: 0, right: Constants.defaultPaddingLabels)
         return tableView
     }()
     
@@ -244,6 +245,11 @@ extension ContactsViewController: UITableViewDataSource {
         
         let contact = self.contactsViewModel.contacts[indexPath.row]
         cell.setupCell(with: contact)
+        
+        let contactsCount = self.contactsViewModel.contacts.count
+        if indexPath.row == contactsCount - 1 {
+            cell.hideSeparator()
+        }
         return cell
     }
     
