@@ -14,22 +14,22 @@ class ContactCell: UITableViewCell {
     // MARK: - Objects
     
     private struct Constants {
-        static var reuseIDName: String {
-            return String(describing: self)
-        }
         static let fullNameFont: UIFont = UIFont(name: "Manrope-Bold", size: 16.0) ?? UIFont.systemFont(ofSize: 16.0)
         static let jobPositionFont: UIFont = UIFont(name: "Manrope-Medium", size: 14.0) ?? UIFont.systemFont(ofSize: 14.0)
+        static let placeholderImageName: String = "placeholder"
         static let imageViewWidth: CGFloat = 50.0
         static let fullNameLabelHeight: CGFloat = 22.0
         static let jobPositionHeight: CGFloat = 19.0
         static let photoImageViewInsets: UIEdgeInsets = UIEdgeInsets(top: 15.0, left: 30.0, bottom: 17.0, right: 0.0)
-        static let fullNameLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 18.0, left: 14.0, bottom: 0.0, right: 37.0)
-        static let jobPositionInsets: UIEdgeInsets = UIEdgeInsets(top: 3.0, left: 14.0, bottom: 0.0, right: 37.0)
+        static let fullNameLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 18.0, left: 14.0, bottom: 0.0, right: 30.0)
+        static let jobPositionInsets: UIEdgeInsets = UIEdgeInsets(top: 3.0, left: 14.0, bottom: 0.0, right: 30.0)
     }
     
     // MARK: - Properties
     
-    static let reuseID = Constants.reuseIDName
+    static var reuseID: String {
+        return String(describing: self)
+    }
     
     private lazy var fullNameLabel: UILabel = {
         let label = UILabel()
@@ -100,13 +100,14 @@ class ContactCell: UITableViewCell {
         let contactFullName = contact.fullName
         let contactJobPosition = contact.jobPosition
         let contactPhoto = contact.photo
+        
         self.fullNameLabel.text = contactFullName
         self.jobPositionLabel.text = contactJobPosition
         
         if let photoImage = contactPhoto {
             self.photoImageView.image = photoImage
         } else {
-            self.photoImageView.image = UIImage(named: "placeholder")
+            self.photoImageView.image = UIImage(named: Constants.placeholderImageName)
         }
     }
     
