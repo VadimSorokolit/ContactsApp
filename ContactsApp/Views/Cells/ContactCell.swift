@@ -14,7 +14,9 @@ class ContactCell: UITableViewCell {
     // MARK: - Objects
     
     private struct Constants {
-        static let reuseIDName: String = "ContactCell"
+        static var reuseIDName: String {
+            return String(describing: self)
+        }
         static let fullNameFont: UIFont = UIFont(name: "Manrope-Bold", size: 16.0) ?? UIFont.systemFont(ofSize: 16.0)
         static let jobPositionFont: UIFont = UIFont(name: "Manrope-Medium", size: 14.0) ?? UIFont.systemFont(ofSize: 14.0)
         static let imageViewWidth: CGFloat = 50.0
