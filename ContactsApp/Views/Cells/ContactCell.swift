@@ -18,8 +18,8 @@ class ContactCell: UITableViewCell {
         static let jobPositionFont: UIFont? = UIFont(name: "Manrope-Medium", size: 14.0)
         static let placeholderImageName: String = "placeholder"
         static let imageViewWidth: CGFloat = 50.0
-        static let photoImageViewInsets: UIEdgeInsets = UIEdgeInsets(top: 15.0, left: 30.0, bottom: 17.0, right: 0.0)
-        static let fullNameLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 18.0, left: 14.0, bottom: 0.0, right: 30.0)
+        static let photoImageViewInsets: UIEdgeInsets = UIEdgeInsets(top: 15.0, left: 30.0, bottom: 15.0, right: 0.0)
+        static let fullNameLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 15.0, left: 14.0, bottom: 0.0, right: 30.0)
         static let jobPositionInsets: UIEdgeInsets = UIEdgeInsets(top: 3.0, left: 14.0, bottom: 15.0, right: 30.0)
     }
     
@@ -70,14 +70,14 @@ class ContactCell: UITableViewCell {
     }
     
     private func setupViews() {
+        self.contentView.addSubview(self.photoImageView)
         self.contentView.addSubview(self.fullNameLabel)
         self.contentView.addSubview(self.jobPositionLabel)
-        self.contentView.addSubview(self.photoImageView)
         
         self.preservesSuperviewLayoutMargins = false
         self.separatorInset = UIEdgeInsets(top: 0, left: 30.0, bottom: 0, right: 30.0)
         self.layoutMargins = UIEdgeInsets(top: 0, left: 30.0, bottom: 0, right: 30.0)
-            
+        
         self.photoImageView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.contentView.snp.top).offset(Constants.photoImageViewInsets.top)
             make.leading.equalTo(self.contentView.snp.leading).offset(Constants.photoImageViewInsets.left)
