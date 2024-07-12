@@ -33,6 +33,9 @@ class ContactCell: UITableViewCell {
         let label = UILabel()
         label.font = Constants.fullNameFont
         label.numberOfLines = 0
+        label.lineBreakMode = .byCharWrapping
+        label.minimumScaleFactor = 0.5
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -40,6 +43,9 @@ class ContactCell: UITableViewCell {
         let label = UILabel()
         label.font = Constants.jobPositionFont
         label.numberOfLines = 0
+        label.lineBreakMode = .byCharWrapping
+        label.minimumScaleFactor = 0.5
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
