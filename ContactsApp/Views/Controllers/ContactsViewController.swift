@@ -86,7 +86,7 @@ class ContactsViewController: UIViewController {
         let tableView = UITableView()
         tableView.register(ContactCell.self, forCellReuseIdentifier: ContactCell.reuseID)
         tableView.dataSource = self
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: Constants.defaultPaddingLabels, bottom: 0, right: Constants.defaultPaddingLabels)
+        tableView.separatorInset = UIEdgeInsets(top: 0.0, left: Constants.defaultPaddingLabels, bottom: 0.0, right: Constants.defaultPaddingLabels)
         tableView.estimatedRowHeight = UITableView.automaticDimension
         tableView.rowHeight = UITableView.automaticDimension
         return tableView
