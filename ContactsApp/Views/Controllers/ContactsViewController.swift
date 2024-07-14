@@ -25,13 +25,13 @@ class ContactsViewController: UIViewController {
         static let infoLabelCornerRadius: CGFloat = 5.0
         static let searchBarCornerRadius: CGFloat = 10.0
         static let titleLabelTopPadding: CGFloat = 80.0
-        static let defaultPaddingLabels: CGFloat = 30.0
-        static let defaultHeightLabels: CGFloat = 40.0
-        static let defaultTopInsetLabels: CGFloat = 18.0
+        static let defaultLabelsPadding: CGFloat = 30.0
+        static let defaultLabelsHeight: CGFloat = 40.0
+        static let defaultLabelsTopInset: CGFloat = 18.0
         static let addButtonHeight: CGFloat = 70.0
         static let addButtonInsets: UIEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 39.0, right: 27.0)
         static let addButtonShadowOpacity: Float = 0.15
-        static let addButtonShadowOffSet: CGSize = CGSize(width: 0.0, height: 4.0)
+        static let addButtonShadowOffset: CGSize = CGSize(width: 0.0, height: 4.0)
         static let iconPlusSize: CGSize = CGSize(width: 30.0, height: 30.0)
         static let searchBarPlaceholder: String = "Search"
         static let infoLabelText: String = "💡 Swipe to delete contact from list"
@@ -47,7 +47,6 @@ class ContactsViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString(Constants.titleLabelText, comment: "")
-        label.textAlignment = .left
         label.font = Constants.titleLabelFont
         return label
     }()
@@ -86,7 +85,7 @@ class ContactsViewController: UIViewController {
         let tableView = UITableView()
         tableView.register(ContactCell.self, forCellReuseIdentifier: ContactCell.reuseID)
         tableView.dataSource = self
-        tableView.separatorInset = UIEdgeInsets(top: 0.0, left: Constants.defaultPaddingLabels, bottom: 0.0, right: Constants.defaultPaddingLabels)
+        tableView.separatorInset = UIEdgeInsets(top: 0.0, left: Constants.defaultLabelsPadding, bottom: 0.0, right: Constants.defaultLabelsPadding)
         tableView.estimatedRowHeight = UITableView.automaticDimension
         tableView.rowHeight = UITableView.automaticDimension
         return tableView
@@ -103,7 +102,7 @@ class ContactsViewController: UIViewController {
         button.layer.cornerRadius = Constants.addButtonHeight / 2
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowOpacity = Constants.addButtonShadowOpacity
-        button.layer.shadowOffset = Constants.addButtonShadowOffSet
+        button.layer.shadowOffset = Constants.addButtonShadowOffset
         return button
     }()
     
@@ -153,29 +152,29 @@ class ContactsViewController: UIViewController {
         
         self.headerContainerView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.view.snp.top).inset(Constants.titleLabelTopPadding)
-            make.leading.trailing.equalTo(self.view).inset(Constants.defaultPaddingLabels)
+            make.leading.trailing.equalTo(self.view)
         })
         
         self.titleLabel.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.headerContainerView.snp.top)
-            make.leading.trailing.equalTo(self.headerContainerView)
-            make.height.equalTo(Constants.defaultHeightLabels)
+            make.leading.trailing.equalTo(self.view).inset(Constants.defaultLabelsPadding)
+            make.height.equalTo(Constants.defaultLabelsHeight)
         })
         
         self.searchBar.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.titleLabel.snp.bottom).inset(-Constants.defaultTopInsetLabels / 1.3)
-            make.leading.trailing.equalTo(self.headerContainerView)
-            make.height.equalTo(Constants.defaultHeightLabels)
+            make.top.equalTo(self.titleLabel.snp.bottom).inset(-Constants.defaultLabelsTopInset / 1.3)
+            make.leading.trailing.equalTo(self.titleLabel)
+            make.height.equalTo(Constants.defaultLabelsHeight)
         })
         
         self.infoLabel.snp.makeConstraints({ (make: ConstraintMaker) -> Void  in
-            make.top.equalTo(self.searchBar.snp.bottom).inset(-Constants.defaultTopInsetLabels)
-            make.leading.trailing.equalTo(self.headerContainerView)
-            make.height.equalTo(Constants.defaultHeightLabels)
+            make.top.equalTo(self.searchBar.snp.bottom).inset(-Constants.defaultLabelsTopInset)
+            make.leading.trailing.equalTo(self.searchBar)
+            make.height.equalTo(Constants.defaultLabelsHeight)
         })
         
         self.navBarSeparator.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.infoLabel.snp.bottom).inset(-Constants.defaultTopInsetLabels)
+            make.top.equalTo(self.infoLabel.snp.bottom).inset(-Constants.defaultLabelsTopInset)
             make.leading.trailing.equalTo(self.view)
             make.height.equalTo(Constants.separatorHeight)
             make.bottom.equalTo(self.headerContainerView.snp.bottom)
@@ -189,8 +188,7 @@ class ContactsViewController: UIViewController {
         
         self.addButton.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.trailing.equalTo(self.view.snp.trailing).inset(Constants.addButtonInsets.right)
-            make.height.equalTo(Constants.addButtonHeight)
-            make.width.equalTo(Constants.addButtonHeight)
+            make.size.equalTo(Constants.addButtonHeight)
             make.bottom.equalTo(self.tableView.snp.bottom).inset(Constants.addButtonInsets.bottom)
         })
     }
@@ -245,11 +243,11 @@ extension ContactsViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let contact = self.contactsViewModel.contacts[indexPath.row]
+        let contacts = self.contactsViewModel.contacts
+        let contact = contacts[indexPath.row]
         cell.setupCell(with: contact)
         
-        let contactsCount = self.contactsViewModel.contacts.count
-        if indexPath.row == contactsCount - 1 {
+        if indexPath.row == contacts.count - 1 {
             cell.hideSeparator()
         }
         return cell
