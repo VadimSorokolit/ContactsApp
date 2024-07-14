@@ -77,9 +77,8 @@ class ContactCell: UITableViewCell {
         self.separatorInset = UIEdgeInsets(top: 0.0, left: 30.0, bottom: 0.0, right: 30.0)
         
         self.photoImageView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.contentView.snp.top).inset(Constants.photoImageViewInsets.top)
-            make.leading.equalTo(self.contentView.snp.leading).inset(Constants.photoImageViewInsets.left)
-            make.bottom.lessThanOrEqualTo(self.contentView.snp.bottom).inset(-Constants.photoImageViewInsets.bottom)
+            make.centerY.equalTo(self.contentView)
+            make.leading.equalTo(self.contentView).inset(Constants.photoImageViewInsets.left)
             make.size.equalTo(Constants.imageViewWidth)
         })
         
