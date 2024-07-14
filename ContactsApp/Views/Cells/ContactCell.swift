@@ -83,13 +83,13 @@ class ContactCell: UITableViewCell {
         })
         
         self.fullNameLabel.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.contentView.snp.top).inset(Constants.fullNameLabelInsets.top)
+            make.top.equalTo(self.contentView.snp.top).offset(Constants.fullNameLabelInsets.top)
             make.leading.equalTo(self.photoImageView.snp.trailing).inset(-Constants.fullNameLabelInsets.left)
             make.trailing.equalTo(self.contentView.snp.trailing).inset(Constants.fullNameLabelInsets.right)
         })
         
         self.jobPositionLabel.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.fullNameLabel.snp.bottom).inset(Constants.jobPositionLabelInsets.top)
+            make.top.equalTo(self.fullNameLabel.snp.bottom).offset(Constants.jobPositionLabelInsets.top)
             make.leading.trailing.equalTo(self.fullNameLabel)
             make.bottom.equalTo(self.contentView.snp.bottom).inset(Constants.jobPositionLabelInsets.bottom)
         })

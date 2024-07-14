@@ -151,7 +151,7 @@ class ContactsViewController: UIViewController {
         self.view.addSubview(self.addButton)
         
         self.headerContainerView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.view.snp.top).inset(Constants.titleLabelTopPadding)
+            make.top.equalTo(self.view.snp.top).offset(Constants.titleLabelTopPadding)
             make.leading.trailing.equalTo(self.view)
         })
         
@@ -162,19 +162,19 @@ class ContactsViewController: UIViewController {
         })
         
         self.searchBar.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.titleLabel.snp.bottom).inset(-Constants.defaultLabelsTopInset / 1.3)
+            make.top.equalTo(self.titleLabel.snp.bottom).offset(Constants.defaultLabelsTopInset / 1.3)
             make.leading.trailing.equalTo(self.titleLabel)
             make.height.equalTo(Constants.defaultLabelsHeight)
         })
         
         self.infoLabel.snp.makeConstraints({ (make: ConstraintMaker) -> Void  in
-            make.top.equalTo(self.searchBar.snp.bottom).inset(-Constants.defaultLabelsTopInset)
+            make.top.equalTo(self.searchBar.snp.bottom).offset(Constants.defaultLabelsTopInset)
             make.leading.trailing.equalTo(self.searchBar)
             make.height.equalTo(Constants.defaultLabelsHeight)
         })
         
         self.navBarSeparator.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.infoLabel.snp.bottom).inset(-Constants.defaultLabelsTopInset)
+            make.top.equalTo(self.infoLabel.snp.bottom).offset(Constants.defaultLabelsTopInset)
             make.leading.trailing.equalTo(self.view)
             make.height.equalTo(Constants.separatorHeight)
             make.bottom.equalTo(self.headerContainerView.snp.bottom)
