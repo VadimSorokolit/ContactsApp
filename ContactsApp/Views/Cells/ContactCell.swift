@@ -47,7 +47,6 @@ class ContactCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = Constants.imageViewWidth / 2
         imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
