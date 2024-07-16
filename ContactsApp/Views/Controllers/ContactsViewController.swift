@@ -103,6 +103,7 @@ class ContactsViewController: UIViewController {
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowOpacity = Constants.addButtonShadowOpacity
         button.layer.shadowOffset = Constants.addButtonShadowOffset
+        button.addTarget(self, action: #selector(self.onAddButtonDidTap), for: .touchUpInside)
         return button
     }()
     
@@ -201,6 +202,14 @@ class ContactsViewController: UIViewController {
         } else {
             print("Database doesn't empty")
         }
+    }
+    
+    // MARK: - Events
+    
+    @objc private func onAddButtonDidTap() {
+        let modalViewController = EmptyModalViewController()
+        modalViewController.modalPresentationStyle = .fullScreen
+        present(modalViewController, animated: true, completion: nil)
     }
     
 }

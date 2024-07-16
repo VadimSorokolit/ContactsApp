@@ -21,6 +21,7 @@
 		DD1223642C10CF9500A5C93B /* ContactsAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1223632C10CF9500A5C93B /* ContactsAppTests.swift */; };
 		DD12236E2C10CF9500A5C93B /* ContactsAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD12236D2C10CF9500A5C93B /* ContactsAppUITests.swift */; };
 		DD1223702C10CF9500A5C93B /* ContactsAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD12236F2C10CF9500A5C93B /* ContactsAppUITestsLaunchTests.swift */; };
+		DD35F18D2C46495F0027F1EB /* EmptyModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD35F18C2C46495F0027F1EB /* EmptyModalViewController.swift */; };
 		DD5DCF292C35D8A8007A33BC /* Manrope-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DD5DCF282C35D8A8007A33BC /* Manrope-Bold.ttf */; };
 		DD5DCF2B2C35D8C7007A33BC /* Manrope-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DD5DCF2A2C35D8C7007A33BC /* Manrope-Medium.ttf */; };
 		DD66DD012C3496A800EA3EDB /* GlobalConstans.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD66DD002C3496A800EA3EDB /* GlobalConstans.swift */; };
@@ -78,6 +79,7 @@
 		DD1223692C10CF9500A5C93B /* ContactsAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ContactsAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD12236D2C10CF9500A5C93B /* ContactsAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsAppUITests.swift; sourceTree = "<group>"; };
 		DD12236F2C10CF9500A5C93B /* ContactsAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		DD35F18C2C46495F0027F1EB /* EmptyModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyModalViewController.swift; sourceTree = "<group>"; };
 		DD5DCF282C35D8A8007A33BC /* Manrope-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Manrope-Bold.ttf"; sourceTree = "<group>"; };
 		DD5DCF2A2C35D8C7007A33BC /* Manrope-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Manrope-Medium.ttf"; sourceTree = "<group>"; };
 		DD66DD002C3496A800EA3EDB /* GlobalConstans.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstans.swift; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				DD12234D2C10CF9300A5C93B /* ContactsViewController.swift */,
+				DD35F18C2C46495F0027F1EB /* EmptyModalViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -541,6 +544,7 @@
 				DD73768E2C3C6F0600791B0E /* ResizeImage.swift in Sources */,
 				DD72B98D2C18C998003FBB46 /* CoreDataService.swift in Sources */,
 				DD0991232C1A37F0009DEBA0 /* Contact+CoreDataClass.swift in Sources */,
+				DD35F18D2C46495F0027F1EB /* EmptyModalViewController.swift in Sources */,
 				DD0991242C1A37F0009DEBA0 /* Contact+CoreDataProperties.swift in Sources */,
 				DD12234E2C10CF9300A5C93B /* ContactsViewController.swift in Sources */,
 				DD66DD012C3496A800EA3EDB /* GlobalConstans.swift in Sources */,
