@@ -85,7 +85,7 @@ class ContactsViewController: UIViewController {
         let tableView = UITableView()
         tableView.register(ContactCell.self, forCellReuseIdentifier: ContactCell.reuseID)
         tableView.dataSource = self
-        tableView.separatorInset = UIEdgeInsets(top: 0.0, left: Constants.defaultLabelsPadding, bottom: 0.0, right: Constants.defaultLabelsPadding)
+        tableView.separatorInset = UIEdgeInsets(top: 0.0, left: Constants.defaultLabelsPadding, bottom: 0.0, right: 0.0)
         tableView.estimatedRowHeight = UITableView.automaticDimension
         tableView.rowHeight = UITableView.automaticDimension
         return tableView
@@ -247,7 +247,9 @@ extension ContactsViewController: UITableViewDataSource {
         let contact = contacts[indexPath.row]
         cell.setupCell(with: contact)
         
-        if indexPath.row == contacts.count - 1 {
+        let isLastCell = indexPath.row == contacts.count - 1
+        
+        if isLastCell {
             cell.hideSeparator()
         }
         return cell
