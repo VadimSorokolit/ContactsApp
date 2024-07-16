@@ -86,7 +86,7 @@ class ContactsViewController: UIViewController {
         tableView.register(ContactCell.self, forCellReuseIdentifier: ContactCell.reuseID)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.separatorInset = UIEdgeInsets(top: 0.0, left: Constants.defaultLabelsPadding, bottom: 0.0, right: 0.0)
+        tableView.separatorInset.left = Constants.defaultLabelsPadding
         tableView.estimatedRowHeight = UITableView.automaticDimension
         tableView.rowHeight = UITableView.automaticDimension
         return tableView
@@ -205,12 +205,16 @@ class ContactsViewController: UIViewController {
         }
     }
     
+    private func goToModalView() {
+        let modalViewController = EmptyModalViewController()
+        modalViewController.modalPresentationStyle = .fullScreen
+        self.present(modalViewController, animated: true, completion: nil)
+    }
+    
     // MARK: - Events
     
     @objc private func onAddButtonDidTap() {
-        let modalViewController = EmptyModalViewController()
-        modalViewController.modalPresentationStyle = .fullScreen
-        present(modalViewController, animated: true, completion: nil)
+        self.goToModalView()
     }
     
 }
@@ -244,8 +248,7 @@ extension ContactsViewController: UISearchBarDelegate {
 extension ContactsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        var editingStyle: UITableViewCell.EditingStyle
-        editingStyle = .delete
+        let editingStyle: UITableViewCell.EditingStyle = .delete
         return editingStyle
     }
     
@@ -280,11 +283,9 @@ extension ContactsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         let contactToRemove = self.contactsViewModel.contacts[indexPath.row]
         
-        if let contactToRemoveEmail = contactToRemove.email {
-            if editingStyle == .delete {
-                self.contactsViewModel.deleteContact(byEmail: contactToRemoveEmail)
-                tableView.deleteRows(at: [indexPath], with: .automatic)
-            }
+        if let contactEmail = contactToRemove.email, editingStyle == .delete {
+            self.contactsViewModel.deleteContact(byEmail: contactEmail)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
     
