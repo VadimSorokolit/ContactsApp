@@ -21,6 +21,17 @@ class EmptyModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.setup()
+    }
+    
+    // MARK: - Methods
+    
+    private func setup() {
+        self.setupViews()
+    }
+    
+    private func setupViews() {
         self.view.backgroundColor = Constants.backgroundColor
     }
+    
 }
