@@ -84,6 +84,7 @@ class ContactsViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ContactCell.self, forCellReuseIdentifier: ContactCell.reuseID)
+        tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorInset = UIEdgeInsets(top: 0.0, left: Constants.defaultLabelsPadding, bottom: 0.0, right: 0.0)
         tableView.estimatedRowHeight = UITableView.automaticDimension
@@ -238,6 +239,18 @@ extension ContactsViewController: UISearchBarDelegate {
     
 }
 
+// MARK: - UITableViewDelegate
+
+extension ContactsViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        var editingStyle: UITableViewCell.EditingStyle
+        editingStyle = .delete
+        return editingStyle
+    }
+    
+}
+
 // MARK: - UITableViewDataSource
 
 extension ContactsViewController: UITableViewDataSource {
@@ -264,4 +277,17 @@ extension ContactsViewController: UITableViewDataSource {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        let contactToRemove = self.contactsViewModel.contacts[indexPath.row]
+        
+        if let contactToRemoveEmail = contactToRemove.email {
+            if editingStyle == .delete {
+                self.contactsViewModel.deleteContact(byEmail: contactToRemoveEmail)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+            }
+        }
+    }
+    
 }
+
+
