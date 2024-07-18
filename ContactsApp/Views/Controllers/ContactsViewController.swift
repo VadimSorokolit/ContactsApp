@@ -33,6 +33,8 @@ class ContactsViewController: UIViewController {
         static let addButtonShadowOpacity: Float = 0.15
         static let addButtonShadowOffset: CGSize = CGSize(width: 0.0, height: 4.0)
         static let iconPlusSize: CGSize = CGSize(width: 30.0, height: 30.0)
+        static let newContactTitleName: String = "New contact"
+        static let editContactTitleName: String = "Edit Contact"
         static let searchBarPlaceholder: String = "Search"
         static let infoLabelText: String = "💡 Swipe to delete contact from list"
         static let addButtonIconName: String = "plus"
@@ -205,8 +207,8 @@ class ContactsViewController: UIViewController {
         }
     }
     
-    private func goToEditViewController() {
-        let editContactController = EditContactViewController(contactsViewModel: self.contactsViewModel)
+    private func goToEditViewController(withTitleName titleName: String) {
+        let editContactController = EditContactViewController(contactsViewModel: self.contactsViewModel, title: titleName)
         editContactController.modalPresentationStyle = .fullScreen
         self.present(editContactController, animated: true, completion: nil)
     }
@@ -214,7 +216,7 @@ class ContactsViewController: UIViewController {
     // MARK: - Events
     
     @objc private func onAddButtonDidTap() {
-        self.goToEditViewController()
+        self.goToEditViewController(withTitleName: Constants.newContactTitleName)
     }
     
 }
@@ -246,6 +248,10 @@ extension ContactsViewController: UISearchBarDelegate {
 // MARK: - UITableViewDelegate
 
 extension ContactsViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.goToEditViewController(withTitleName: Constants.editContactTitleName)
+    }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         let editingStyle: UITableViewCell.EditingStyle = .delete
