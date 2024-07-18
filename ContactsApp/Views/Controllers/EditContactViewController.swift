@@ -74,9 +74,12 @@ class EditContactViewController: UIViewController {
     private lazy var goToBackButton: UIButton = {
         let button = UIButton()
         if let xImage = UIImage(named: Constants.goToBackButtonIconName) {
-            let image = xImage.resized(to: Constants.goToBackButtonSize)
-            button.configuration?.imagePadding = Constants.goToBackButtonImagePadding
+            let increasedSize = CGSize(width: Constants.goToBackButtonIconSize.width + 2 * Constants.goToBackButtonImagePadding,
+                                       height: Constants.goToBackButtonIconSize.height + 2 * Constants.goToBackButtonImagePadding)
+            let image = xImage.resized(to: increasedSize)
+            
             button.setImage(image, for: .normal)
+            button.imageView?.contentMode = .scaleAspectFit
         }
         return button
     }()
