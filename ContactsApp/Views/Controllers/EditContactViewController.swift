@@ -255,7 +255,7 @@ class EditContactViewController: UIViewController {
         
         self.saveButton.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.addPhotoButton.snp.bottom).offset(Constants.saveButtonTopPadding)
-            make.leading.trailing.equalToSuperview().inset(Constants.defaultLabelsPadding)
+            make.leading.trailing.equalTo(self.containerView).inset(Constants.defaultLabelsPadding)
             make.height.equalTo(Constants.saveButtonHeight)
             make.bottom.equalTo(self.containerView.snp.bottom).offset(-Constants.saveButtonBottomInset)
         })

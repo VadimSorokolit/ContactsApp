@@ -43,35 +43,38 @@ class TextFieldWithTitle: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setupViews()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        
         setupViews()
     }
     
     // MARK: - Setup
     
     private func setupViews() {
-        addSubview(titleLabel)
-        addSubview(textField)
+        self.addSubview(self.titleLabel)
+        self.addSubview(self.textField)
         
-        titleLabel.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
+        self.titleLabel.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
+            make.top.leading.trailing.equalTo(self)
             make.height.equalTo(Constants.titleLabelHeight)
-        }
+        })
         
-        textField.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(Constants.textFieldTopPadding)
-            make.leading.trailing.equalToSuperview()
+        self.textField.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.titleLabel.snp.bottom).offset(Constants.textFieldTopPadding)
+            make.leading.trailing.equalTo(self)
             make.height.equalTo(Constants.textFieldHeight)
-            make.bottom.equalToSuperview()
-        }
+            make.bottom.equalTo(self)
+        })
     }
     
     func configure(title: String, placeholder: String) {
-        titleLabel.text = title
-        textField.placeholder = placeholder
+        self.titleLabel.text = title
+        self.textField.placeholder = placeholder
     }
+    
 }
