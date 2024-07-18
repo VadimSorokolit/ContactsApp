@@ -205,16 +205,16 @@ class ContactsViewController: UIViewController {
         }
     }
     
-    private func goToModalView() {
-        let modalViewController = EmptyModalViewController()
-        modalViewController.modalPresentationStyle = .fullScreen
-        self.present(modalViewController, animated: true, completion: nil)
+    private func goToEditViewController() {
+        let editContactController = EditContactViewController(contactsViewModel: self.contactsViewModel)
+        editContactController.modalPresentationStyle = .fullScreen
+        self.present(editContactController, animated: true, completion: nil)
     }
     
     // MARK: - Events
     
     @objc private func onAddButtonDidTap() {
-        self.goToModalView()
+        self.goToEditViewController()
     }
     
 }
