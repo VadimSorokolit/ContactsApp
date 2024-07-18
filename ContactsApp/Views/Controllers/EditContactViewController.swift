@@ -14,13 +14,14 @@ class EditContactViewController: UIViewController {
     // MARK: - Objects
     
     private struct Constants {
-        static let topTitleLabelFont: UIFont? = UIFont(name: "Manrope-ExtraBold", size: 28.0)
-        static let saveButtonTitleFont: UIFont? = UIFont(name: "Manrope-ExtraBold", size: 24.0)
-        static let titleLabelPhotoFont: UIFont? = UIFont(name: "Manrope-ExtraBold", size: 14.0)
+        static let topTitleLabelFont: UIFont? = UIFont(name: "Manrope-Bold", size: 28.0)
+        static let saveButtonTitleFont: UIFont? = UIFont(name: "Manrope-Bold", size: 24.0)
+        static let titleLabelPhotoFont: UIFont? = UIFont(name: "Manrope-Bold", size: 14.0)
         static let backgroundColor: UIColor = UIColor(hexString: "447BF1")
         static let defaultColor: UIColor = UIColor(hexString: "FFFFFF")
         static let defaultLabelsPadding: CGFloat = 30.0
         static let goToBackButtonInsets: UIEdgeInsets = UIEdgeInsets(top: 10.0, left: 0.0, bottom: 0.0, right: 34.0)
+        static let goToBackButtonImagePadding: CGFloat = 6.87
         static let titleLabelTopPadding: CGFloat = 72.0
         static let stackViewTopPadding: CGFloat = 40.0
         static let separatorTopInset: CGFloat = 23.0
@@ -73,7 +74,8 @@ class EditContactViewController: UIViewController {
     private lazy var goToBackButton: UIButton = {
         let button = UIButton()
         if let xImage = UIImage(named: Constants.goToBackButtonIconName) {
-            let image = xImage.resized(to: Constants.goToBackButtonIconSize)
+            let image = xImage.resized(to: Constants.goToBackButtonSize)
+            button.configuration?.imagePadding = Constants.goToBackButtonImagePadding
             button.setImage(image, for: .normal)
         }
         return button
