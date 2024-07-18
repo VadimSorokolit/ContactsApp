@@ -23,7 +23,7 @@ class EditContactViewController: UIViewController {
         static let goToBackButtonInsets: UIEdgeInsets = UIEdgeInsets(top: 10.0, left: 0.0, bottom: 0.0, right: 34.0)
         static let goToBackButtonImagePadding: CGFloat = 6.87
         static let titleLabelTopPadding: CGFloat = 72.0
-        static let stackViewTopPadding: CGFloat = 40.0
+        static let stackViewTopPadding: CGFloat = 59.0
         static let separatorTopInset: CGFloat = 23.0
         static let saveButtonBottomInset: CGFloat = 59.0
         static let saveButtonHeight: CGFloat = 69.0
@@ -34,7 +34,7 @@ class EditContactViewController: UIViewController {
         static let isZero: CGFloat = 0.0
         static let goToBackButtonSize: CGSize = CGSize(width: 33.0, height: 33.0)
         static let goToBackButtonIconSize: CGSize = CGSize(width: 19.25, height: 19.25)
-        static let iconAddPhotoSize: CGSize = CGSize(width: 143.0, height: 143.0)
+        static let addPhotoButtonSize: CGSize = CGSize(width: 143.0, height: 143.0)
         static let addPhotoButtonHeight: CGFloat = 143.0
         static let addPhotoButtonTopPadding: CGFloat = 12.0
         static let titleLabelPhotoHeight: CGFloat = 19.0
@@ -141,11 +141,10 @@ class EditContactViewController: UIViewController {
     private lazy var addPhotoButton: UIButton = {
         let button = UIButton()
         if let addPhotoImage = UIImage(named: Constants.addPhoIconName) {
-            let image = addPhotoImage.resized(to: Constants.iconAddPhotoSize)
+            let image = addPhotoImage.resized(to: Constants.addPhotoButtonSize)
             button.setImage(image, for: .normal)
         }
         button.layer.cornerRadius = Constants.addPhotoButtonHeight / 2
-        button.layer.shadowColor = UIColor.black.cgColor
         return button
     }()
     
@@ -207,7 +206,7 @@ class EditContactViewController: UIViewController {
         self.view.addSubview(self.scrollView)
         
         self.goToBackButton.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.view.snp.top).offset(self.statusBarHeight + Constants.goToBackButtonInsets.top)
+            make.top.equalTo(self.view.snp.top).offset(self.statusBarHeight - Constants.goToBackButtonInsets.top)
             make.trailing.equalTo(self.view.snp.trailing).inset(Constants.goToBackButtonInsets.right)
             make.size.equalTo(Constants.goToBackButtonSize)
         })
@@ -226,8 +225,7 @@ class EditContactViewController: UIViewController {
     
         self.scrollView.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.separator.snp.bottom)
-            make.leading.trailing.equalTo(self.view)
-            make.bottom.equalTo(self.view.snp.bottom)
+            make.leading.trailing.bottom.equalTo(self.view)
         })
         
         self.containerView.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
@@ -249,14 +247,15 @@ class EditContactViewController: UIViewController {
         self.addPhotoButton.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.titleLabelPhoto.snp.bottom).offset(Constants.addPhotoButtonTopPadding)
             make.leading.equalTo(self.containerView).inset(Constants.defaultLabelsPadding)
+            make.size.equalTo(Constants.addPhotoButtonSize)
         })
         
-        saveButton.snp.makeConstraints { make in
-            make.top.equalTo(addPhotoButton.snp.bottom).offset(Constants.saveButtonTopPadding)
+        self.saveButton.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.addPhotoButton.snp.bottom).offset(Constants.saveButtonTopPadding)
             make.leading.trailing.equalToSuperview().inset(Constants.defaultLabelsPadding)
             make.height.equalTo(Constants.saveButtonHeight)
-            make.bottom.equalTo(containerView.snp.bottom).offset(-Constants.saveButtonBottomInset)
-        }
+            make.bottom.equalTo(self.containerView.snp.bottom).offset(-Constants.saveButtonBottomInset)
+        })
 
     }
     
