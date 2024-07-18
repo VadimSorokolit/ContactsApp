@@ -32,12 +32,13 @@ class EditContactViewController: UIViewController {
         static let stackViewSpacing: CGFloat = 30.0
         static let isZero: CGFloat = 0.0
         static let goToBackButtonSize: CGSize = CGSize(width: 33.0, height: 33.0)
+        static let goToBackButtonIconSize: CGSize = CGSize(width: 19.25, height: 19.25)
         static let iconAddPhotoSize: CGSize = CGSize(width: 143.0, height: 143.0)
         static let addPhotoButtonHeight: CGFloat = 143.0
         static let addPhotoButtonTopPadding: CGFloat = 12.0
         static let titleLabelPhotoHeight: CGFloat = 19.0
         static let titleLabelPhotoTopPadding: CGFloat = 50.0
-        static let saveButtonTopPadding: CGFloat = 10.0
+        static let saveButtonTopPadding: CGFloat = 81.0
         static let addPhoIconName: String = "addPhoto"
         static let topTitleLabelText: String = "New contact"
         static let bottomTitleLabelText: String = "Photo"
@@ -72,7 +73,7 @@ class EditContactViewController: UIViewController {
     private lazy var goToBackButton: UIButton = {
         let button = UIButton()
         if let xImage = UIImage(named: Constants.goToBackButtonIconName) {
-            let image = xImage.resized(to: Constants.goToBackButtonSize)
+            let image = xImage.resized(to: Constants.goToBackButtonIconSize)
             button.setImage(image, for: .normal)
         }
         return button
@@ -90,6 +91,16 @@ class EditContactViewController: UIViewController {
         let lineView = UIView()
         lineView.backgroundColor = Constants.defaultColor
         return lineView
+    }()
+    
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        return scrollView
+    }()
+    
+    private lazy var containerView: UIView = {
+        let containerView = UIView()
+        return containerView
     }()
     
     private lazy var textFieldWithTitleName: TextFieldWithTitle = {
@@ -171,7 +182,6 @@ class EditContactViewController: UIViewController {
 
     private func setup() {
         self.setupViews()
-        print(self.statusBarHeight)
     }
     
     private func setupViews() {
@@ -181,13 +191,18 @@ class EditContactViewController: UIViewController {
         self.stackView.addArrangedSubview(self.textFieldWithTitleJobPosition)
         self.stackView.addArrangedSubview(self.textFieldWithTitleEmail)
         
+        self.containerView.addSubview(self.stackView)
+        self.containerView.addSubview(self.titleLabelPhoto)
+        self.containerView.addSubview(self.addPhotoButton)
+        self.containerView.addSubview(self.saveButton)
+        
+        self.scrollView.addSubview(containerView)
+        
+        
         self.view.addSubview(self.goToBackButton)
         self.view.addSubview(self.titleLabel)
         self.view.addSubview(self.separator)
-        self.view.addSubview(self.stackView)
-        self.view.addSubview(self.titleLabelPhoto)
-        self.view.addSubview(self.addPhotoButton)
-        self.view.addSubview(self.saveButton)
+        self.view.addSubview(self.scrollView)
         
         self.goToBackButton.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.view.snp.top).offset(self.statusBarHeight + Constants.goToBackButtonInsets.top)
@@ -206,11 +221,22 @@ class EditContactViewController: UIViewController {
             make.leading.trailing.equalTo(self.titleLabel)
             make.height.equalTo(Constants.separatorHeight)
         })
+    
+        self.scrollView.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.separator.snp.bottom)
+            make.leading.trailing.equalTo(self.view)
+            make.bottom.equalTo(self.view.snp.bottom)
+        })
         
-        self.stackView.snp.makeConstraints { make in
-            make.top.equalTo(self.separator.snp.bottom).offset(Constants.stackViewTopPadding)
+        self.containerView.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
+            make.edges.equalTo(self.scrollView)
+            make.width.equalTo(self.scrollView)
+        })
+        
+        self.stackView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.containerView.snp.top).offset(Constants.stackViewTopPadding)
             make.leading.trailing.equalToSuperview().inset(Constants.defaultLabelsPadding)
-        }
+        })
         
         self.titleLabelPhoto.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.stackView.snp.bottom).offset(Constants.titleLabelTopPadding)
@@ -220,14 +246,16 @@ class EditContactViewController: UIViewController {
         
         self.addPhotoButton.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.titleLabelPhoto.snp.bottom).offset(Constants.addPhotoButtonTopPadding)
-            make.leading.equalTo(self.view).inset(Constants.defaultLabelsPadding)
+            make.leading.equalTo(self.containerView).inset(Constants.defaultLabelsPadding)
         })
         
-        self.saveButton.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-Constants.saveButtonTopPadding)
-            make.leading.trailing.equalTo(self.titleLabel)
+        saveButton.snp.makeConstraints { make in
+            make.top.equalTo(addPhotoButton.snp.bottom).offset(Constants.saveButtonTopPadding)
+            make.leading.trailing.equalToSuperview().inset(Constants.defaultLabelsPadding)
             make.height.equalTo(Constants.saveButtonHeight)
-        })
+            make.bottom.equalTo(containerView.snp.bottom).offset(-Constants.saveButtonBottomInset)
+        }
+
     }
     
     // MARK: - Events
