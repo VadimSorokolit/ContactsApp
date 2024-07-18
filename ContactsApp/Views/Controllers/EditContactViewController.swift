@@ -44,7 +44,6 @@ class EditContactViewController: UIViewController {
         static let bottomTitleLabelText: String = "Photo"
         static let saveButtonTitle: String = "Save contact"
         static let goToBackButtonIconName: String = "x"
-        static let nameTextFieldWithTitleName = "Full name"
         static let textFieldWithTitleNamePlaceholder = "Enter name"
         static let nameTextFieldWithTitleJob = "Job position"
         static let textFieldWithTitleJobPlaceholder = "Enter position"
@@ -55,7 +54,6 @@ class EditContactViewController: UIViewController {
     // MARK: - Properties
     
     private let contactsViewModel: ContactsViewModel
-    
     private var topTitleLabelText: String = ""
     
     private var statusBarHeight: CGFloat {
@@ -74,6 +72,7 @@ class EditContactViewController: UIViewController {
     
     private lazy var goToBackButton: UIButton = {
         let button = UIButton()
+        
         if let xImage = UIImage(named: Constants.goToBackButtonIconName) {
             let increasedSize = CGSize(width: Constants.goToBackButtonIconSize.width + 2 * Constants.goToBackButtonImagePadding,
                                        height: Constants.goToBackButtonIconSize.height + 2 * Constants.goToBackButtonImagePadding)
@@ -82,6 +81,8 @@ class EditContactViewController: UIViewController {
             button.setImage(image, for: .normal)
             button.imageView?.contentMode = .scaleAspectFit
         }
+        
+        button.addTarget(self, action: #selector(onGoToBackButtonDidTap), for: .touchUpInside)
         return button
     }()
     
@@ -111,7 +112,7 @@ class EditContactViewController: UIViewController {
     
     private lazy var textFieldWithTitleName: TextFieldWithTitle = {
         let textFieldWithTitle = TextFieldWithTitle()
-        textFieldWithTitle.configure(title: Constants.nameTextFieldWithTitleName, placeholder: Constants.textFieldWithTitleNamePlaceholder)
+        textFieldWithTitle.configure(title: self.topTitleLabelText, placeholder: Constants.textFieldWithTitleNamePlaceholder)
         return textFieldWithTitle
     }()
 
@@ -144,10 +145,12 @@ class EditContactViewController: UIViewController {
     
     private lazy var addPhotoButton: UIButton = {
         let button = UIButton()
+        
         if let addPhotoImage = UIImage(named: Constants.addPhoIconName) {
             let image = addPhotoImage.resized(to: Constants.addPhotoButtonSize)
             button.setImage(image, for: .normal)
         }
+        
         button.layer.cornerRadius = Constants.addPhotoButtonHeight / 2
         return button
     }()
@@ -202,8 +205,7 @@ class EditContactViewController: UIViewController {
         self.containerView.addSubview(self.addPhotoButton)
         self.containerView.addSubview(self.saveButton)
         
-        self.scrollView.addSubview(containerView)
-        
+        self.scrollView.addSubview(self.containerView)
         
         self.view.addSubview(self.goToBackButton)
         self.view.addSubview(self.titleLabel)
@@ -227,7 +229,7 @@ class EditContactViewController: UIViewController {
             make.leading.trailing.equalTo(self.titleLabel)
             make.height.equalTo(Constants.separatorHeight)
         })
-    
+        
         self.scrollView.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.separator.snp.bottom)
             make.leading.trailing.bottom.equalTo(self.view)
@@ -240,7 +242,7 @@ class EditContactViewController: UIViewController {
         
         self.stackView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.containerView.snp.top).offset(Constants.stackViewTopPadding)
-            make.leading.trailing.equalToSuperview().inset(Constants.defaultLabelsPadding)
+            make.leading.trailing.equalTo(self.containerView).inset(Constants.defaultLabelsPadding)
         })
         
         self.titleLabelPhoto.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
@@ -261,10 +263,13 @@ class EditContactViewController: UIViewController {
             make.height.equalTo(Constants.saveButtonHeight)
             make.bottom.equalTo(self.containerView.snp.bottom).offset(-Constants.saveButtonBottomInset)
         })
-
     }
     
     // MARK: - Events
+    
+    @objc private func onGoToBackButtonDidTap() {
+        self.dismiss(animated: true, completion: nil)
+    }
     
     @objc private func onSaveButtonDidTap() {}
     

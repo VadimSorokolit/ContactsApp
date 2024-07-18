@@ -34,7 +34,7 @@ class ContactsViewController: UIViewController {
         static let addButtonShadowOffset: CGSize = CGSize(width: 0.0, height: 4.0)
         static let iconPlusSize: CGSize = CGSize(width: 30.0, height: 30.0)
         static let newContactTitleName: String = "New contact"
-        static let editContactTitleName: String = "Edit Contact"
+        static let editContactTitleName: String = "Edit contact"
         static let searchBarPlaceholder: String = "Search"
         static let infoLabelText: String = "💡 Swipe to delete contact from list"
         static let addButtonIconName: String = "plus"
@@ -98,10 +98,12 @@ class ContactsViewController: UIViewController {
         let button = UIButton()
         button.backgroundColor = Constants.addButtonColor
         button.tintColor = Constants.backgroundColor
+        
         if let plusImage = UIImage(named: Constants.addButtonIconName) {
             let image = plusImage.resized(to: Constants.iconPlusSize)
             button.setImage(image, for: .normal)
         }
+        
         button.layer.cornerRadius = Constants.addButtonHeight / 2
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowOpacity = Constants.addButtonShadowOpacity
