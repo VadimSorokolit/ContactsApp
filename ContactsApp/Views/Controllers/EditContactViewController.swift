@@ -41,7 +41,6 @@ class EditContactViewController: UIViewController {
         static let titleLabelPhotoTopPadding: CGFloat = 50.0
         static let saveButtonTopPadding: CGFloat = 81.0
         static let addPhoIconName: String = "addPhoto"
-        static let topTitleLabelText: String = "New contact"
         static let bottomTitleLabelText: String = "Photo"
         static let saveButtonTitle: String = "Save contact"
         static let goToBackButtonIconName: String = "x"
@@ -56,6 +55,8 @@ class EditContactViewController: UIViewController {
     // MARK: - Properties
     
     private let contactsViewModel: ContactsViewModel
+    
+    private var topTitleLabelText: String = ""
     
     private var statusBarHeight: CGFloat {
         var height: CGFloat = Constants.isZero
@@ -86,7 +87,7 @@ class EditContactViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = NSLocalizedString(Constants.topTitleLabelText, comment: "")
+        label.text = NSLocalizedString(self.topTitleLabelText, comment: "")
         label.font = Constants.topTitleLabelFont
         label.textColor = Constants.defaultColor
         return label
@@ -164,8 +165,9 @@ class EditContactViewController: UIViewController {
     
     // MARK: - Initializer
     
-    required init(contactsViewModel: ContactsViewModel) {
+    required init(contactsViewModel: ContactsViewModel, title: String) {
         self.contactsViewModel = contactsViewModel
+        self.topTitleLabelText = title
         
         super.init(nibName: nil, bundle: nil)
     }
