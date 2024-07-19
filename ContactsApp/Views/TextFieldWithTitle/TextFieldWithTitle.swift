@@ -66,9 +66,8 @@ class TextFieldWithTitle: UIView {
         
         self.textField.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.titleLabel.snp.bottom).offset(Constants.textFieldTopPadding)
-            make.leading.trailing.equalTo(self)
+            make.leading.trailing.bottom.equalTo(self)
             make.height.equalTo(Constants.textFieldHeight)
-            make.bottom.equalTo(self)
         })
     }
     

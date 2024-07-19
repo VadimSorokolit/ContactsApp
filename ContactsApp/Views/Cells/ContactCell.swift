@@ -17,10 +17,10 @@ class ContactCell: UITableViewCell {
         static let fullNameLabelFont: UIFont? = UIFont(name: "Manrope-Bold", size: 16.0)
         static let jobPositionLabelFont: UIFont? = UIFont(name: "Manrope-Medium", size: 14.0)
         static let placeholderImageName: String = "placeholder"
-        static let imageViewWidth: CGFloat = 50.0
-        static let photoImageViewInsets: UIEdgeInsets = UIEdgeInsets(top: 15.0, left: 30.0, bottom: 15.0, right: 0.0)
         static let fullNameLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 15.0, left: 14.0, bottom: 0.0, right: 30.0)
+        static let imageViewWidth: CGFloat = 50.0
         static let jobPositionLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 3.0, left: 0.0, bottom: 15.0, right: 0.0)
+        static let photoImageViewInsets: UIEdgeInsets = UIEdgeInsets(top: 15.0, left: 30.0, bottom: 15.0, right: 0.0)
     }
     
     // MARK: - Properties
@@ -32,14 +32,14 @@ class ContactCell: UITableViewCell {
     private lazy var fullNameLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.fullNameLabelFont
-        label.numberOfLines = 0
+        label.numberOfLines = .zero
         return label
     }()
     
     private lazy var jobPositionLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.jobPositionLabelFont
-        label.numberOfLines = 0
+        label.numberOfLines = .zero
         return label
     }()
     
@@ -74,14 +74,14 @@ class ContactCell: UITableViewCell {
         self.contentView.addSubview(self.jobPositionLabel)
         
         self.photoImageView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
-            make.centerY.equalTo(self.contentView)
-            make.leading.equalTo(self.contentView).inset(Constants.photoImageViewInsets.left)
+            make.centerY.equalTo(self.contentView.snp.centerY)
+            make.leading.equalTo(self.contentView.snp.leading).inset(Constants.photoImageViewInsets.left)
             make.size.equalTo(Constants.imageViewWidth)
         })
         
         self.fullNameLabel.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.contentView.snp.top).offset(Constants.fullNameLabelInsets.top)
-            make.leading.equalTo(self.photoImageView.snp.trailing).inset(-Constants.fullNameLabelInsets.left)
+            make.leading.equalTo(self.photoImageView.snp.trailing).offset(Constants.fullNameLabelInsets.left)
             make.trailing.equalTo(self.contentView.snp.trailing).inset(Constants.fullNameLabelInsets.right)
         })
         

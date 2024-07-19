@@ -14,30 +14,31 @@ class ContactsViewController: UIViewController {
     // MARK: - Objects
     
     private struct Constants {
-        static let titleLabelFont: UIFont? = UIFont(name: "Manrope-ExtraBold", size: 28.0)
         static let infoLabelFont: UIFont? = UIFont(name: "Manrope-Medium", size: 14.0)
+        static let titleLabelFont: UIFont? = UIFont(name: "Manrope-ExtraBold", size: 28.0)
+        static let addButtonColor: UIColor = UIColor(hexString: "447BF1")
+        static let addButtonShadowColor: CGColor = UIColor(hexString: "000000").cgColor
         static let backgroundColor: UIColor = UIColor(hexString: "FFFFFF")
         static let infoLabelBackgroundColor: UIColor = UIColor(hexString: "F0F5FF")
         static let searchBarBackgroundColor: UIColor = UIColor(hexString: "E1E6F0")
-        static let addButtonColor: UIColor = UIColor(hexString: "447BF1")
         static let separatorBackgroundColor: UIColor = UIColor(hexString: "E5E5E5")
-        static let separatorHeight: CGFloat = 1.0
+        static let defaultLabelsHeight: CGFloat = 40.0
+        static let defaultLabelsPadding: CGFloat = 30.0
+        static let defaultLabelsTopInset: CGFloat = 18.0
         static let infoLabelCornerRadius: CGFloat = 5.0
         static let searchBarCornerRadius: CGFloat = 10.0
+        static let separatorHeight: CGFloat = 1.0
         static let titleLabelTopPadding: CGFloat = 80.0
-        static let defaultLabelsPadding: CGFloat = 30.0
-        static let defaultLabelsHeight: CGFloat = 40.0
-        static let defaultLabelsTopInset: CGFloat = 18.0
         static let addButtonHeight: CGFloat = 70.0
         static let addButtonInsets: UIEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 39.0, right: 27.0)
         static let addButtonShadowOpacity: Float = 0.15
         static let addButtonShadowOffset: CGSize = CGSize(width: 0.0, height: 4.0)
         static let iconPlusSize: CGSize = CGSize(width: 30.0, height: 30.0)
-        static let newContactTitleName: String = "New contact"
-        static let editContactTitleName: String = "Edit contact"
-        static let searchBarPlaceholder: String = "Search"
-        static let infoLabelText: String = "💡 Swipe to delete contact from list"
+        static let editContactTitle: String = "Edit contact"
+        static let newContactTitle: String = "New contact"
         static let addButtonIconName: String = "plus"
+        static let infoLabelText: String = "💡 Swipe to delete contact from list"
+        static let searchBarPlaceholder: String = "Search"
         static let titleLabelText: String = "Contacts"
     }
     
@@ -104,8 +105,8 @@ class ContactsViewController: UIViewController {
             button.setImage(image, for: .normal)
         }
         
-        button.layer.cornerRadius = Constants.addButtonHeight / 2
-        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.cornerRadius = Constants.addButtonHeight / 2.0
+        button.layer.shadowColor = Constants.addButtonShadowColor
         button.layer.shadowOpacity = Constants.addButtonShadowOpacity
         button.layer.shadowOffset = Constants.addButtonShadowOffset
         button.addTarget(self, action: #selector(self.onAddButtonDidTap), for: .touchUpInside)
@@ -209,16 +210,16 @@ class ContactsViewController: UIViewController {
         }
     }
     
-    private func goToEditViewController(withTitleName titleName: String) {
-        let editContactController = EditContactViewController(contactsViewModel: self.contactsViewModel, title: titleName)
-        editContactController.modalPresentationStyle = .fullScreen
-        self.present(editContactController, animated: true, completion: nil)
+    private func goToEditContactVC(withTitle title: String) {
+        let editContactViewController = EditContactViewController(contactsViewModel: self.contactsViewModel, title: title)
+        editContactViewController.modalPresentationStyle = .fullScreen
+        self.present(editContactViewController, animated: true, completion: nil)
     }
     
     // MARK: - Events
     
     @objc private func onAddButtonDidTap() {
-        self.goToEditViewController(withTitleName: Constants.newContactTitleName)
+        self.goToEditContactVC(withTitle: Constants.newContactTitle)
     }
     
 }
@@ -252,7 +253,7 @@ extension ContactsViewController: UISearchBarDelegate {
 extension ContactsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.goToEditViewController(withTitleName: Constants.editContactTitleName)
+        self.goToEditContactVC(withTitle: Constants.editContactTitle)
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
@@ -280,11 +281,13 @@ extension ContactsViewController: UITableViewDataSource {
         let contact = contacts[indexPath.row]
         cell.setupCell(with: contact)
         
-        let isLastCell = indexPath.row == contacts.count - 1
+        let isCellLast = indexPath.row == contacts.indices.last
         
-        if isLastCell {
+        if isCellLast {
             cell.hideSeparator()
         }
+        
+        cell.selectionStyle = .none
         return cell
     }
     
