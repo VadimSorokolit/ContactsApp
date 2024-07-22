@@ -58,6 +58,7 @@ class EditContactViewController: UIViewController {
     
     private let contactsViewModel: ContactsViewModel
     private let titleLabelText: String
+    private let contact: Contact?
     
     private var statusBarHeight: CGFloat {
         var height: CGFloat = .zero
@@ -142,16 +143,17 @@ class EditContactViewController: UIViewController {
         return label
     }()
     
-    private lazy var addPhotoButton: UIButton = {
-        let button = UIButton()
+    private lazy var addPhotoView: UIImageView = {
+        let imageView = UIImageView()
         
         if let addPhotoImage = UIImage(named: Constants.addPhotoIconName) {
             let image = addPhotoImage.resized(to: Constants.addPhotoButtonSize)
-            button.setImage(image, for: .normal)
+            imageView.image = image
         }
         
-        button.layer.cornerRadius = Constants.addPhotoButtonHeight / 2.0
-        return button
+        imageView.layer.cornerRadius = Constants.addPhotoButtonHeight / 2.0
+        imageView.clipsToBounds = true
+        return imageView
     }()
     
     private lazy var saveButton: UIButton = {
@@ -167,9 +169,10 @@ class EditContactViewController: UIViewController {
     
     // MARK: - Initializer
     
-    required init(contactsViewModel: ContactsViewModel, title: String) {
+    required init(contactsViewModel: ContactsViewModel, title: String, contact: Contact?) {
         self.contactsViewModel = contactsViewModel
         self.titleLabelText = title
+        self.contact = contact
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -190,6 +193,7 @@ class EditContactViewController: UIViewController {
 
     private func setup() {
         self.setupViews()
+        self.setupTextFields()
     }
     
     private func setupViews() {
@@ -201,7 +205,7 @@ class EditContactViewController: UIViewController {
         
         self.containerView.addSubview(self.stackView)
         self.containerView.addSubview(self.labelPhoto)
-        self.containerView.addSubview(self.addPhotoButton)
+        self.containerView.addSubview(self.addPhotoView)
         self.containerView.addSubview(self.saveButton)
         
         self.scrollView.addSubview(self.containerView)
@@ -250,18 +254,32 @@ class EditContactViewController: UIViewController {
             make.height.equalTo(Constants.photoLabelHeight)
         })
         
-        self.addPhotoButton.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
+        self.addPhotoView.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.labelPhoto.snp.bottom).offset(Constants.addPhotoButtonTopPadding)
             make.leading.equalTo(self.containerView.snp.leading).inset(Constants.defaultLabelsPadding)
             make.size.equalTo(Constants.addPhotoButtonSize)
         })
         
         self.saveButton.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.addPhotoButton.snp.bottom).offset(Constants.saveButtonTopPadding)
+            make.top.equalTo(self.addPhotoView.snp.bottom).offset(Constants.saveButtonTopPadding)
             make.leading.trailing.equalTo(self.containerView).inset(Constants.defaultLabelsPadding)
             make.height.equalTo(Constants.saveButtonHeight)
             make.bottom.equalTo(self.containerView.snp.bottom).inset(Constants.saveButtonBottomInset)
         })
+    }
+    
+    private func setupTextFields() {
+        if let contact = self.contact {
+            self.textFieldWithTitleName.text = contact.fullName
+            self.textFieldWithTitleJobPosition.text = contact.jobPosition
+            self.textFieldWithTitleEmail.text = contact.email
+            
+            if let photo = contact.photo {
+                self.addPhotoView.image = photo
+            } else {
+                self.addPhotoView.image = UIImage(named: Constants.addPhotoIconName)
+            }
+        }
     }
     
     // MARK: - Events

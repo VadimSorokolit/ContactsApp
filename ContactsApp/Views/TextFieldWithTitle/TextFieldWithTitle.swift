@@ -40,6 +40,15 @@ class TextFieldWithTitle: UIView {
         return textField
     }()
     
+    var text: String? {
+        get {
+            return self.textField.text
+        }
+        set {
+            self.textField.text = ""
+        }
+    }
+    
     // MARK: - Initializers
     
     override init(frame: CGRect) {

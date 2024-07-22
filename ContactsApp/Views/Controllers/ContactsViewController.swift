@@ -210,8 +210,8 @@ class ContactsViewController: UIViewController {
         }
     }
     
-    private func goToEditContactVC(withTitle title: String) {
-        let editContactViewController = EditContactViewController(contactsViewModel: self.contactsViewModel, title: title)
+    private func goToEditContactVC(withTitle title: String, withContact contact: Contact?) {
+        let editContactViewController = EditContactViewController(contactsViewModel: self.contactsViewModel, title: title, contact: contact)
         editContactViewController.modalPresentationStyle = .fullScreen
         self.present(editContactViewController, animated: true, completion: nil)
     }
@@ -219,7 +219,7 @@ class ContactsViewController: UIViewController {
     // MARK: - Events
     
     @objc private func onAddButtonDidTap() {
-        self.goToEditContactVC(withTitle: Constants.newContactTitle)
+        self.goToEditContactVC(withTitle: Constants.newContactTitle, withContact: nil)
     }
     
 }
@@ -253,7 +253,8 @@ extension ContactsViewController: UISearchBarDelegate {
 extension ContactsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.goToEditContactVC(withTitle: Constants.editContactTitle)
+        let selectedContact = self.contactsViewModel.contacts[indexPath.row]
+        self.goToEditContactVC(withTitle: Constants.editContactTitle, withContact: selectedContact)
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
