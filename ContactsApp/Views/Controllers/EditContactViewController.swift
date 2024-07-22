@@ -157,7 +157,13 @@ class EditContactViewController: UIViewController {
         
         imageView.layer.cornerRadius = Constants.addPhotoButtonHeight / 2.0
         imageView.clipsToBounds = true
+        imageView.isUserInteractionEnabled = true
         return imageView
+    }()
+    
+    private lazy var addPhotoTapGesture: UITapGestureRecognizer = {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onAddPhotoTapped))
+        return tapGesture
     }()
     
     private lazy var saveButton: UIButton = {
@@ -218,6 +224,8 @@ class EditContactViewController: UIViewController {
         self.view.addSubview(self.titleLabel)
         self.view.addSubview(self.separator)
         self.view.addSubview(self.scrollView)
+        
+        self.addPhotoView.addGestureRecognizer(self.addPhotoTapGesture)
         
         self.backButton.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.view.snp.top).offset(self.statusBarHeight + Constants.backButtonInsets.top)
@@ -300,12 +308,42 @@ class EditContactViewController: UIViewController {
         return nil
     }
     
+    private func presentPhotoLibrary() {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.sourceType = .photoLibrary
+        imagePickerController.delegate = self
+        present(imagePickerController, animated: true, completion: nil)
+    }
+    
     // MARK: - Events
     
     @objc private func onBackButtonDidTap() {
         self.dismiss(animated: true, completion: nil)
     }
     
+    @objc private func onAddPhotoTapped() {
+        self.presentPhotoLibrary()
+    }
+    
     @objc private func onSaveButtonDidTap() {}
+    
+}
+
+// MARK: - UIImagePickerControllerDelegate, UINavigationControllerDelegate
+
+extension EditContactViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        if let selectedImage = info[.originalImage] as? UIImage {
+            self.addPhotoView.image = selectedImage
+        }
+        
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
     
 }
