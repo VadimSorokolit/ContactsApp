@@ -32,6 +32,10 @@ class EditContactViewController: UIViewController {
         static let nameTextFieldPlaceholder = "Enter name"
         static let jobPositionTextFieldPlaceholder = "Enter position"
         static let emailTextFieldPlaceholder = "Enter email"
+        static let errorMessageEmailDoesntMustContainSpaces = "Email doesn't must contain spaces"
+        static let errorMessageInvalidEmailAddress = "Invalid email address"
+        static let predicateFormat = "SELF MATCHES %@"
+        static let emailRegularExpression = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         static let addPhotoButtonSize: CGSize = CGSize(width: 143.0, height: 143.0)
         static let addPhotoButtonHeight: CGFloat = 143.0
         static let addPhotoButtonTopPadding: CGFloat = 12.0
@@ -275,6 +279,25 @@ class EditContactViewController: UIViewController {
             self.textFieldWithTitleEmail.text = contact.email
             self.addPhotoView.image = contact.photo ?? UIImage(named: Constants.addPhotoIconName)
         }
+    }
+    
+    private func checkValidEmail(_ value: String) -> String? {
+        if value.isEmpty {
+            return nil
+        }
+        
+        if value.contains(" ") {
+            return Constants.errorMessageEmailDoesntMustContainSpaces
+        }
+        
+        let reqularExpression = Constants.emailRegularExpression
+        let predicate = NSPredicate(format: Constants.predicateFormat, reqularExpression)
+        
+        if !predicate.evaluate(with: value) {
+            return Constants.errorMessageInvalidEmailAddress
+        }
+        
+        return nil
     }
     
     // MARK: - Events

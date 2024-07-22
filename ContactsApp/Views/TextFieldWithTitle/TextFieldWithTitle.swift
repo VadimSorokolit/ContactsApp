@@ -45,7 +45,7 @@ class TextFieldWithTitle: UIView {
             return self.textField.text
         }
         set {
-            self.textField.text = ""
+            self.textField.text = newValue
         }
     }
     
