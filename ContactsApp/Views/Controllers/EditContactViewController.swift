@@ -318,6 +318,9 @@ class EditContactViewController: UIViewController {
     // MARK: - Events
     
     @objc private func onBackButtonDidTap() {
+        if let contact = self.contact, let contactEmail = contact.email, contactEmail.isEmpty {
+            self.contactsViewModel.deleteContact(byEmail: contactEmail)
+        }
         self.dismiss(animated: true, completion: nil)
     }
     

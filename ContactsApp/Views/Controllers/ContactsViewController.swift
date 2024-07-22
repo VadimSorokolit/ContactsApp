@@ -219,7 +219,9 @@ class ContactsViewController: UIViewController {
     // MARK: - Events
     
     @objc private func onAddButtonDidTap() {
-        self.goToEditContactVC(withTitle: Constants.newContactTitle, withContact: nil)
+        self.contactsViewModel.createContact(fullName: "", jobPosition: "", email: "", photo: nil)
+        let contact = self.contactsViewModel.contacts.first(where: {$0.email == ""})
+        self.goToEditContactVC(withTitle: Constants.newContactTitle, withContact: contact)
     }
     
 }
