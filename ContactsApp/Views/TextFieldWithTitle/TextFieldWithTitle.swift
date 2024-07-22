@@ -33,9 +33,10 @@ class TextFieldWithTitle: UIView {
     
     private lazy var textField: UITextField = {
         let textField = UITextField()
-        textField.borderStyle = .roundedRect
         textField.font = Constants.textFieldFont
         textField.textColor = Constants.backgroundColor
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 2, height: textField.frame.height))
+        textField.leftViewMode = .always
         return textField
     }()
     
@@ -73,7 +74,10 @@ class TextFieldWithTitle: UIView {
     
     func configure(title: String, placeholder: String) {
         self.titleLabel.text = title
-        self.textField.placeholder = placeholder
+        self.textField.attributedPlaceholder = NSAttributedString(
+            string: placeholder,
+            attributes: [NSAttributedString.Key.foregroundColor: Constants.backgroundColor]
+        )
     }
     
 }
