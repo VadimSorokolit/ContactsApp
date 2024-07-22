@@ -273,12 +273,7 @@ class EditContactViewController: UIViewController {
             self.textFieldWithTitleName.text = contact.fullName
             self.textFieldWithTitleJobPosition.text = contact.jobPosition
             self.textFieldWithTitleEmail.text = contact.email
-            
-            if let photo = contact.photo {
-                self.addPhotoView.image = photo
-            } else {
-                self.addPhotoView.image = UIImage(named: Constants.addPhotoIconName)
-            }
+            self.addPhotoView.image = contact.photo ?? UIImage(named: Constants.addPhotoIconName)
         }
     }
     
