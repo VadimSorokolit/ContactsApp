@@ -35,7 +35,7 @@ class TextFieldWithTitle: UIView {
         let textField = UITextField()
         textField.font = Constants.textFieldFont
         textField.textColor = Constants.backgroundColor
-        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 2, height: textField.frame.height))
+        textField.leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 2.0, height: textField.frame.height))
         textField.leftViewMode = .always
         return textField
     }()

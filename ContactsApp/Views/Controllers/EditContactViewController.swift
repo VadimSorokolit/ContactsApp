@@ -203,7 +203,7 @@ class EditContactViewController: UIViewController {
 
     private func setup() {
         self.setupViews()
-        self.setupTextFields()
+        self.setupContactFields()
     }
     
     private func setupViews() {
@@ -280,7 +280,7 @@ class EditContactViewController: UIViewController {
         })
     }
     
-    private func setupTextFields() {
+    private func setupContactFields() {
         if let contact = self.contact {
             self.textFieldWithTitleName.textField.text = contact.fullName
             self.textFieldWithTitleJobPosition.textField.text = contact.jobPosition
