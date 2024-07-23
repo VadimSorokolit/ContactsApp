@@ -282,9 +282,9 @@ class EditContactViewController: UIViewController {
     
     private func setupTextFields() {
         if let contact = self.contact {
-            self.textFieldWithTitleName.text = contact.fullName
-            self.textFieldWithTitleJobPosition.text = contact.jobPosition
-            self.textFieldWithTitleEmail.text = contact.email
+            self.textFieldWithTitleName.textField.text = contact.fullName
+            self.textFieldWithTitleJobPosition.textField.text = contact.jobPosition
+            self.textFieldWithTitleEmail.textField.text = contact.email
             self.addPhotoView.image = contact.photo ?? UIImage(named: Constants.addPhotoIconName)
         }
     }
@@ -298,8 +298,8 @@ class EditContactViewController: UIViewController {
             return Constants.errorMessageEmailDoesntMustContainSpaces
         }
         
-        let reqularExpression = Constants.emailRegularExpression
-        let predicate = NSPredicate(format: Constants.predicateFormat, reqularExpression)
+        let regularExpression = Constants.emailRegularExpression
+        let predicate = NSPredicate(format: Constants.predicateFormat, regularExpression)
         
         if !predicate.evaluate(with: value) {
             return Constants.errorMessageInvalidEmailAddress
@@ -321,6 +321,7 @@ class EditContactViewController: UIViewController {
         if let contact = self.contact, let contactEmail = contact.email, contactEmail.isEmpty {
             self.contactsViewModel.deleteContact(byEmail: contactEmail)
         }
+        
         self.dismiss(animated: true, completion: nil)
     }
     

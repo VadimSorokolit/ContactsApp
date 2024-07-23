@@ -31,7 +31,7 @@ class TextFieldWithTitle: UIView {
         return label
     }()
     
-    private lazy var textField: UITextField = {
+    lazy var textField: UITextField = {
         let textField = UITextField()
         textField.font = Constants.textFieldFont
         textField.textColor = Constants.backgroundColor
@@ -39,16 +39,7 @@ class TextFieldWithTitle: UIView {
         textField.leftViewMode = .always
         return textField
     }()
-    
-    var text: String? {
-        get {
-            return self.textField.text
-        }
-        set {
-            self.textField.text = newValue
-        }
-    }
-    
+
     // MARK: - Initializers
     
     override init(frame: CGRect) {
