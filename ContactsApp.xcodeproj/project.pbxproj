@@ -10,8 +10,6 @@
 		ABA8BEC5FF3ED5155393ADB8 /* Pods_ContactsApp_ContactsAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01B077C5BF960A46A307FDCF /* Pods_ContactsApp_ContactsAppUITests.framework */; };
 		DD09348C2C245FE300FD84FF /* ContactsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD09348B2C245FE300FD84FF /* ContactsViewModel.swift */; };
 		DD0991202C1A36DF009DEBA0 /* ContactsApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DD09911E2C1A36DF009DEBA0 /* ContactsApp.xcdatamodeld */; };
-		DD0991232C1A37F0009DEBA0 /* Contact+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0991212C1A37F0009DEBA0 /* Contact+CoreDataClass.swift */; };
-		DD0991242C1A37F0009DEBA0 /* Contact+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0991222C1A37F0009DEBA0 /* Contact+CoreDataProperties.swift */; };
 		DD0DB21A2C24A6880058A001 /* NotificationNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0DB2192C24A6880058A001 /* NotificationNames.swift */; };
 		DD12234A2C10CF9300A5C93B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1223492C10CF9300A5C93B /* AppDelegate.swift */; };
 		DD12234C2C10CF9300A5C93B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD12234B2C10CF9300A5C93B /* SceneDelegate.swift */; };
@@ -32,6 +30,8 @@
 		DD73768C2C3C53B300791B0E /* Manrope-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DD73768B2C3C53B300791B0E /* Manrope-ExtraBold.ttf */; };
 		DD73768E2C3C6F0600791B0E /* ResizeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD73768D2C3C6F0600791B0E /* ResizeImage.swift */; };
 		DD7376912C3E64AF00791B0E /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7376902C3E64AF00791B0E /* ContactCell.swift */; };
+		DD8198102C52D431008C40B7 /* Contact+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD81980E2C52D431008C40B7 /* Contact+CoreDataProperties.swift */; };
+		DD8198112C52D431008C40B7 /* Contact+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD81980F2C52D431008C40B7 /* Contact+CoreDataClass.swift */; };
 		E8B335379D4445D2FCC312F2 /* Pods_ContactsApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D06CA5A949831E6A2DDE750 /* Pods_ContactsApp.framework */; };
 		F978449275FF4795A13FBFA8 /* Pods_ContactsAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39DB43FB58512A6EA8D8B6C2 /* Pods_ContactsAppTests.framework */; };
 /* End PBXBuildFile section */
@@ -66,8 +66,6 @@
 		CA353E2B77B7D5060FB58374 /* Pods-ContactsApp-ContactsAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactsApp-ContactsAppTests.debug.xcconfig"; path = "Target Support Files/Pods-ContactsApp-ContactsAppTests/Pods-ContactsApp-ContactsAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		DD09348B2C245FE300FD84FF /* ContactsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewModel.swift; sourceTree = "<group>"; };
 		DD09911F2C1A36DF009DEBA0 /* ContactsApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ContactsApp.xcdatamodel; sourceTree = "<group>"; };
-		DD0991212C1A37F0009DEBA0 /* Contact+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Contact+CoreDataClass.swift"; sourceTree = "<group>"; };
-		DD0991222C1A37F0009DEBA0 /* Contact+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Contact+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		DD0DB2192C24A6880058A001 /* NotificationNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationNames.swift; sourceTree = "<group>"; };
 		DD1223462C10CF9300A5C93B /* ContactsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ContactsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD1223492C10CF9300A5C93B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -92,6 +90,8 @@
 		DD73768B2C3C53B300791B0E /* Manrope-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Manrope-ExtraBold.ttf"; sourceTree = "<group>"; };
 		DD73768D2C3C6F0600791B0E /* ResizeImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizeImage.swift; sourceTree = "<group>"; };
 		DD7376902C3E64AF00791B0E /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
+		DD81980E2C52D431008C40B7 /* Contact+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Contact+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		DD81980F2C52D431008C40B7 /* Contact+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Contact+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E271E04A40827F4886BD885E /* Pods-ContactsApp-ContactsAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactsApp-ContactsAppTests.release.xcconfig"; path = "Target Support Files/Pods-ContactsApp-ContactsAppTests/Pods-ContactsApp-ContactsAppTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -305,9 +305,9 @@
 		DD72B98E2C18CD9F003FBB46 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				DD81980F2C52D431008C40B7 /* Contact+CoreDataClass.swift */,
+				DD81980E2C52D431008C40B7 /* Contact+CoreDataProperties.swift */,
 				DD72B98C2C18C998003FBB46 /* CoreDataService.swift */,
-				DD0991222C1A37F0009DEBA0 /* Contact+CoreDataProperties.swift */,
-				DD0991212C1A37F0009DEBA0 /* Contact+CoreDataClass.swift */,
 				DD66DD072C35A4BD00EA3EDB /* Entities */,
 			);
 			path = Services;
@@ -565,10 +565,10 @@
 				DD0991202C1A36DF009DEBA0 /* ContactsApp.xcdatamodeld in Sources */,
 				DD73768E2C3C6F0600791B0E /* ResizeImage.swift in Sources */,
 				DD72B98D2C18C998003FBB46 /* CoreDataService.swift in Sources */,
-				DD0991232C1A37F0009DEBA0 /* Contact+CoreDataClass.swift in Sources */,
-				DD0991242C1A37F0009DEBA0 /* Contact+CoreDataProperties.swift in Sources */,
+				DD8198102C52D431008C40B7 /* Contact+CoreDataProperties.swift in Sources */,
 				DD35F19D2C4EFA340027F1EB /* AlertsManager.swift in Sources */,
 				DD12234E2C10CF9300A5C93B /* ContactsViewController.swift in Sources */,
+				DD8198112C52D431008C40B7 /* Contact+CoreDataClass.swift in Sources */,
 				DD66DD012C3496A800EA3EDB /* GlobalConstans.swift in Sources */,
 				DD09348C2C245FE300FD84FF /* ContactsViewModel.swift in Sources */,
 				DD12234A2C10CF9300A5C93B /* AppDelegate.swift in Sources */,

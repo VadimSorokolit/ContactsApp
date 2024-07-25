@@ -9,6 +9,10 @@ import Foundation
 import UIKit
 import SnapKit
 
+protocol InterfaceContactDelegate : AnyObject {
+    func didReturnEditContact(editedContact: Contact)
+}
+
 class ContactsViewController: UIViewController {
     
     // MARK: - Objects
@@ -201,17 +205,21 @@ class ContactsViewController: UIViewController {
     }
     
     private func getData() {
-        // self.contactsViewModel.deleteAllContacts()
-        self.contactsViewModel.fetchContacts()
-        if self.contactsViewModel.contacts.isEmpty {
-            self.contactsViewModel.testCreateContacts()
-        } else {
-            print("Database doesn't empty")
-        }
+//        self.contactsViewModel.deleteAllContacts()
+//        self.contactsViewModel.contacts.removeAll()
+//        self.contactsViewModel.fetchContacts()
+//        if self.contactsViewModel.contacts.isEmpty {
+//            self.contactsViewModel.testCreateContacts()
+//        } else {
+//            print("Database doesn't empty")
+//            print(self.contactsViewModel.contacts.count)
+//        }
+//        self.tableView.reloadData()
     }
     
     private func goToEditContactVC(withTitle title: String, withContact contact: Contact?) {
-        let editContactViewController = EditContactViewController(contactsViewModel: self.contactsViewModel, title: title, contact: contact)
+        let editContactViewController = EditContactViewController(title: title, contact: contact)
+        editContactViewController.delegate = self
         editContactViewController.modalPresentationStyle = .fullScreen
         self.present(editContactViewController, animated: true, completion: nil)
     }
@@ -219,7 +227,9 @@ class ContactsViewController: UIViewController {
     // MARK: - Events
     
     @objc private func onAddButtonDidTap() {
-        self.goToEditContactVC(withTitle: Constants.newContactTitle, withContact: nil)
+        let contact = self.contactsViewModel.createNewEmptyContact()
+        contact?.email = "Vadim@ukr.net"
+        self.goToEditContactVC(withTitle: Constants.newContactTitle, withContact: contact)
     }
     
 }
@@ -299,6 +309,17 @@ extension ContactsViewController: UITableViewDataSource {
             self.contactsViewModel.deleteContact(byEmail: contactEmail)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
+    }
+    
+}
+
+// MARK: - InterfaceContactDelegate
+
+extension ContactsViewController: InterfaceContactDelegate {
+    
+    func didReturnEditContact(editedContact: Contact) {
+        self.contactsViewModel.updateContact(contact: editedContact)
+        self.tableView.reloadData()
     }
     
 }

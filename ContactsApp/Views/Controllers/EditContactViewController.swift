@@ -9,6 +9,10 @@ import Foundation
 import UIKit
 import SnapKit
 
+protocol HandleEditTextFieldDelegate: AnyObject {
+    func textEditing(textField: UITextField)
+}
+
 class EditContactViewController: UIViewController {
     
     // MARK: - Objects
@@ -60,9 +64,10 @@ class EditContactViewController: UIViewController {
     
     // MARK: - Properties
     
-    private let contactsViewModel: ContactsViewModel
+    weak var delegate: InterfaceContactDelegate?
+    
     private let titleLabelText: String
-    private let contact: Contact?
+    private var contact: Contact?
     
     private var statusBarHeight: CGFloat {
         var height: CGFloat = .zero
@@ -116,18 +121,21 @@ class EditContactViewController: UIViewController {
     
     private lazy var textFieldWithTitleName: TextFieldWithTitle = {
         let textFieldWithTitle = TextFieldWithTitle()
+        textFieldWithTitle.delegate = self
         textFieldWithTitle.configure(title: Constants.nameTextFieldTitle, placeholder: Constants.nameTextFieldPlaceholder)
         return textFieldWithTitle
     }()
 
     private lazy var textFieldWithTitleJobPosition: TextFieldWithTitle = {
         let textFieldWithTitle = TextFieldWithTitle()
+        textFieldWithTitle.delegate = self
         textFieldWithTitle.configure(title: Constants.jobPositionTextFieldTitle, placeholder: Constants.jobPositionTextFieldPlaceholder)
         return textFieldWithTitle
     }()
     
     private lazy var textFieldWithTitleEmail: TextFieldWithTitle = {
         let textFieldWithTitle = TextFieldWithTitle()
+        textFieldWithTitle.delegate = self
         textFieldWithTitle.configure(title: Constants.emailTextFieldTitle, placeholder: Constants.emailTextFieldPlaceholder)
         return textFieldWithTitle
     }()
@@ -179,10 +187,9 @@ class EditContactViewController: UIViewController {
     
     // MARK: - Initializer
     
-    required init(contactsViewModel: ContactsViewModel, title: String, contact: Contact?) {
-        self.contactsViewModel = contactsViewModel
+    required init(title: String, contact: Contact?) {
         self.titleLabelText = title
-        self.contact = contact
+        self.contact = contact?.clone()
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -281,12 +288,11 @@ class EditContactViewController: UIViewController {
     }
     
     private func setupContactFields() {
-        if let contact = self.contact {
+            guard let contact = self.contact else { return }
             self.textFieldWithTitleName.textField.text = contact.fullName
             self.textFieldWithTitleJobPosition.textField.text = contact.jobPosition
             self.textFieldWithTitleEmail.textField.text = contact.email
-            self.addPhotoView.image = contact.photo ?? UIImage(named: Constants.addPhotoIconName)
-        }
+        self.addPhotoView.image = UIImage(data: contact.photo ?? Data()) ?? UIImage(named: Constants.addPhotoIconName)
     }
     
     private func checkValidEmail(_ value: String) -> String? {
@@ -318,10 +324,7 @@ class EditContactViewController: UIViewController {
     // MARK: - Events
     
     @objc private func onBackButtonDidTap() {
-        if let contact = self.contact, let contactEmail = contact.email, contactEmail.isEmpty {
-            self.contactsViewModel.deleteContact(byEmail: contactEmail)
-        }
-        
+        print(self.contact?.email! as Any)
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -329,7 +332,15 @@ class EditContactViewController: UIViewController {
         self.presentPhotoLibrary()
     }
     
-    @objc private func onSaveButtonDidTap() {}
+    @objc private func onSaveButtonDidTap() {
+        if let delegate = self.delegate, let contact = self.contact {
+            delegate.didReturnEditContact(editedContact: contact)
+            print(contact.fullName!)
+            print(contact.email!)
+            print(contact.jobPosition!)
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
     
 }
 
@@ -341,13 +352,37 @@ extension EditContactViewController: UIImagePickerControllerDelegate, UINavigati
         
         if let selectedImage = info[.originalImage] as? UIImage {
             self.addPhotoView.image = selectedImage
+            
+            self.contact?.photo = selectedImage.pngData()
         }
         
+       
         picker.dismiss(animated: true, completion: nil)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
+    }
+    
+}
+
+// MARK: - HandleEditTextFieldDelegate
+
+extension EditContactViewController: HandleEditTextFieldDelegate {
+    
+    func textEditing(textField: UITextField) {
+        guard let text = textField.text else { return }
+        
+        switch textField {
+        case self.textFieldWithTitleName.textField:
+            self.contact?.fullName = text
+        case self.textFieldWithTitleJobPosition.textField:
+            self.contact?.jobPosition = text
+        case self.textFieldWithTitleEmail.textField:
+            self.contact?.email = text
+        default:
+            break
+        }
     }
     
 }

@@ -101,7 +101,7 @@ class ContactCell: UITableViewCell {
         self.jobPositionLabel.text = contactJobPosition
         
         if let photoImage = contactPhoto {
-            self.photoImageView.image = photoImage
+            self.photoImageView.image = UIImage(data: photoImage)
         } else {
             self.photoImageView.image = UIImage(named: Constants.placeholderImageName)
         }

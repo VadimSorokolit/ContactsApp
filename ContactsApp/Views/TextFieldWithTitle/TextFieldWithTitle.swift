@@ -24,6 +24,8 @@ class TextFieldWithTitle: UIView {
     
     // MARK: - Properties
     
+    weak var delegate: HandleEditTextFieldDelegate?
+    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.titleLabelFont
@@ -33,6 +35,7 @@ class TextFieldWithTitle: UIView {
     
     lazy var textField: UITextField = {
         let textField = UITextField()
+        textField.delegate = self
         textField.font = Constants.textFieldFont
         textField.textColor = Constants.backgroundColor
         textField.leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 2.0, height: textField.frame.height))
@@ -78,6 +81,17 @@ class TextFieldWithTitle: UIView {
             string: placeholder,
             attributes: [NSAttributedString.Key.foregroundColor: Constants.backgroundColor]
         )
+    }
+    
+}
+
+// MARK: - UITextFieldDelegate
+
+extension TextFieldWithTitle: UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        self.delegate?.textEditing(textField: textField)
+        return true
     }
     
 }

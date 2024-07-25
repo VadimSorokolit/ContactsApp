@@ -40,25 +40,30 @@ class ContactsViewModel {
             self.notify(name: .errorNotification, error: error.localizedDescription)
         }
     }
-
-    func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) {
-        do {
-            if let contact = try self.coreDataService.createContact(fullName: fullName, jobPosition: jobPosition, email: email, photo: photo) {
-                self.contacts.append(contact)
-                self.notify(name: .contactCreatedNotification)
-            }
-        } catch {
-            self.notify(name: .errorNotification, error: error.localizedDescription)
-        }
+    
+    func createNewEmptyContact() -> Contact? {
+        let contact = self.coreDataService.createNewEmptyContact()
+        return contact
     }
+
+//    func createContact(fullName: String, jobPosition: String, email: String, photo: Data?) {
+//        do {
+//            if let contact = try self.coreDataService.createContact(fullName: fullName, jobPosition: jobPosition, email: email, photo: photo) {
+//                self.contacts.append(contact)
+//                self.notify(name: .contactCreatedNotification)
+//            }
+//        } catch {
+//            self.notify(name: .errorNotification, error: error.localizedDescription)
+//        }
+//    }
     
     // !!!! Only for test create contacts
-    func testCreateContacts() {
-        self.createContact(fullName: "Vadim Sorokolit", jobPosition: "iOS Developer", email: "macintosh@ukr.net", photo: nil)
-        self.createContact(fullName: "Viktor Shroyko", jobPosition: "Driver", email: "kotik@ukr.net", photo: nil)
-        let image = UIImage(named: "splashScreenImage")
-        self.createContact(fullName: "Marina Nazarenko", jobPosition: "Teacher", email: "everest@i.ua", photo: image)
-    }
+//    func testCreateContacts() {
+//        self.createContact(fullName: "Vadim Sorokolit", jobPosition: "iOS Developer", email: "macintosh@ukr.net", photo: nil)
+//        self.createContact(fullName: "Viktor Shtoyko", jobPosition: "Driver", email: "kotik@ukr.net", photo: nil)
+//        let image = UIImage(named: "splashScreenImage")
+//        self.createContact(fullName: "Marina Nazarenko", jobPosition: "Teacher", email: "everest@i.ua", photo: nil)
+//    }
     
     // !!!! Only for test delete all contacts
     func deleteAllContacts() {
@@ -71,19 +76,23 @@ class ContactsViewModel {
         }
     }
     
-    func updateContact(byEmail email: String, jobPosition: String) {
-        do {
-            if let updatedContact = try self.coreDataService.updateContact(byEmail: email, jobPosition: jobPosition) {
-                if let index = self.contacts.firstIndex(where: { $0.email == email }) {
-                    self.contacts[index] = updatedContact
-                    self.notify(name: .contactUpdatedNotification)
-                }
-            }
-        } catch {
-            self.notify(name: .errorNotification, error: error.localizedDescription)
-        }
+    func updateContact(contact: Contact) {
+        self.coreDataService.updateContact(editedContact: contact, completion: { (result: Result<Void, Error>) -> Void in
+            // switch result {case}
+        })
+        
+//        do {
+//            if let updatedContact = try self.coreDataService.updateContact(editedContact: contact) {
+//                if let index = self.contacts.firstIndex(where: { $0.email == contact.email }) {
+////                    self.contacts[index] = updatedContact
+//                    self.notify(name: .contactUpdatedNotification)
+//                }
+//            }
+//        } catch {
+//            self.notify(name: .errorNotification, error: error.localizedDescription)
+//        }
     }
-    
+
     func deleteContact(byEmail email: String) {
         do {
             if let contact = try self.self.coreDataService.deleteContact(byEmail: email) {

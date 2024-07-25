@@ -98,46 +98,58 @@ class CoreDataService {
         }
     }
     
-    // Create contact
-    func createContact(fullName: String, jobPosition: String, email: String, photo: UIImage?) throws -> Contact? {
-        if try self.isContactExist(byEmail: email) {
-            return nil
-        }
+    // Create empty contact
+    func createNewEmptyContact() -> Contact? {
+        let newEmptyContact = Contact(context: self.context)
+        return newEmptyContact
+    }
+    
+    // Save contact
+    func saveContact(contact: Contact) {
+        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext)  in
+            guard let contactEmail = contact.email else { return }
+//            if try self.isContactExist(byEmail: contactEmail) {
+//                return
+//            }
+            do {
+
+                try  contact.managedObjectContext?.save()
+                try context.save()
+             
+            } catch {
+                
+            }
+        })
         
-        let contact = Contact(context: self.context)
-        contact.fullName = fullName
-        contact.jobPosition = jobPosition
-        contact.email = email
-        contact.photo = photo
-        
-        do {
-            try self.context.save()
-            return contact
-        } catch {
-            throw error
-        }
+
     }
     
     // Update contact
-    func updateContact(byEmail email: String, jobPosition: String) throws -> Contact? {
-        let fetchRequest = Contact.fetchRequest()
-        let predicate = NSPredicate(format: "email == %@", email)
-        fetchRequest.predicate = predicate
-        fetchRequest.fetchLimit = 1
-        
-        do {
-            let contacts = try self.context.fetch(fetchRequest)
-            if let contact = contacts.first {
-                contact.jobPosition = jobPosition
-                try self.context.save()
-                return contact
+    func updateContact(editedContact: Contact, completion: @escaping (Result<Void, Error>) -> Void) {
+        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext)  in
+            guard let contactEmail = editedContact.email else { return }
+            
+            let fetchRequest = Contact.fetchRequest()
+            let predicate = NSPredicate(format: "email = %@", contactEmail)
+            fetchRequest.predicate = predicate
+            fetchRequest.fetchLimit = 1
+            
+            do {
+                let contacts = try context.fetch(fetchRequest)
+                
+                if let contact = contacts.first {
+                    contact.fullName = editedContact.fullName
+                    contact.jobPosition = editedContact.jobPosition
+                    contact.photo = editedContact.photo
+                }
+                try context.save()
+                completion(.success(()))
+            } catch {
+                completion(.failure(error))
             }
-        } catch {
-            throw error
-        }
-        return nil
+        })
     }
-    
+        
     // Delete all contacts
     func deleteAllContacts() throws {
         let fetchRequest = Contact.fetchRequest()
