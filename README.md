@@ -2,3 +2,4 @@
 
 
 * Architecture - **MVVM**
+* Layout - Snapkit
