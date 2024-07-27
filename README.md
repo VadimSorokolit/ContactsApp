@@ -3,6 +3,7 @@
 
 * Architecture - **MVVM**
 * Layout - Snapkit
+* Data Access Layer - Core Data service 
 
 <br />
 <img src = "https://github.com/user-attachments/assets/6e454c7a-f89f-4cd4-a233-e7fd1d9bc195" width = 48.8%>
