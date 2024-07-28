@@ -2,8 +2,10 @@
 
 
 * Architecture - **MVVM**
-* Layout - Snapkit
-* Data Access Layer - Core Data service 
+* Layout - **Snapkit**
+* Bindigs - **NotificationCenter**
+* Data Access Layer - **CoreData service**
+* Tests - **Unit tests** 
 
 <br />
 <img src = "https://github.com/user-attachments/assets/6e454c7a-f89f-4cd4-a233-e7fd1d9bc195" width = 48.8%>
