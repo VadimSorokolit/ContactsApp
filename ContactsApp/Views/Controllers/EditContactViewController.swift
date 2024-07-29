@@ -67,7 +67,7 @@ class EditContactViewController: UIViewController {
     weak var delegate: InterfaceContactDelegate?
     
     private let titleLabelText: String
-    private var contact: Contact?
+    private let contact: Contact
     
     private var statusBarHeight: CGFloat {
         var height: CGFloat = .zero
@@ -187,9 +187,9 @@ class EditContactViewController: UIViewController {
     
     // MARK: - Initializer
     
-    required init(title: String, contact: Contact?) {
+    required init(title: String, contact: Contact) {
         self.titleLabelText = title
-        self.contact = contact?.clone()
+        self.contact = contact.clone()
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -288,10 +288,9 @@ class EditContactViewController: UIViewController {
     }
     
     private func setupContactFields() {
-            guard let contact = self.contact else { return }
-            self.textFieldWithTitleName.textField.text = contact.fullName
-            self.textFieldWithTitleJobPosition.textField.text = contact.jobPosition
-            self.textFieldWithTitleEmail.textField.text = contact.email
+        self.textFieldWithTitleName.textField.text = contact.fullName
+        self.textFieldWithTitleJobPosition.textField.text = contact.jobPosition
+        self.textFieldWithTitleEmail.textField.text = contact.email
         self.addPhotoView.image = UIImage(data: contact.photo ?? Data()) ?? UIImage(named: Constants.addPhotoIconName)
     }
     
@@ -324,7 +323,6 @@ class EditContactViewController: UIViewController {
     // MARK: - Events
     
     @objc private func onBackButtonDidTap() {
-        print(self.contact?.email! as Any)
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -333,7 +331,7 @@ class EditContactViewController: UIViewController {
     }
     
     @objc private func onSaveButtonDidTap() {
-        if let delegate = self.delegate, let contact = self.contact {
+        if let delegate = self.delegate {
             delegate.didReturnEditContact(editedContact: contact)
             print(contact.fullName!)
             print(contact.email!)
@@ -353,7 +351,7 @@ extension EditContactViewController: UIImagePickerControllerDelegate, UINavigati
         if let selectedImage = info[.originalImage] as? UIImage {
             self.addPhotoView.image = selectedImage
             
-            self.contact?.photo = selectedImage.pngData()
+            self.contact.photo = selectedImage.pngData()
         }
         
        
@@ -375,11 +373,11 @@ extension EditContactViewController: HandleEditTextFieldDelegate {
         
         switch textField {
         case self.textFieldWithTitleName.textField:
-            self.contact?.fullName = text
+            self.contact.fullName = text
         case self.textFieldWithTitleJobPosition.textField:
-            self.contact?.jobPosition = text
+            self.contact.jobPosition = text
         case self.textFieldWithTitleEmail.textField:
-            self.contact?.email = text
+            self.contact.email = text
         default:
             break
         }

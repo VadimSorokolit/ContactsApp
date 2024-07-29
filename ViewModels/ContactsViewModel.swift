@@ -18,33 +18,33 @@ class ContactsViewModel {
     
     // MARK: - Methods
     
-    func fetchContacts() {
-        do {
-            let contacts = try self.coreDataService.fetchContacts()
-            self.contacts = contacts
-            print(contacts.map({ contact in
-                contact.email
-            }))
-            self.notify(name: .contactsFetchedNotification)
-        } catch {
-            self.notify(name: .errorNotification, error: error.localizedDescription)
-        }
-    }
+//    func fetchContacts() {
+//        do {
+//            let contacts = try self.coreDataService.fetchContacts()
+//            self.contacts = contacts
+//            print(contacts.map({ contact in
+//                contact.email
+//            }))
+//            self.notify(name: .contactsFetchedNotification)
+//        } catch {
+//            self.notify(name: .errorNotification, error: error.localizedDescription)
+//        }
+//    }
     
-    func searchContacts(byQuery query: String) {
-        do {
-            let foundContacts = try self.coreDataService.searchContacts(byFullName: query, jobPosition: query)
-            self.contacts = foundContacts
-            self.notify(name: .contactsFoundNotification)
-        } catch {
-            self.notify(name: .errorNotification, error: error.localizedDescription)
-        }
-    }
+//    func searchContacts(byQuery query: String) {
+//        do {
+//            let foundContacts = try self.coreDataService.searchContacts(byFullName: query, jobPosition: query)
+//            self.contacts = foundContacts
+//            self.notify(name: .contactsFoundNotification)
+//        } catch {
+//            self.notify(name: .errorNotification, error: error.localizedDescription)
+//        }
+//    }
     
-    func createNewEmptyContact() -> Contact? {
-        let contact = self.coreDataService.createNewEmptyContact()
-        return contact
-    }
+//    func createNewEmptyContact() -> Contact? {
+//        let contact = self.coreDataService.createNewEmptyContact()
+//        return contact
+//    }
 
 //    func createContact(fullName: String, jobPosition: String, email: String, photo: Data?) {
 //        do {
@@ -66,15 +66,15 @@ class ContactsViewModel {
 //    }
     
     // !!!! Only for test delete all contacts
-    func deleteAllContacts() {
-        do {
-            try self.coreDataService.deleteAllContacts()
-            self.contacts.removeAll()
-            self.notify(name: .contactDeletedNotification)
-        } catch {
-            self.notify(name: .errorNotification, error: error.localizedDescription)
-        }
-    }
+//    func deleteAllContacts() {
+//        do {
+//            try self.coreDataService.deleteAllContacts()
+//            self.contacts.removeAll()
+//            self.notify(name: .contactDeletedNotification)
+//        } catch {
+//            self.notify(name: .errorNotification, error: error.localizedDescription)
+//        }
+//    }
     
     func updateContact(contact: Contact) {
         self.coreDataService.updateContact(editedContact: contact, completion: { (result: Result<Void, Error>) -> Void in
@@ -93,18 +93,18 @@ class ContactsViewModel {
 //        }
     }
 
-    func deleteContact(byEmail email: String) {
-        do {
-            if let contact = try self.self.coreDataService.deleteContact(byEmail: email) {
-                if let index = self.contacts.firstIndex(of: contact) {
-                    self.contacts.remove(at: index)
-                    self.notify(name: .contactDeletedNotification)
-                }
-            }
-        } catch {
-            self.notify(name: .errorNotification, error: error.localizedDescription)
-        }
-    }
+//    func deleteContact(byEmail email: String) {
+//        do {
+//            if let contact = try self.self.coreDataService.deleteContact(byEmail: email) {
+//                if let index = self.contacts.firstIndex(of: contact) {
+//                    self.contacts.remove(at: index)
+//                    self.notify(name: .contactDeletedNotification)
+//                }
+//            }
+//        } catch {
+//            self.notify(name: .errorNotification, error: error.localizedDescription)
+//        }
+//    }
     
     private func notify(name: Notification.Name, error: String? = nil) {
         var userInfo: [String: String]? = nil

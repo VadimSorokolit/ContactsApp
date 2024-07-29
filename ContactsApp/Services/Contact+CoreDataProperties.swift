@@ -20,7 +20,7 @@ extension Contact {
     @NSManaged public var email: String?
     @NSManaged public var photo: Data?
     
-    public func clone() -> Contact? {
+    public func clone() -> Contact {
         if let managedObjectContext = self.managedObjectContext{
             let newContact = Contact(context: managedObjectContext)
             newContact.fullName = self.fullName
@@ -29,7 +29,7 @@ extension Contact {
             newContact.photo = self.photo
             return newContact
         } else {
-            return nil
+            return self
         }
     }
 

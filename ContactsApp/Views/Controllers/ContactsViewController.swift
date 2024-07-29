@@ -217,7 +217,7 @@ class ContactsViewController: UIViewController {
 //        self.tableView.reloadData()
     }
     
-    private func goToEditContactVC(withTitle title: String, withContact contact: Contact?) {
+    private func goToEditContactVC(withTitle title: String, withContact contact: Contact) {
         let editContactViewController = EditContactViewController(title: title, contact: contact)
         editContactViewController.delegate = self
         editContactViewController.modalPresentationStyle = .fullScreen
@@ -227,9 +227,9 @@ class ContactsViewController: UIViewController {
     // MARK: - Events
     
     @objc private func onAddButtonDidTap() {
-        let contact = self.contactsViewModel.createNewEmptyContact()
-        contact?.email = "Vadim@ukr.net"
-        self.goToEditContactVC(withTitle: Constants.newContactTitle, withContact: contact)
+//        let contact = self.contactsViewModel.createNewEmptyContact()
+//        contact?.email = "Vadim@ukr.net"
+//        self.goToEditContactVC(withTitle: Constants.newContactTitle, withContact: contact)
     }
     
 }
@@ -241,7 +241,7 @@ extension ContactsViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.count >= 3 {
             self.isSearching = true
-            self.contactsViewModel.searchContacts(byQuery: searchText)
+//            self.contactsViewModel.searchContacts(byQuery: searchText)
         } else {
             self.isSearching = false
         }
@@ -303,12 +303,12 @@ extension ContactsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        let contactToRemove = self.contactsViewModel.contacts[indexPath.row]
+//        let contactToRemove = self.contactsViewModel.contacts[indexPath.row]
         
-        if let contactEmail = contactToRemove.email, editingStyle == .delete {
-            self.contactsViewModel.deleteContact(byEmail: contactEmail)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-        }
+//        if let contactEmail = contactToRemove.email, editingStyle == .delete {
+//            self.contactsViewModel.deleteContact(byEmail: contactEmail)
+//            tableView.deleteRows(at: [indexPath], with: .automatic)
+//        }
     }
     
 }
