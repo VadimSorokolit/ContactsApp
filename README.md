@@ -3,9 +3,9 @@
 
 * Architecture - **MVVM**
 * Layout - **Snapkit**
-* Bindigs - **NotificationCenter**
-* Data Access Layer - **CoreData service**
-* Tests - **Unit tests** 
+* Bindigs - **Closures, NotificationCenter**
+* Database - **CoreData**
+* Tests - **Unit Tests** 
 
 <br />
 <img src = "https://github.com/user-attachments/assets/6e454c7a-f89f-4cd4-a233-e7fd1d9bc195" width = 48.8%>
