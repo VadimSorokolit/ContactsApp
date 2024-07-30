@@ -42,7 +42,7 @@ class CoreDataService {
     
     // Fetch contacts
     func fetchContacts(completion: @escaping (Result<[Contact], Error>) -> Void) {
-        self.persistentContainer.performBackgroundTask { context in
+        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
             let fetchRequest: NSFetchRequest<Contact> = Contact.fetchRequest()
             
             do {
@@ -55,12 +55,12 @@ class CoreDataService {
             } catch {
                 completion(.failure(error))
             }
-        }
+        })
     }
     
     // Search contacts by fullName and jobPosition
     func searchContacts(byFullName fullName: String?, jobPosition: String?, completion: @escaping (Result<[Contact], Error>) -> Void) {
-        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) in
+        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
             let fetchRequest = Contact.fetchRequest()
             var predicates: [NSPredicate] = []
             
@@ -95,7 +95,7 @@ class CoreDataService {
     
     // Fetch contact by email
     func fetchContact(byEmail email: String, completion: @escaping (Result<Contact?, Error>) -> Void) {
-        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) in
+        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
             let fetchRequest = Contact.fetchRequest()
             let predicate = NSPredicate(format: "email == %@", email)
             fetchRequest.predicate = predicate
@@ -125,7 +125,7 @@ class CoreDataService {
     
     // Save contact
     func saveContact(contact: Contact, completion: @escaping (Result<Void, Error>) -> Void) {
-        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext)  in
+        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
             guard let contactEmail = contact.email else {
                 let error = NSError(domain: Constants.errorInvalidContact, code: 1)
                 completion(.failure(error))
@@ -163,7 +163,7 @@ class CoreDataService {
     
     // Update contact
     func updateContact(editedContact: Contact, completion: @escaping (Result<Void, Error>) -> Void) {
-        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext)  in
+        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void  in
             guard let contactEmail = editedContact.email else {
                 let error = NSError(domain: Constants.errorContactEmailDoesntExist, code: 1)
                 completion(.failure(error))

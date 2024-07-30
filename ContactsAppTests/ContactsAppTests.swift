@@ -311,7 +311,7 @@ class ContactsAppTests: XCTestCase {
                                                         
                                                     case .failure(let error):
                                                         
-                                                        XCTFail("error.localizedDescription")
+                                                        XCTFail(error.localizedDescription)
                                                         
                                                         expectation.fulfill()
                                                 }
