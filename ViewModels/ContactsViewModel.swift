@@ -18,94 +18,123 @@ class ContactsViewModel {
     
     // MARK: - Methods
     
-//    func fetchContacts() {
-//        do {
-//            let contacts = try self.coreDataService.fetchContacts()
-//            self.contacts = contacts
-//            print(contacts.map({ contact in
-//                contact.email
-//            }))
-//            self.notify(name: .contactsFetchedNotification)
-//        } catch {
-//            self.notify(name: .errorNotification, error: error.localizedDescription)
-//        }
-//    }
-    
-//    func searchContacts(byQuery query: String) {
-//        do {
-//            let foundContacts = try self.coreDataService.searchContacts(byFullName: query, jobPosition: query)
-//            self.contacts = foundContacts
-//            self.notify(name: .contactsFoundNotification)
-//        } catch {
-//            self.notify(name: .errorNotification, error: error.localizedDescription)
-//        }
-//    }
-    
-//    func createNewEmptyContact() -> Contact? {
-//        let contact = self.coreDataService.createNewEmptyContact()
-//        return contact
-//    }
-
-//    func createContact(fullName: String, jobPosition: String, email: String, photo: Data?) {
-//        do {
-//            if let contact = try self.coreDataService.createContact(fullName: fullName, jobPosition: jobPosition, email: email, photo: photo) {
-//                self.contacts.append(contact)
-//                self.notify(name: .contactCreatedNotification)
-//            }
-//        } catch {
-//            self.notify(name: .errorNotification, error: error.localizedDescription)
-//        }
-//    }
-    
-    // !!!! Only for test create contacts
-//    func testCreateContacts() {
-//        self.createContact(fullName: "Vadim Sorokolit", jobPosition: "iOS Developer", email: "macintosh@ukr.net", photo: nil)
-//        self.createContact(fullName: "Viktor Shtoyko", jobPosition: "Driver", email: "kotik@ukr.net", photo: nil)
-//        let image = UIImage(named: "splashScreenImage")
-//        self.createContact(fullName: "Marina Nazarenko", jobPosition: "Teacher", email: "everest@i.ua", photo: nil)
-//    }
-    
-    // !!!! Only for test delete all contacts
-//    func deleteAllContacts() {
-//        do {
-//            try self.coreDataService.deleteAllContacts()
-//            self.contacts.removeAll()
-//            self.notify(name: .contactDeletedNotification)
-//        } catch {
-//            self.notify(name: .errorNotification, error: error.localizedDescription)
-//        }
-//    }
-    
-    func updateContact(contact: Contact) {
-        self.coreDataService.updateContact(editedContact: contact, completion: { (result: Result<Void, Error>) -> Void in
-            // switch result {case}
+    func fetchContacts() {
+        self.coreDataService.fetchContacts(completion: { (fetchContactResult: Result<[Contact], Error>) -> Void in
+            switch fetchContactResult {
+                case .success(let contacts):
+                    self.contacts = contacts
+                    print(contacts.map({ contact in
+                        contact.email
+                    }))
+                    self.notify(name: .contactsFetchedNotification)
+                case .failure(let error):
+                    self.notify(name: .errorNotification, error: error.localizedDescription)
+            }
         })
-        
-//        do {
-//            if let updatedContact = try self.coreDataService.updateContact(editedContact: contact) {
-//                if let index = self.contacts.firstIndex(where: { $0.email == contact.email }) {
-////                    self.contacts[index] = updatedContact
-//                    self.notify(name: .contactUpdatedNotification)
-//                }
-//            }
-//        } catch {
-//            self.notify(name: .errorNotification, error: error.localizedDescription)
-//        }
+    }
+    
+    func searchContacts(byQuery query: String) {
+        self.coreDataService.searchContacts(byFullName: query, jobPosition: query, completion: { (searchResult: Result<[Contact], Error>) -> Void in
+            switch searchResult {
+                case .success(let foundContacts):
+                    self.contacts = foundContacts
+                    self.notify(name: .contactsFoundNotification)
+                case .failure(let error):
+                    self.notify(name: .errorNotification, error: error.localizedDescription)
+            }
+        })
+    }
+    
+    func createNewEmptyContact() -> Contact {
+        let contact = self.coreDataService.createEmptyContact()
+        return contact
     }
 
-//    func deleteContact(byEmail email: String) {
-//        do {
-//            if let contact = try self.self.coreDataService.deleteContact(byEmail: email) {
-//                if let index = self.contacts.firstIndex(of: contact) {
-//                    self.contacts.remove(at: index)
-//                    self.notify(name: .contactDeletedNotification)
-//                }
-//            }
-//        } catch {
-//            self.notify(name: .errorNotification, error: error.localizedDescription)
-//        }
-//    }
+    // !!!! Only for test create contacts
+    func testCreateContacts() {
+        let contact1 = self.coreDataService.createEmptyContact()
+        let contact2 = self.coreDataService.createEmptyContact()
+        let contact3 = self.coreDataService.createEmptyContact()
+        
+        contact1.fullName = "Vadim Sorokolit"
+        contact1.jobPosition = "iOS Developer"
+        contact1.email = "macintosh@ukr.net"
+        contact1.photo = nil
+        
+        contact2.fullName = "Viktor Shtoyko"
+        contact2.jobPosition = "Driver"
+        contact2.email = "kotik@ukr.net"
+        contact2.photo = nil
+        
+        let image = UIImage(named: "splashScreenImage")?.pngData()
+        contact3.fullName = "Marina Nazarenko"
+        contact3.jobPosition = "Teacher"
+        contact3.email = "everest@i.ua"
+        contact3.photo = image
+        self.coreDataService.saveContact(contact: contact1, completion: { (saveResult: Result<Void, Error>) -> Void in
+            switch saveResult {
+                case .success(()):
+                    self.contacts.append(contact1)
+                    self.coreDataService.saveContact(contact: contact2, completion: { (saveResult: Result<Void, Error>) -> Void in
+                        switch saveResult {
+                            case.success(()):
+                                self.contacts.append(contact2)
+                                self.coreDataService.saveContact(contact: contact3, completion: { (saveResult: Result<Void, Error>) -> Void in
+                                    switch saveResult {
+                                        case .success(()):
+                                            self.contacts.append(contact3)
+                                            print("All contacts saved")
+                                        case .failure(let error):
+                                            print(error.localizedDescription)
+                                    }
+                                })
+                            case .failure(let error):
+                                print(error.localizedDescription)
+                        }
+                    })
+                case.failure(let error):
+                    print(error.localizedDescription)
+            }
+        })
+    }
+     
+    // !!!! Only for test delete all contacts
+    func deleteAllContacts() {
+        self.coreDataService.deleteAllContacts(completion: { (deleteResult: Result<Void, Error>) -> Void in
+            switch deleteResult {
+                case .success(()):
+                    self.contacts.removeAll()
+                case .failure(let error):
+                    print(error.localizedDescription)
+            }
+        })
+    }
     
+    func updateContact(contact: Contact) {
+        self.coreDataService.updateContact(editedContact: contact, completion: { (updateResult: Result<Void, Error>) -> Void in
+            switch updateResult {
+                case .success(()):
+                    if let index = self.contacts.firstIndex(where: { $0.email == contact.email }) {
+                        self.contacts[index] = contact
+                        self.notify(name: .contactUpdatedNotification)
+                    }
+                case .failure(let error):
+                    self.notify(name: .errorNotification, error: error.localizedDescription)
+            }
+        })
+    }
+        
+    func deleteContact(byEmail email: String) {
+        self.coreDataService.deleteContact(byEmail: email, completion: { (deleteResult: Result<Void, Error>) -> Void in
+            switch deleteResult {
+                case .success(()):
+                    self.contacts = self.contacts.filter { $0.email != email }
+                case .failure(let error):
+                    self.notify(name: .errorNotification, error: error.localizedDescription)
+            }
+        })
+    }
+
     private func notify(name: Notification.Name, error: String? = nil) {
         var userInfo: [String: String]? = nil
         if let error = error {
