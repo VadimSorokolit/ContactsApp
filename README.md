@@ -3,9 +3,10 @@
 
 * Architecture - **MVVM**
 * Layout - **Snapkit**
-* Bindigs - **Closures, NotificationCenter**
+* Bindings - **Closures, NotificationCenter**
 * Database - **CoreData**
-* Tests - **Unit Tests** 
+* Tests - **Unit Tests**
+* DI - **Initializer**
 
 <br />
 <img src = "https://github.com/user-attachments/assets/6e454c7a-f89f-4cd4-a233-e7fd1d9bc195" width = 48.8%>
