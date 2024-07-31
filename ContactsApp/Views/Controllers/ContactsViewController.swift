@@ -146,7 +146,7 @@ class ContactsViewController: UIViewController {
     
     private func setup() {
         self.setupViews()
-        self.getData()
+        self.getData(completion: {})
     }
     
     private func setupViews() {
@@ -204,17 +204,21 @@ class ContactsViewController: UIViewController {
         })
     }
     
-    private func getData() {
-//        self.contactsViewModel.deleteAllContacts()
-//        self.contactsViewModel.contacts.removeAll()
-//        self.contactsViewModel.fetchContacts()
-//        if self.contactsViewModel.contacts.isEmpty {
-//            self.contactsViewModel.testCreateContacts()
-//        } else {
-//            print("Database doesn't empty")
-//            print(self.contactsViewModel.contacts.count)
-//        }
-//        self.tableView.reloadData()
+    private func getData(completion: @escaping () -> Void) {
+        self.contactsViewModel.fetchContacts {
+            DispatchQueue.main.async {
+                print(self.contactsViewModel.contacts.count)
+                self.tableView.reloadData()
+                completion()
+            }
+                    if self.contactsViewModel.contacts.isEmpty {
+                        self.contactsViewModel.testCreateContacts()
+                    } else {
+                        print("Database doesn't empty")
+                        print(self.contactsViewModel.contacts.count)
+                    }
+
+        }
     }
     
     private func goToEditContactVC(withTitle title: String, withContact contact: Contact) {
@@ -227,9 +231,8 @@ class ContactsViewController: UIViewController {
     // MARK: - Events
     
     @objc private func onAddButtonDidTap() {
-//        let contact = self.contactsViewModel.createNewEmptyContact()
-//        contact?.email = "Vadim@ukr.net"
-//        self.goToEditContactVC(withTitle: Constants.newContactTitle, withContact: contact)
+        let contact = self.contactsViewModel.createNewEmptyContact()
+        self.goToEditContactVC(withTitle: Constants.newContactTitle, withContact: contact)
     }
     
 }
@@ -241,7 +244,7 @@ extension ContactsViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.count >= 3 {
             self.isSearching = true
-//            self.contactsViewModel.searchContacts(byQuery: searchText)
+            self.contactsViewModel.searchContacts(byQuery: searchText)
         } else {
             self.isSearching = false
         }
@@ -303,12 +306,12 @@ extension ContactsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        let contactToRemove = self.contactsViewModel.contacts[indexPath.row]
+        let contactToRemove = self.contactsViewModel.contacts[indexPath.row]
         
-//        if let contactEmail = contactToRemove.email, editingStyle == .delete {
-//            self.contactsViewModel.deleteContact(byEmail: contactEmail)
-//            tableView.deleteRows(at: [indexPath], with: .automatic)
-//        }
+        if let contactEmail = contactToRemove.email, editingStyle == .delete {
+            self.contactsViewModel.deleteContact(byEmail: contactEmail)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
     }
     
 }
@@ -318,10 +321,22 @@ extension ContactsViewController: UITableViewDataSource {
 extension ContactsViewController: InterfaceContactDelegate {
     
     func didReturnEditContact(editedContact: Contact) {
-        self.contactsViewModel.updateContact(contact: editedContact)
-        self.tableView.reloadData()
+        self.contactsViewModel.coreDataService.saveContact(contact: editedContact) { result in
+            switch result {
+                case .success():
+                    DispatchQueue.main.async {
+                        self.contactsViewModel.fetchContacts(completion: {
+                            self.tableView.reloadData()
+                        })
+                    }
+                    
+                case .failure(let error):
+                    print(error.localizedDescription)
+            }
+        }
     }
     
 }
+
 
 

@@ -48,6 +48,9 @@ class CoreDataService {
             do {
                 let contacts = try context.fetch(fetchRequest)
                 if !contacts.isEmpty {
+                    let contacts = contacts.compactMap({ (contact: Contact) -> Contact? in
+                        self.context.object(with: contact.objectID) as? Contact
+                    })
                     completion(.success(contacts))
                 } else {
                     completion(.success([]))
@@ -114,12 +117,6 @@ class CoreDataService {
     // Create empty contact
     func createEmptyContact() -> Contact {
         let newEmptyContact = Contact(context: self.context)
-        
-        newEmptyContact.fullName = nil
-        newEmptyContact.jobPosition = nil
-        newEmptyContact.email = nil
-        newEmptyContact.photo = nil
-        
         return newEmptyContact
     }
     
@@ -128,6 +125,7 @@ class CoreDataService {
         self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
             guard let contactEmail = contact.email else {
                 let error = NSError(domain: Constants.errorInvalidContact, code: 1)
+                print("Error: Invalid contact email")
                 completion(.failure(error))
                 return
             }
@@ -137,6 +135,7 @@ class CoreDataService {
                     case .success(let exists):
                         if exists {
                             let error = NSError(domain: Constants.errorIsContactExist, code: 1)
+                            print("Error: Contact already exists")
                             completion(.failure(error))
                             return
                         } else {
@@ -148,13 +147,16 @@ class CoreDataService {
                             
                             do {
                                 try context.save()
+                                print("Contact saved successfully")
                                 completion(.success(()))
                             } catch {
+                                print("Error saving context: \(error.localizedDescription)")
                                 completion(.failure(error))
                             }
                         }
                         
                     case .failure(let error):
+                        print("Error checking contact existence: \(error.localizedDescription)")
                         completion(.failure(error))
                 }
             }

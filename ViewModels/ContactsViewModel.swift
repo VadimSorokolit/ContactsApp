@@ -13,26 +13,30 @@ class ContactsViewModel {
     
     // MARK: - Properties
     
-    private let coreDataService: CoreDataService = CoreDataService()
+    let coreDataService: CoreDataService = CoreDataService()
     var contacts: [Contact] = []
     
     // MARK: - Methods
     
-    func fetchContacts() {
-        self.coreDataService.fetchContacts(completion: { (fetchContactResult: Result<[Contact], Error>) -> Void in
+    func fetchContacts(completion: @escaping () -> Void) {
+        self.coreDataService.fetchContacts { (fetchContactResult: Result<[Contact], Error>) -> Void in
             switch fetchContactResult {
-                case .success(let contacts):
+            case .success(let contacts):
+                DispatchQueue.main.async {
                     self.contacts = contacts
-                    print(contacts.map({ contact in
-                        contact.email
-                    }))
+                    print("Fetched contacts: \(contacts.map({ contact in contact.email }))")
                     self.notify(name: .contactsFetchedNotification)
-                case .failure(let error):
+                    completion()
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
                     self.notify(name: .errorNotification, error: error.localizedDescription)
+                    completion()
+                }
             }
-        })
+        }
     }
-    
+
     func searchContacts(byQuery query: String) {
         self.coreDataService.searchContacts(byFullName: query, jobPosition: query, completion: { (searchResult: Result<[Contact], Error>) -> Void in
             switch searchResult {
