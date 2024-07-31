@@ -205,19 +205,20 @@ class ContactsViewController: UIViewController {
     }
     
     private func getData(completion: @escaping () -> Void) {
+//        self.contactsViewModel.deleteAllContacts()
         self.contactsViewModel.fetchContacts {
             DispatchQueue.main.async {
                 print(self.contactsViewModel.contacts.count)
                 self.tableView.reloadData()
                 completion()
             }
-                    if self.contactsViewModel.contacts.isEmpty {
-                        self.contactsViewModel.testCreateContacts()
-                    } else {
-                        print("Database doesn't empty")
-                        print(self.contactsViewModel.contacts.count)
-                    }
-
+            if self.contactsViewModel.contacts.isEmpty {
+                self.contactsViewModel.testCreateContacts()
+            } else {
+                print("Database doesn't empty")
+                print(self.contactsViewModel.contacts.count)
+            }
+            
         }
     }
     

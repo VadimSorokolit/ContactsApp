@@ -122,47 +122,25 @@ class CoreDataService {
     
     // Save contact
     func saveContact(contact: Contact, completion: @escaping (Result<Void, Error>) -> Void) {
-        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
-            guard let contactEmail = contact.email else {
-                let error = NSError(domain: Constants.errorInvalidContact, code: 1)
-                print("Error: Invalid contact email")
-                completion(.failure(error))
-                return
-            }
+        self.persistentContainer.performBackgroundTask { (context: NSManagedObjectContext) in
             
-            self.isContactExist(byEmail: contactEmail) { result in
-                switch result {
-                    case .success(let exists):
-                        if exists {
-                            let error = NSError(domain: Constants.errorIsContactExist, code: 1)
-                            print("Error: Contact already exists")
-                            completion(.failure(error))
-                            return
-                        } else {
-                            let newContact = Contact(context: context)
-                            newContact.fullName = contact.fullName
-                            newContact.jobPosition = contact.jobPosition
-                            newContact.email = contact.email
-                            newContact.photo = contact.photo
-                            
-                            do {
-                                try context.save()
-                                print("Contact saved successfully")
-                                completion(.success(()))
-                            } catch {
-                                print("Error saving context: \(error.localizedDescription)")
-                                completion(.failure(error))
-                            }
-                        }
-                        
-                    case .failure(let error):
-                        print("Error checking contact existence: \(error.localizedDescription)")
-                        completion(.failure(error))
-                }
+            let newContact = Contact(context: context)
+            newContact.fullName = contact.fullName
+            newContact.jobPosition = contact.jobPosition
+            newContact.email = contact.email
+            newContact.photo = contact.photo
+            
+            do {
+                try context.save()
+                print("Contact saved successfully")
+                completion(.success(()))
+            } catch {
+                print("Error saving context: \(error.localizedDescription)")
+                completion(.failure(error))
             }
-        })
+        }
     }
-    
+
     // Update contact
     func updateContact(editedContact: Contact, completion: @escaping (Result<Void, Error>) -> Void) {
         self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void  in
