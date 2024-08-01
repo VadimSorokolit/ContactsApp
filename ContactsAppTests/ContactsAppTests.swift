@@ -54,8 +54,9 @@ class ContactsAppTests: XCTestCase {
     // MARK: - Test methods
     
     func test_FetchContacts() {
-        let expectation = XCTestExpectation(description: "Save contacts and verify")
-        let newContact = self.coreDataService.createEmptyContact()
+        let expectation = XCTestExpectation(description: "Fetch contacts and verify")
+        
+        var newContact = ContactStruct()
         
         XCTAssertNotNil(newContact)
         
@@ -63,40 +64,37 @@ class ContactsAppTests: XCTestCase {
         
         XCTAssertNotNil(newContact.email)
         
-        self.coreDataService.saveContact(contact: newContact) { (result: Result<Void, Error>) -> Void in
-            switch result {
+        self.coreDataService.saveContact(contact: newContact, completion: { (saveResult: Result<Void, Error>) -> Void in
+            switch saveResult {
                 case .success(()):
-                    self.coreDataService.fetchContacts { (fetchResult: Result<[Contact], Error>) -> Void in
+                    self.coreDataService.fetchContacts(completion: { (fetchResult: Result<[ContactEntity], Error>) -> Void in
                         switch fetchResult {
                             case .success(let contacts):
                                 
                                 XCTAssertFalse(contacts.isEmpty)
                                 XCTAssertTrue(contacts.contains(where: { $0.email == self.testEmail }))
-                                
                                 expectation.fulfill()
                                 
                             case .failure(let error):
                                 
                                 XCTFail(error.localizedDescription)
-                                
                                 expectation.fulfill()
-                                
                         }
-                    }
+                    })
                     
                 case .failure(let error):
                     
                     XCTFail(error.localizedDescription)
-                    
                     expectation.fulfill()
             }
-        }
+        })
         wait(for: [expectation], timeout: 5.0)
     }
     
     func test_FetchContact() {
-        let expectation = XCTestExpectation(description: "Fetch contact verify")
-        let newContact = self.coreDataService.createEmptyContact()
+        let expectation = XCTestExpectation(description: "Fetch contact and verify")
+        
+        var newContact = ContactStruct()
         
         XCTAssertNotNil(newContact)
         
@@ -108,41 +106,49 @@ class ContactsAppTests: XCTestCase {
         
         XCTAssertNotNil(newContact.email)
         
-        if let contactEmail = newContact.email {
-            self.coreDataService.fetchContact(byEmail: contactEmail) { (result: Result<Contact?, Error>) -> Void in
-                switch result {
-                    case .success(let contact):
+        self.coreDataService.saveContact(contact: newContact, completion: { (saveResult: Result<Void, Error>) -> Void in
+            switch saveResult {
+                case .success(()):
+                    
+                    guard let contactEmail = newContact.email else {
                         
-                        XCTAssertNil(contact)
-                        
+                        XCTFail("Contact email should not be nil")
                         expectation.fulfill()
-                        
-                    case .failure(let error):
-                        
-                        XCTFail(error.localizedDescription)
-                        
-                        expectation.fulfill()
-                }
+                        return
+                    }
+                    
+                    self.coreDataService.fetchContact(byEmail: contactEmail, completion: { (fetchResult: Result<ContactEntity?, Error>) -> Void in
+                        switch fetchResult {
+                            case .success(let contact):
+                                
+                                XCTAssertNotNil(contact)
+                                expectation.fulfill()
+                                
+                            case .failure(let error):
+                                
+                                XCTFail(error.localizedDescription)
+                                expectation.fulfill()
+                        }
+                    })
+                    
+                case .failure(let error):
+                    
+                    XCTFail(error.localizedDescription)
+                    expectation.fulfill()
             }
-        } else {
-            
-            XCTFail("Contact email should not be nil")
-            
-            expectation.fulfill()
-        }
-        
+        })
         wait(for: [expectation], timeout: 5.0)
     }
     
     func test_SearchContacts() {
         let expectation = XCTestExpectation(description: "Search contacts and verify")
         
-        let contact1 = self.coreDataService.createEmptyContact()
+        var contact1 = ContactStruct()
         contact1.fullName = self.testFullName
         contact1.jobPosition = self.testJobPosition
         contact1.email = self.testEmail
         
-        let contact2 = self.coreDataService.createEmptyContact()
+        var contact2 = ContactStruct()
         contact2.fullName = self.testNewFullName
         contact2.jobPosition = self.testNewJobPosition
         contact2.email = self.testNewEmail
@@ -151,12 +157,15 @@ class ContactsAppTests: XCTestCase {
         var saveCount = 0
         
         for contact in contacts {
-            self.coreDataService.saveContact(contact: contact) { (result: Result<Void, Error>) -> Void in
+            self.coreDataService.saveContact(contact: contact, completion: { (result: Result<Void, Error>) -> Void in
                 switch result {
                     case .success(()):
+                        
                         saveCount += 1
+                        
                         if saveCount == contacts.count {
-                            self.coreDataService.searchContacts(byFullName: self.testFullName, jobPosition: nil) { (searchResult: Result<[Contact], Error>) -> Void in
+                            
+                            self.coreDataService.searchContacts(byFullName: self.testFullName, jobPosition: nil, completion: { (searchResult: Result<[ContactEntity], Error>) -> Void in
                                 switch searchResult {
                                     case .success(let foundContacts):
                                         
@@ -164,7 +173,7 @@ class ContactsAppTests: XCTestCase {
                                         
                                         XCTAssertFalse(foundContacts.contains(where: { $0.email == self.testNewEmail }))
                                         
-                                        self.coreDataService.searchContacts(byFullName: nil, jobPosition: self.testNewJobPosition) { (searchResult: Result<[Contact], Error>) -> Void in
+                                        self.coreDataService.searchContacts(byFullName: nil, jobPosition: self.testNewJobPosition, completion: { (searchResult: Result<[ContactEntity], Error>) -> Void in
                                             switch searchResult {
                                                 case .success(let foundContacts):
                                                     
@@ -176,35 +185,35 @@ class ContactsAppTests: XCTestCase {
                                                 case .failure(let error):
                                                     
                                                     XCTFail(error.localizedDescription)
-                                                    
                                                     expectation.fulfill()
                                             }
-                                        }
+                                        })
                                         
                                     case .failure(let error):
                                         XCTFail(error.localizedDescription)
-                                        
                                         expectation.fulfill()
                                 }
-                            }
+                            })
                         }
                     case .failure(let error):
                         
                         XCTFail(error.localizedDescription)
-                        
                         expectation.fulfill()
                 }
-            }
+            })
         }
-        
         wait(for: [expectation], timeout: 5.0)
     }
     
-    func test_CreateEmptyContact() {
-        let newContact = self.coreDataService.createEmptyContact()
+    func test_CreateEmptyContactStruct() {
+        var newContact = ContactStruct()
         
         XCTAssertNotNil(newContact)
-        XCTAssertNil(newContact.fullName)
+        
+        newContact.fullName = self.testFullName
+        
+        XCTAssertNotNil(newContact.fullName)
+        
         XCTAssertNil(newContact.jobPosition)
         XCTAssertNil(newContact.email)
         XCTAssertNil(newContact.photo)
@@ -213,7 +222,7 @@ class ContactsAppTests: XCTestCase {
     func test_saveContact() {
         let expectation = XCTestExpectation(description: "Save all contacts and verify")
         
-        let newContact = self.coreDataService.createEmptyContact()
+        var newContact = ContactStruct()
         
         XCTAssertNotNil(newContact)
         
@@ -222,19 +231,19 @@ class ContactsAppTests: XCTestCase {
         newContact.email = self.testNewEmail
         newContact.photo = self.testPhoto
         
-        self.coreDataService.saveContact(contact: newContact) { (result: Result<Void, Error>) -> Void in
-            switch result {
+        self.coreDataService.saveContact(contact: newContact, completion: { (saveResult: Result<Void, Error>) -> Void in
+            switch saveResult {
                 case .success(()):
+                    
                     guard let contactEmail = newContact.email else {
                         
                         XCTFail("Contact email should not be nil")
-                        
                         expectation.fulfill()
                         return
                     }
                     
-                    self.coreDataService.isContactExist(byEmail: contactEmail) { (result: Result<Bool, Error>) -> Void in
-                        switch result {
+                    self.coreDataService.isContactExist(byEmail: contactEmail, completion: { (isExistResult: Result<Bool, Error>) -> Void in
+                        switch isExistResult {
                             case .success(let isExist):
                                 
                                 XCTAssertTrue(isExist)
@@ -245,7 +254,7 @@ class ContactsAppTests: XCTestCase {
                         }
                         
                         expectation.fulfill()
-                    }
+                    })
                     
                 case .failure(let error):
                     
@@ -253,32 +262,33 @@ class ContactsAppTests: XCTestCase {
                     
                     expectation.fulfill()
             }
-        }
+        })
         wait(for: [expectation], timeout: 5.0)
     }
     
     func test_UpdateContact() {
         let expectation = XCTestExpectation(description: "Update contact and verify")
         
-        let newContact = self.coreDataService.createEmptyContact()
+        var newContact = ContactStruct()
+        
         XCTAssertNotNil(newContact)
         
         newContact.email = self.testEmail
+        
         XCTAssertNotNil(newContact.email)
         
-        self.coreDataService.saveContact(contact: newContact) { (saveResult: Result<Void, Error>) -> Void in
+        self.coreDataService.saveContact(contact: newContact, completion: { (saveResult: Result<Void, Error>) -> Void in
             switch saveResult {
                 case .success(()):
                     guard let contactEmail = newContact.email else {
                         
                         XCTFail("Email contact should not be nil")
-                        
                         expectation.fulfill()
                         return
                     }
                     
-                    self.coreDataService.isContactExist(byEmail: contactEmail) { (BoolResult: Result<Bool, Error>) -> Void in
-                        switch BoolResult {
+                    self.coreDataService.isContactExist(byEmail: contactEmail, completion: { (isExistResult: Result<Bool, Error>) -> Void in
+                        switch isExistResult {
                             case .success(let isContactExist):
                                 
                                 XCTAssertTrue(isContactExist)
@@ -287,137 +297,129 @@ class ContactsAppTests: XCTestCase {
                                 newContact.jobPosition = self.testJobPosition
                                 newContact.photo = self.testPhoto
                                 
-                                self.coreDataService.updateContact(editedContact: newContact) { (updateResult: Result<Void, Error>) -> Void in
+                                self.coreDataService.updateContact(editedContact: newContact, completion: { (updateResult: Result<Void, Error>) -> Void in
                                     switch updateResult {
                                         case .success(()):
-                                            self.coreDataService.fetchContacts { (fetchResult: Result<[Contact], Error>) -> Void in
+                                            
+                                            self.coreDataService.fetchContacts(completion: { (fetchResult: Result<[ContactEntity], Error>) -> Void in
                                                 switch fetchResult {
                                                     case .success(let contacts):
+                                                        
                                                         if let updatedContact = contacts.first(where: { $0.email == self.testEmail }) {
                                                             
                                                             XCTAssertEqual(updatedContact.fullName, self.testFullName)
                                                             XCTAssertEqual(updatedContact.jobPosition, self.testJobPosition)
                                                             XCTAssertNotEqual(updatedContact.email, self.testNewEmail)
                                                             XCTAssertEqual(updatedContact.photo, self.testPhoto)
-                                                            
-                                                            
                                                             expectation.fulfill()
                                                         } else {
                                                             
                                                             XCTFail("Contact with new email not found")
-                                                            
                                                             expectation.fulfill()
                                                         }
                                                         
                                                     case .failure(let error):
                                                         
                                                         XCTFail(error.localizedDescription)
-                                                        
                                                         expectation.fulfill()
                                                 }
-                                            }
+                                            })
                                             
                                         case .failure(let error):
                                             
                                             XCTFail(error.localizedDescription)
-                                            
                                             expectation.fulfill()
                                     }
-                                }
+                                })
                                 
                             case .failure(let error):
                                 
                                 XCTFail(error.localizedDescription)
-                                
                                 expectation.fulfill()
                         }
-                    }
+                    })
                     
                 case .failure(let error):
                     
                     XCTFail(error.localizedDescription)
-                    
                     expectation.fulfill()
             }
-        }
-        
+        })
         wait(for: [expectation], timeout: 5.0)
     }
     
     func test_DeleteContact() {
         let expectation = XCTestExpectation(description: "Delete contact and verify")
         
-        let newContact = self.coreDataService.createEmptyContact()
+        var newContact = ContactStruct()
+        
         XCTAssertNotNil(newContact)
         
         newContact.email = self.testEmail
+        
         XCTAssertNotNil(newContact.email)
         
-        self.coreDataService.saveContact(contact: newContact) { (saveResult: Result<Void, Error>) -> Void in
+        self.coreDataService.saveContact(contact: newContact, completion: { (saveResult: Result<Void, Error>) -> Void in
             switch saveResult {
                 case .success(()):
                     guard let contactEmail = newContact.email else {
                         
                         XCTFail("Email contact should not be nil")
-                        
                         expectation.fulfill()
                         return
                     }
                     
-                    self.coreDataService.isContactExist(byEmail: contactEmail) { (existsResult: Result<Bool, Error>) -> Void in
-                        switch existsResult {
+                    self.coreDataService.isContactExist(byEmail: contactEmail, completion: { (isExistResult: Result<Bool, Error>) -> Void in
+                        switch isExistResult {
                             case .success(let isContactExists):
                                 
                                 XCTAssertTrue(isContactExists)
                                 
-                                self.coreDataService.deleteContact(byEmail: contactEmail) { (deleteResult: Result<Void, Error>) -> Void in
+                                self.coreDataService.deleteContact(byEmail: contactEmail, completion: { (deleteResult: Result<Void, Error>) -> Void in
                                     switch deleteResult {
                                         case .success(()):
-                                            self.coreDataService.isContactExist(byEmail: contactEmail) { (postDeleteResult: Result<Bool, Error>) -> Void in
+                                            
+                                            self.coreDataService.isContactExist(byEmail: contactEmail, completion: { (postDeleteResult: Result<Bool, Error>) -> Void in
                                                 switch postDeleteResult {
                                                     case .success(let isContactExist):
                                                         
                                                         XCTAssertFalse(isContactExist)
-                                                        
                                                         expectation.fulfill()
+                                                        
                                                     case .failure(let error):
                                                         
                                                         XCTFail(error.localizedDescription)
                                                         expectation.fulfill()
                                                 }
-                                            }
+                                            })
                                             
                                         case .failure(let error):
                                             
                                             XCTFail(error.localizedDescription)
-                                            
                                             expectation.fulfill()
                                     }
-                                }
+                                })
                                 
                             case .failure(let error):
                                 
                                 XCTFail(error.localizedDescription)
-                                
                                 expectation.fulfill()
                         }
-                    }
+                    })
                     
                 case .failure(let error):
                     
                     XCTFail(error.localizedDescription)
-                    
                     expectation.fulfill()
             }
-        }
-        
+        })
         wait(for: [expectation], timeout: 5.0)
     }
     
     func test_DeleteAllContacts() {
         let expectation = XCTestExpectation(description: "Delete all contacts and verify")
         
-        let newContact = self.coreDataService.createEmptyContact()
+        var newContact = ContactStruct()
         
         XCTAssertNotNil(newContact)
         
@@ -425,100 +427,101 @@ class ContactsAppTests: XCTestCase {
         
         XCTAssertNotNil(newContact.email)
         
-        self.coreDataService.saveContact(contact: newContact) { (saveResult: Result<Void, Error>) -> Void in
+        self.coreDataService.saveContact(contact: newContact, completion: { (saveResult: Result<Void, Error>) -> Void in
             switch saveResult {
                 case .success(()):
                     guard let contactEmail = newContact.email else {
                         
                         XCTFail("Email contact should not be nil")
-                        
                         expectation.fulfill()
                         return
                     }
                     
-                    self.coreDataService.isContactExist(byEmail: contactEmail) { (existsResult: Result<Bool, Error>) -> Void in
+                    self.coreDataService.isContactExist(byEmail: contactEmail, completion: { (existsResult: Result<Bool, Error>) -> Void in
                         switch existsResult {
                             case .success(let exists):
                                 
                                 XCTAssertTrue(exists)
                                 
-                                self.coreDataService.deleteAllContacts { (deleteResult: Result<Void, Error>) -> Void in
+                                self.coreDataService.deleteAllContacts(completion: { (deleteResult: Result<Void, Error>) -> Void in
                                     switch deleteResult {
                                         case .success(()):
-                                            self.coreDataService.fetchContacts { (fetchResult: Result<[Contact], Error>) -> Void in
+                                            
+                                            self.coreDataService.fetchContacts(completion: { (fetchResult: Result<[ContactEntity], Error>) -> Void in
                                                 switch fetchResult {
                                                     case .success(let contacts):
                                                         
                                                         XCTAssertTrue(contacts.isEmpty)
-                                                        
                                                         expectation.fulfill()
                                                         
                                                     case .failure(let error):
                                                         
                                                         XCTFail(error.localizedDescription)
-                                                        
                                                         expectation.fulfill()
                                                 }
-                                            }
+                                            })
                                             
                                         case .failure(let error):
                                             
                                             XCTFail(error.localizedDescription)
-                                            
                                             expectation.fulfill()
                                     }
-                                }
+                                })
                                 
                             case .failure(let error):
                                 
                                 XCTFail(error.localizedDescription)
-                                
                                 expectation.fulfill()
                         }
-                    }
+                    })
                     
                 case .failure(let error):
                     
                     XCTFail(error.localizedDescription)
-                    
                     expectation.fulfill()
             }
-        }
-        
+        })
         wait(for: [expectation], timeout: 5.0)
     }
     
     func test_isContactExist() {
-        let expectation = XCTestExpectation(description: "Is contact exist verify")
-        let contact = self.coreDataService.createEmptyContact()
+        let expectation = XCTestExpectation(description: "Is contact exist and verify")
         
-        XCTAssertNotNil(contact)
+        var newContact = ContactStruct()
         
-        contact.email = self.testEmail
+        XCTAssertNotNil(newContact)
         
-        if let contactEmail = contact.email {
-            self.coreDataService.isContactExist(byEmail: contactEmail) { (result: Result<Bool, Error>) -> Void in
-                switch result {
-                    case .success(let isExist):
+        newContact.email = self.testEmail
+        
+        self.coreDataService.saveContact(contact: newContact, completion: { (saveResult: Result<Void, Error>) -> Void in
+            switch saveResult {
+                case .success(()):
+                    
+                    if let contactEmail = newContact.email {
+                        self.coreDataService.isContactExist(byEmail: contactEmail, completion: { (isExistResult: Result<Bool, Error>) -> Void in
+                            switch isExistResult {
+                                case .success(let isExist):
+                                    
+                                    XCTAssertTrue(isExist)
+                                    expectation.fulfill()
+                                    
+                                case .failure(let error):
+                                    
+                                    XCTFail(error.localizedDescription)
+                                    expectation.fulfill()
+                            }
+                        })
+                    } else {
                         
-                        XCTAssertFalse(isExist)
-                        
+                        XCTFail("Contact email should not be nil")
                         expectation.fulfill()
-                        
-                    case .failure(let error):
-                        
-                        XCTFail(error.localizedDescription)
-                        
-                        expectation.fulfill()
-                }
+                    }
+                case .failure(let error):
+                    
+                    XCTFail(error.localizedDescription)
+                    expectation.fulfill()
             }
-        } else {
-            
-            XCTFail("Contact email should not be nil")
-            
-            expectation.fulfill()
-        }
-        
+        })
         wait(for: [expectation], timeout: 5.0)
     }
     
