@@ -41,7 +41,7 @@ class ContactsViewModel {
     }
 
     func searchContacts(byQuery query: String) {
-        self.coreDataService.searchContacts(byFullName: query, jobPosition: query, completion: { (searchResult: Result<[Contact], Error>) -> Void in
+        self.coreDataService.searchContacts(byFullName: query, jobPosition: query, completion: { (searchResult: Result<[ContactEntity], Error>) -> Void in
             switch searchResult {
                 case .success(let foundContacts):
                     self.contacts = foundContacts.map({ $0.asContactStruct() })

@@ -1,5 +1,5 @@
 //
-//  Contact+CoreDataProperties.swift
+//  ContactEntity+CoreDataProperties.swift
 //  ContactsApp
 //
 //  Created by Vadim Sorokolit on 12.06.2024.
@@ -9,17 +9,18 @@
 import Foundation
 import CoreData
 
-extension Contact {
+extension ContactEntity {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Contact> {
-        return NSFetchRequest<Contact>(entityName: "Contact")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<ContactEntity> {
+        return NSFetchRequest<ContactEntity>(entityName: "ContactEntity")
     }
 
     @NSManaged public var fullName: String?
     @NSManaged public var jobPosition: String?
     @NSManaged public var email: String?
     @NSManaged public var photo: Data?
-
+    
+    // ContactEntity -> ContactStruct
     func asContactStruct() -> ContactStruct {
         var newContact = ContactStruct()
         newContact.fullName = self.fullName
@@ -31,6 +32,6 @@ extension Contact {
 
 }
 
-extension Contact : Identifiable {}
+extension ContactEntity : Identifiable {}
 
 

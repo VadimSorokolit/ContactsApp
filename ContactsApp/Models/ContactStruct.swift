@@ -1,5 +1,5 @@
 //
-//  ContactModel.swift
+//  ContactStruct.swift
 //  ContactsApp
 //
 //  Created by Vadim Sorokolit on 31.07.2024.
@@ -14,8 +14,9 @@ struct ContactStruct {
     var email: String?
     var photo: Data?
     
-    func asEntity(withContext context: NSManagedObjectContext) -> Contact {
-        let contact = Contact(context: context)
+    // ContactStruct -> ContactEntity
+    func asEntity(withContext context: NSManagedObjectContext) -> ContactEntity {
+        let contact = ContactEntity(context: context)
         contact.fullName = self.fullName
         contact.jobPosition = self.jobPosition
         contact.email = self.email
