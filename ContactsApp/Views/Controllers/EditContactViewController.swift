@@ -67,7 +67,7 @@ class EditContactViewController: UIViewController {
     weak var delegate: InterfaceContactDelegate?
     
     private let titleLabelText: String
-    private let contact: Contact
+    private var contact: ContactStruct
     
     private var statusBarHeight: CGFloat {
         var height: CGFloat = .zero
@@ -187,9 +187,9 @@ class EditContactViewController: UIViewController {
     
     // MARK: - Initializer
     
-    required init(title: String, contact: Contact) {
+    required init(title: String, contact: ContactStruct) {
         self.titleLabelText = title
-        self.contact = contact.clone()
+        self.contact = contact
         
         super.init(nibName: nil, bundle: nil)
     }

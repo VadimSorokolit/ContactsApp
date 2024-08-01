@@ -92,7 +92,7 @@ class ContactCell: UITableViewCell {
         })
     }
     
-    func setupCell(with contact: Contact) {
+    func setupCell(with contact: ContactStruct) {
         let contactFullName = contact.fullName
         let contactJobPosition = contact.jobPosition
         let contactPhoto = contact.photo

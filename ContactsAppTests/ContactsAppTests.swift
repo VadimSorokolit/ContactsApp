@@ -358,7 +358,7 @@ class ContactsAppTests: XCTestCase {
                 case .success(()):
                     guard let contactEmail = newContact.email else {
                         
-                        XCTFail("Email контакта не должен быть nil")
+                        XCTFail("Email contact should not be nil")
                         
                         expectation.fulfill()
                         return

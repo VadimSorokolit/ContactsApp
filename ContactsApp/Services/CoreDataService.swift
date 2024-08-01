@@ -42,19 +42,13 @@ class CoreDataService {
     
     // Fetch contacts
     func fetchContacts(completion: @escaping (Result<[Contact], Error>) -> Void) {
+        print(#function)
         self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
             let fetchRequest: NSFetchRequest<Contact> = Contact.fetchRequest()
             
             do {
                 let contacts = try context.fetch(fetchRequest)
-                if !contacts.isEmpty {
-                    let contacts = contacts.compactMap({ (contact: Contact) -> Contact? in
-                        self.context.object(with: contact.objectID) as? Contact
-                    })
-                    completion(.success(contacts))
-                } else {
-                    completion(.success([]))
-                }
+                completion(.success(contacts))
             } catch {
                 completion(.failure(error))
             }
@@ -119,9 +113,9 @@ class CoreDataService {
         let newEmptyContact = Contact(context: self.context)
         return newEmptyContact
     }
-    
+
     // Save contact
-    func saveContact(contact: Contact, completion: @escaping (Result<Void, Error>) -> Void) {
+    func saveContact(contact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void) {
         self.persistentContainer.performBackgroundTask { (context: NSManagedObjectContext) in
             
             let newContact = Contact(context: context)
@@ -135,40 +129,48 @@ class CoreDataService {
                 print("Contact saved successfully")
                 completion(.success(()))
             } catch {
-                print("Error saving context: \(error.localizedDescription)")
+                print(error.localizedDescription)
                 completion(.failure(error))
             }
         }
     }
 
     // Update contact
-    func updateContact(editedContact: Contact, completion: @escaping (Result<Void, Error>) -> Void) {
-        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void  in
-            guard let contactEmail = editedContact.email else {
-                let error = NSError(domain: Constants.errorContactEmailDoesntExist, code: 1)
-                completion(.failure(error))
-                return
-            }
-            
-            let fetchRequest = Contact.fetchRequest()
-            let predicate = NSPredicate(format: "email == %@", contactEmail)
-            fetchRequest.predicate = predicate
-            fetchRequest.fetchLimit = 1
+    func updateContact(editedContact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void) {
+        self.persistentContainer.performBackgroundTask { context in
+            let fetchRequest: NSFetchRequest<Contact> = Contact.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "email == %@", editedContact.email ?? "")
             
             do {
                 let contacts = try context.fetch(fetchRequest)
                 
-                if let contact = contacts.first {
-                    contact.fullName = editedContact.fullName
-                    contact.jobPosition = editedContact.jobPosition
-                    contact.photo = editedContact.photo
+                if let existingContact = contacts.first {
+                    existingContact.fullName = editedContact.fullName
+                    existingContact.jobPosition = editedContact.jobPosition
+                    existingContact.photo = editedContact.photo
+                    
+                    try context.save()
+                    print("Contact updated successfully")
+                    
+                    self.fetchContacts { fetchResult in
+                        switch fetchResult {
+                            case .success:
+                                completion(.success(()))
+                            case .failure(let error):
+                                print(error.localizedDescription)
+                                completion(.failure(error))
+                        }
+                    }
+                } else {
+                    let error = NSError(domain: "ContactUpdateErrorDomain", code: 1)
+                    print(error.localizedDescription)
+                    completion(.failure(error))
                 }
-                try context.save()
-                completion(.success(()))
             } catch {
+                print(error.localizedDescription)
                 completion(.failure(error))
             }
-        })
+        }
     }
     
     // Delete all contacts
