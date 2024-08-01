@@ -333,9 +333,6 @@ class EditContactViewController: UIViewController {
     @objc private func onSaveButtonDidTap() {
         if let delegate = self.delegate {
             delegate.didReturnEditContact(editedContact: contact)
-            print(contact.fullName!)
-            print(contact.email!)
-            print(contact.jobPosition!)
             self.dismiss(animated: true, completion: nil)
         }
     }

@@ -13,29 +13,20 @@ class ContactsViewModel {
     
     // MARK: - Properties
     
-    let coreDataService: CoreDataService = CoreDataService()
+    private let coreDataService: CoreDataService = CoreDataService()
     var contacts: [ContactStruct] = []
     
     // MARK: - Methods
     
-    func fetchContacts(completion: @escaping (Result<Void, Error>) -> Void) {
+    func fetchContacts() {
         self.coreDataService.fetchContacts { result in
             switch result {
                 case .success(let contacts):
                     self.contacts = contacts.map({ $0.asContactStruct() })
-                    print("Fetched contacts count: \(self.contacts.count)")
-                    self.contacts.forEach { contact in
-                        print(9999, contact.fullName, contact.jobPosition)
-                    }
-                    completion(.success(()))
+                    print(self.contacts.count)
                     self.notify(name: .success)
-                    self.contacts.forEach { contact in
-                        print(5555555, contact.fullName, contact.jobPosition)
-                    }
-                    
                 case .failure(let error):
-                    completion(.failure(error))
-                    self.notify(name: .error, error: error.localizedDescription)
+                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
             }
         }
     }
@@ -47,18 +38,13 @@ class ContactsViewModel {
                     self.contacts = foundContacts.map({ $0.asContactStruct() })
                     self.notify(name: .success)
                 case .failure(let error):
-                    self.notify(name: .error, error: error.localizedDescription)
+                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
             }
         })
     }
-    
-//    func createNewEmptyContact() -> Contact {
-//        let contact = self.coreDataService.createEmptyContact()
-//        return contact
-//    }
 
     // !!!! Only for test create contacts
-    func testCreateContacts(completion: @escaping () -> Void) {
+    func testCreateContacts() {
         var contact1 = ContactStruct()
         var contact2 = ContactStruct()
         var contact3 = ContactStruct()
@@ -73,50 +59,52 @@ class ContactsViewModel {
         contact2.email = "kotik@ukr.net"
         contact2.photo = nil
         
-        let image = UIImage(named: "splashScreenImage")?.pngData()
         contact3.fullName = "Marina Nazarenko"
         contact3.jobPosition = "Teacher"
         contact3.email = "everest@i.ua"
-        contact3.photo = image
+        contact3.photo = UIImage(named: "splashScreenImage")?.pngData()
+        
         self.coreDataService.saveContact(contact: contact1, completion: { (saveResult: Result<Void, Error>) -> Void in
             switch saveResult {
                 case .success(()):
                     self.contacts.append(contact1)
+                    
                     self.coreDataService.saveContact(contact: contact2, completion: { (saveResult: Result<Void, Error>) -> Void in
                         switch saveResult {
                             case.success(()):
                                 self.contacts.append(contact2)
+                                
                                 self.coreDataService.saveContact(contact: contact3, completion: { (saveResult: Result<Void, Error>) -> Void in
                                     switch saveResult {
                                         case .success(()):
                                             self.contacts.append(contact3)
                                             self.notify(name: .success)
-                                            completion()
                                         case .failure(let error):
-                                            self.notify(name: .error, error: error.localizedDescription)
+                                            self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
                                     }
                                 })
                             case .failure(let error):
-                                self.notify(name: .error, error: error.localizedDescription)
+                                self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
                         }
                     })
                 case.failure(let error):
-                    self.notify(name: .error, error: error.localizedDescription)
+                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
             }
         })
     }
      
     // !!!! Only for test delete all contacts
-    //    func deleteAllContacts() {
-    //        self.coreDataService.deleteAllContacts(completion: { (deleteResult: Result<Void, Error>) -> Void in
-    //            switch deleteResult {
-    //                case .success(()):
-    //                    self.contacts.removeAll()
-    //                case .failure(let error):
-    //                    print(error.localizedDescription)
-    //            }
-    //        })
-    //    }
+    func deleteAllContacts() {
+        self.coreDataService.deleteAllContacts(completion: { (deleteResult: Result<Void, Error>) -> Void in
+            switch deleteResult {
+                case .success(()):
+                    self.contacts.removeAll()
+                    self.notify(name: .success)
+                case .failure(let error):
+                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
+            }
+        })
+    }
     
     func updateContact(contact: ContactStruct) {
         self.coreDataService.updateContact(editedContact: contact, completion: { (updateResult: Result<Void, Error>) -> Void in
@@ -127,7 +115,19 @@ class ContactsViewModel {
                         self.notify(name: .success)
                     }
                 case .failure(let error):
-                    self.notify(name: .error, error: error.localizedDescription)
+                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
+            }
+        })
+    }
+    
+    func saveContact(contact: ContactStruct) {
+        self.coreDataService.saveContact(contact: contact, completion: { (saveResult: Result<Void, Error>) -> Void in
+            switch saveResult {
+                case .success(()):
+                    self.contacts.append(contact)
+                    self.notify(name: .success)
+                case .failure(let error):
+                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
             }
         })
     }
@@ -139,14 +139,36 @@ class ContactsViewModel {
                     self.contacts = self.contacts.filter { $0.email != email }
                     self.notify(name: .success)
                 case .failure(let error):
-                    self.notify(name: .error, error: error.localizedDescription)
+                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
             }
         })
     }
+    
+    func contactVarificationBeforeSave(contact: ContactStruct) {
+        guard let contactEmail = contact.email else {
+            let errorMessage = "Email contact should not be nil"
+            self.notify(name: .errorNotification, errorMessage: errorMessage)
+            return
+        }
+        
+        self.coreDataService.isContactExist(byEmail: contactEmail, completion: { (isExistResult: Result<Bool, Error>) -> Void in
+            switch isExistResult {
+                case .success(let isExist):
+                    if isExist {
+                        self.updateContact(contact: contact)
+                    } else {
+                        self.saveContact(contact: contact)
+                    }
+                case .failure(let error):
+                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
+            }
+            
+        })
+    }
 
-    private func notify(name: Notification.Name, error: String? = nil) {
+    private func notify(name: Notification.Name, errorMessage: String? = nil) {
         var userInfo: [String: String]? = nil
-        if let error = error {
+        if let error = errorMessage {
             userInfo = ["error": error]
         }
         NotificationCenter.default.post(name: name, object: nil, userInfo: userInfo)

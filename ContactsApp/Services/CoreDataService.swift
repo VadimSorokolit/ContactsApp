@@ -109,9 +109,8 @@ class CoreDataService {
     func saveContact(contact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void) {
         self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
             
-            let contact = contact.asEntity(withContext: context)
-            
             do {
+                _ = contact.asEntity(withContext: context)
                 try context.save()
                 completion(.success(()))
             } catch {
@@ -132,6 +131,7 @@ class CoreDataService {
                 if let existingContact = contacts.first {
                     existingContact.fullName = editedContact.fullName
                     existingContact.jobPosition = editedContact.jobPosition
+                    existingContact.email = editedContact.email
                     existingContact.photo = editedContact.photo
                     
                     try context.save()

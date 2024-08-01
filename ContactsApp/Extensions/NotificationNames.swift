@@ -18,5 +18,5 @@ extension Notification.Name {
 //    static let errorNotification = Notification.Name("errorNotification")
     
     static let success = Notification.Name("SuccessNotification")
-    static let error = Notification.Name("ErrorNotification")
+    static let errorNotification = Notification.Name("ErrorNotification")
 }

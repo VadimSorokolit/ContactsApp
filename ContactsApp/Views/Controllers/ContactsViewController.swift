@@ -146,7 +146,7 @@ class ContactsViewController: UIViewController {
     
     private func setup() {
         self.setupViews()
-        self.getData(completion: {})
+        self.getData()
         self.registerForNotifications()
     }
     
@@ -156,7 +156,7 @@ class ContactsViewController: UIViewController {
     
     private func registerForNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleSuccess), name: .success, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleError(_:)), name: .error, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleError(_:)), name: .errorNotification, object: nil)
     }
     
     private func unregisterFromNotifications() {
@@ -218,29 +218,11 @@ class ContactsViewController: UIViewController {
         })
     }
     
-    private func getData(completion: @escaping () -> Void) {
-        self.contactsViewModel.fetchContacts { result in
-            DispatchQueue.main.async {
-                switch result {
-                    case .success:
-                        print("Fetched contacts in VC: \(self.contactsViewModel.contacts.count)")
-                        NotificationCenter.default.post(name: .success, object: nil)
-                        
-                        if self.contactsViewModel.contacts.isEmpty {
-                            self.contactsViewModel.testCreateContacts(completion: {
-                                NotificationCenter.default.post(name: .success, object: nil)
-                            })
-                        } else {
-                            print("Database is not empty")
-                        }
-                        
-                    case .failure(let error):
-                        print(error.localizedDescription)
-                }
-                completion()
-            }
-        }
+    private func getData() {
+//      self.contactsViewModel.deleteAllContacts()
+        self.contactsViewModel.fetchContacts()
     }
+
     
     private func goToEditContactVC(withTitle title: String, withContact contact: ContactStruct) {
         let editContactViewController = EditContactViewController(title: title, contact: contact)
@@ -259,7 +241,13 @@ class ContactsViewController: UIViewController {
     
     @objc private func handleSuccess() {
         DispatchQueue.main.async {
+            if self.contactsViewModel.contacts.isEmpty {
+                self.contactsViewModel.testCreateContacts()
+            } else {
+                print("Database is not empty")
+            }
             self.tableView.reloadData()
+            
         }
     }
     
@@ -361,53 +349,7 @@ extension ContactsViewController: UITableViewDataSource {
 extension ContactsViewController: InterfaceContactDelegate {
     
     func didReturnEditContact(editedContact: ContactStruct) {
-        self.contactsViewModel.coreDataService.isContactExist(byEmail: editedContact.email ?? "") { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-                case .success(let exists):
-                    if exists {
-                        self.contactsViewModel.coreDataService.updateContact(editedContact: editedContact) { updateResult in
-                            switch updateResult {
-                                case .success():
-                                    print("Contact updated successfully")
-                                    self.contactsViewModel.fetchContacts { fetchResult in
-                                        self.handleFetchResult(fetchResult)
-                                    }
-                                case .failure(let error):
-                                    self.showErrorAlert(message: error.localizedDescription)
-                            }
-                        }
-                    } else {
-                        self.contactsViewModel.coreDataService.saveContact(contact: editedContact) { saveResult in
-                            switch saveResult {
-                                case .success():
-                                    print("Contact saved successfully")
-                                    self.contactsViewModel.fetchContacts { fetchResult in
-                                        self.handleFetchResult(fetchResult)
-                                    }
-                                case .failure(let error):
-                                    self.showErrorAlert(message: error.localizedDescription)
-                            }
-                        }
-                    }
-                case .failure(let error):
-                    self.showErrorAlert(message: error.localizedDescription)
-            }
-        }
-    }
-    
-    private func handleFetchResult(_ result: Result<Void, Error>) {
-        switch result {
-            case .success:
-                print("Contacts fetched successfully")
-                self.contactsViewModel.contacts.forEach { contact in
-                    print("1", contact.jobPosition)
-                }
-                NotificationCenter.default.post(name: .success, object: nil)
-            case .failure(let error):
-                self.showErrorAlert(message: error.localizedDescription)
-        }
+        self.contactsViewModel.contactVarificationBeforeSave(contact: editedContact)
     }
     
 }
