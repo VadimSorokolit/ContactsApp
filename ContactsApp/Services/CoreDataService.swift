@@ -40,7 +40,6 @@ class CoreDataService {
     
     // Fetch contacts
     func fetchContacts(completion: @escaping (Result<[Contact], Error>) -> Void) {
-        print(#function)
         self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
             let fetchRequest: NSFetchRequest<Contact> = Contact.fetchRequest()
             
@@ -106,21 +105,11 @@ class CoreDataService {
         })
     }
     
-    // Create contact
-    func createContact(from contact: ContactStruct, withContext context: NSManagedObjectContext) -> Contact {
-        let contact = Contact(context: context)
-        contact.fullName = contact.fullName
-        contact.jobPosition = contact.jobPosition
-        contact.email = contact.email
-        contact.photo = contact.photo
-        return contact
-    }
-
     // Save contact
     func saveContact(contact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void) {
-        self.persistentContainer.performBackgroundTask { (context: NSManagedObjectContext) in
-
-            let contact = self.createContact(from: contact, withContext: context)
+        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
+            
+            let contact = contact.asEntity(withContext: context)
             
             do {
                 try context.save()
@@ -128,12 +117,12 @@ class CoreDataService {
             } catch {
                 completion(.failure(error))
             }
-        }
+        })
     }
 
     // Update contact
     func updateContact(editedContact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void) {
-        self.persistentContainer.performBackgroundTask { context in
+        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
             let fetchRequest: NSFetchRequest<Contact> = Contact.fetchRequest()
             fetchRequest.predicate = NSPredicate(format: "email == %@", editedContact.email ?? "")
             
@@ -147,14 +136,14 @@ class CoreDataService {
                     
                     try context.save()
                     
-                    self.fetchContacts { fetchResult in
+                    self.fetchContacts(completion: { (fetchResult: Result<[Contact], Error>) -> Void in
                         switch fetchResult {
                             case .success:
                                 completion(.success(()))
                             case .failure(let error):
                                 completion(.failure(error))
                         }
-                    }
+                    })
                 } else {
                     let error = NSError(domain: Constants.errorContactUpdate, code: 1)
                     completion(.failure(error))
@@ -162,7 +151,7 @@ class CoreDataService {
             } catch {
                 completion(.failure(error))
             }
-        }
+        })
     }
     
     // Delete all contacts
@@ -209,7 +198,7 @@ class CoreDataService {
     
     // Check contact by email
     func isContactExist(byEmail email: String, completion: @escaping (Result<Bool, Error>) -> Void) {
-        self.persistentContainer.performBackgroundTask { context in
+        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
             let fetchRequest: NSFetchRequest<Contact> = Contact.fetchRequest()
             fetchRequest.predicate = NSPredicate(format: "email == %@", email)
             fetchRequest.fetchLimit = 1
@@ -220,7 +209,7 @@ class CoreDataService {
             } catch {
                 completion(.failure(error))
             }
-        }
+        })
     }
     
 }
