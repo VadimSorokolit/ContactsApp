@@ -14,10 +14,8 @@ class CoreDataService {
     // MARK: - Objects
     
     private struct Constants {
-        static let errorInvalidContact: String = "Invalid Contact"
-        static let errorIsContactExist: String  = "Contact is exist"
+        static let errorContactUpdate: String = "Contact doesn't update"
         static let errorContactDoesntExist: String = "Contact doesn't exist"
-        static let errorContactEmailDoesntExist: String = "Contact email doesn't exist"
     }
     
     // MARK: - Properties
@@ -108,28 +106,26 @@ class CoreDataService {
         })
     }
     
-    // Create empty contact
-    func createEmptyContact() -> Contact {
-        let newEmptyContact = Contact(context: self.context)
-        return newEmptyContact
+    // Create contact
+    func createContact(from contact: ContactStruct, withContext context: NSManagedObjectContext) -> Contact {
+        let contact = Contact(context: context)
+        contact.fullName = contact.fullName
+        contact.jobPosition = contact.jobPosition
+        contact.email = contact.email
+        contact.photo = contact.photo
+        return contact
     }
 
     // Save contact
     func saveContact(contact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void) {
         self.persistentContainer.performBackgroundTask { (context: NSManagedObjectContext) in
-            
-            let newContact = Contact(context: context)
-            newContact.fullName = contact.fullName
-            newContact.jobPosition = contact.jobPosition
-            newContact.email = contact.email
-            newContact.photo = contact.photo
+
+            let contact = self.createContact(from: contact, withContext: context)
             
             do {
                 try context.save()
-                print("Contact saved successfully")
                 completion(.success(()))
             } catch {
-                print(error.localizedDescription)
                 completion(.failure(error))
             }
         }
@@ -150,24 +146,20 @@ class CoreDataService {
                     existingContact.photo = editedContact.photo
                     
                     try context.save()
-                    print("Contact updated successfully")
                     
                     self.fetchContacts { fetchResult in
                         switch fetchResult {
                             case .success:
                                 completion(.success(()))
                             case .failure(let error):
-                                print(error.localizedDescription)
                                 completion(.failure(error))
                         }
                     }
                 } else {
-                    let error = NSError(domain: "ContactUpdateErrorDomain", code: 1)
-                    print(error.localizedDescription)
+                    let error = NSError(domain: Constants.errorContactUpdate, code: 1)
                     completion(.failure(error))
                 }
             } catch {
-                print(error.localizedDescription)
                 completion(.failure(error))
             }
         }

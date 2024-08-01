@@ -19,20 +19,7 @@ extension Contact {
     @NSManaged public var jobPosition: String?
     @NSManaged public var email: String?
     @NSManaged public var photo: Data?
-    
-//    public func clone() -> Contact {
-//        if let managedObjectContext = self.managedObjectContext{
-//            let newContact = Contact(context: managedObjectContext)
-//            newContact.fullName = self.fullName
-//            newContact.jobPosition = self.jobPosition
-//            newContact.email = self.email
-//            newContact.photo = self.photo
-//            return newContact
-//        } else {
-//            return self
-//        }
-//    }
-    
+
     func asContactStruct() -> ContactStruct {
         var newContact = ContactStruct()
         newContact.fullName = self.fullName
