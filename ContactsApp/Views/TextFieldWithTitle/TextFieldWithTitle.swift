@@ -86,12 +86,15 @@ class TextFieldWithTitle: UIView {
 }
 
 // MARK: - UITextFieldDelegate
-
+    
 extension TextFieldWithTitle: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        self.delegate?.textEditing(textField: textField)
         return true
+    }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        self.delegate?.textEditing(textField: textField)
     }
     
 }
