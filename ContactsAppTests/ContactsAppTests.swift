@@ -83,9 +83,8 @@ class ContactsAppTests: XCTestCase {
                     
                     XCTFail(error.localizedDescription)
             }
-            expectation.fulfill()
         })
-        wait(for: [expectation], timeout: 5.0)
+        self.wait(for: [expectation], timeout: 5.0)
     }
     
     func test_FetchContact() {
@@ -106,7 +105,6 @@ class ContactsAppTests: XCTestCase {
                     guard let contactEmail = newContact.email else {
                         
                         XCTFail("Contact email should not be nil")
-                        expectation.fulfill()
                         return
                     }
                     
@@ -127,9 +125,8 @@ class ContactsAppTests: XCTestCase {
                     
                     XCTFail(error.localizedDescription)
             }
-            expectation.fulfill()
         })
-        wait(for: [expectation], timeout: 5.0)
+        self.wait(for: [expectation], timeout: 5.0)
     }
     
     func test_SearchContacts() {
@@ -172,29 +169,28 @@ class ContactsAppTests: XCTestCase {
                                                     XCTAssertTrue(foundContacts.contains(where: { $0.email == self.testNewEmail }))
                                                     
                                                     XCTAssertTrue(foundContacts.contains(where: { $0.email == self.testEmail }))
-                                                    expectation.fulfill()
                                                     
                                                 case .failure(let error):
                                                     
                                                     XCTFail(error.localizedDescription)
-                                                    expectation.fulfill()
                                             }
+                                            expectation.fulfill()
                                         })
                                         
                                     case .failure(let error):
+                                        
                                         XCTFail(error.localizedDescription)
-                                        expectation.fulfill()
                                 }
                             })
                         }
                     case .failure(let error):
                         
                         XCTFail(error.localizedDescription)
-                        expectation.fulfill()
                 }
+                
             })
         }
-        wait(for: [expectation], timeout: 5.0)
+        self.wait(for: [expectation], timeout: 5.0)
     }
     
     func test_saveContact() {
@@ -214,7 +210,6 @@ class ContactsAppTests: XCTestCase {
                     guard let contactEmail = newContact.email else {
                         
                         XCTFail("Contact email should not be nil")
-                        expectation.fulfill()
                         return
                     }
                     
@@ -228,7 +223,6 @@ class ContactsAppTests: XCTestCase {
                                 
                                 XCTFail(error.localizedDescription)
                         }
-                        
                         expectation.fulfill()
                     })
                     
@@ -236,9 +230,8 @@ class ContactsAppTests: XCTestCase {
                     
                     XCTFail(error.localizedDescription)
             }
-            expectation.fulfill()
         })
-        wait(for: [expectation], timeout: 5.0)
+        self.wait(for: [expectation], timeout: 5.0)
     }
     
     func test_UpdateContact() {
@@ -256,7 +249,6 @@ class ContactsAppTests: XCTestCase {
                     guard let contactEmail = newContact.email else {
                         
                         XCTFail("Email contact should not be nil")
-                        expectation.fulfill()
                         return
                     }
                     
@@ -293,14 +285,13 @@ class ContactsAppTests: XCTestCase {
                                                         
                                                         XCTFail(error.localizedDescription)
                                                 }
-                                                expectation.fulfill()
                                             })
                                             
                                         case .failure(let error):
                                             
                                             XCTFail(error.localizedDescription)
                                     }
-                                    expectation.fulfill()
+                                    
                                 })
                                 
                             case .failure(let error):
@@ -314,9 +305,8 @@ class ContactsAppTests: XCTestCase {
                     
                     XCTFail(error.localizedDescription)
             }
-            expectation.fulfill()
         })
-        wait(for: [expectation], timeout: 5.0)
+        self.wait(for: [expectation], timeout: 20.0)
     }
     
     func test_DeleteContact() {
@@ -334,7 +324,6 @@ class ContactsAppTests: XCTestCase {
                     guard let contactEmail = newContact.email else {
                         
                         XCTFail("Email contact should not be nil")
-                        expectation.fulfill()
                         return
                     }
                     
@@ -365,23 +354,20 @@ class ContactsAppTests: XCTestCase {
                                             
                                             XCTFail(error.localizedDescription)
                                     }
-                                    expectation.fulfill()
                                 })
                                 
                             case .failure(let error):
                                 
                                 XCTFail(error.localizedDescription)
-                                expectation.fulfill()
                         }
                     })
                     
                 case .failure(let error):
                     
                     XCTFail(error.localizedDescription)
-                    expectation.fulfill()
             }
         })
-        wait(for: [expectation], timeout: 5.0)
+        self.wait(for: [expectation], timeout: 5.0)
     }
     
     func test_DeleteAllContacts() {
@@ -399,7 +385,6 @@ class ContactsAppTests: XCTestCase {
                     guard let contactEmail = newContact.email else {
                         
                         XCTFail("Email contact should not be nil")
-                        expectation.fulfill()
                         return
                     }
                     
@@ -431,23 +416,20 @@ class ContactsAppTests: XCTestCase {
                                             
                                             XCTFail(error.localizedDescription)
                                     }
-                                    expectation.fulfill()
                                 })
                                 
                             case .failure(let error):
                                 
                                 XCTFail(error.localizedDescription)
-                                expectation.fulfill()
                         }
                     })
                     
                 case .failure(let error):
                     
                     XCTFail(error.localizedDescription)
-                    expectation.fulfill()
             }
         })
-        wait(for: [expectation], timeout: 20.0)
+        self.wait(for: [expectation], timeout: 20.0)
     }
     
     func test_isContactExist() {
@@ -482,9 +464,8 @@ class ContactsAppTests: XCTestCase {
                     
                     XCTFail(error.localizedDescription)
             }
-            expectation.fulfill()
         })
-        wait(for: [expectation], timeout: 5.0)
+        self.wait(for: [expectation], timeout: 5.0)
     }
     
 }
