@@ -9,14 +9,7 @@ import Foundation
 
 extension Notification.Name {
     
-//    static let contactsFetchedNotification = Notification.Name("contactsFetchedNotification")
-//    static let contactsFoundNotification = Notification.Name("contactsSerchedNotification")
-//    static let contactFetchedNotification = Notification.Name("contactFetchedNotification")
-//    static let contactCreatedNotification = Notification.Name("contactCreatedNotification")
-//    static let contactUpdatedNotification = Notification.Name("contactUpdatedNotification")
-//    static let contactDeletedNotification = Notification.Name("contactDeletedNotification")
-//    static let errorNotification = Notification.Name("errorNotification")
-    
     static let success = Notification.Name("SuccessNotification")
     static let errorNotification = Notification.Name("ErrorNotification")
+    
 }

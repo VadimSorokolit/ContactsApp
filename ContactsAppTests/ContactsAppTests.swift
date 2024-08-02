@@ -149,8 +149,8 @@ class ContactsAppTests: XCTestCase {
         var saveCount = 0
         
         for contact in contacts {
-            self.coreDataService.saveContact(contact: contact, completion: { (result: Result<Void, Error>) -> Void in
-                switch result {
+            self.coreDataService.saveContact(contact: contact, completion: { (saveResult: Result<Void, Error>) -> Void in
+                switch saveResult {
                     case .success(()):
                         
                         saveCount += 1
@@ -196,12 +196,12 @@ class ContactsAppTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 5.0)
     }
-
+    
     func test_saveContact() {
         let expectation = XCTestExpectation(description: "Save all contacts expectation")
         
         var newContact = ContactStruct()
-
+        
         newContact.fullName = self.testFullName
         newContact.jobPosition = self.testJobPosition
         newContact.email = self.testNewEmail
@@ -235,9 +235,8 @@ class ContactsAppTests: XCTestCase {
                 case .failure(let error):
                     
                     XCTFail(error.localizedDescription)
-                    
-                    expectation.fulfill()
             }
+            expectation.fulfill()
         })
         wait(for: [expectation], timeout: 5.0)
     }
@@ -349,8 +348,8 @@ class ContactsAppTests: XCTestCase {
                                     switch deleteResult {
                                         case .success(()):
                                             
-                                            self.coreDataService.isContactExist(byEmail: contactEmail, completion: { (postDeleteResult: Result<Bool, Error>) -> Void in
-                                                switch postDeleteResult {
+                                            self.coreDataService.isContactExist(byEmail: contactEmail, completion: { (isExistResult: Result<Bool, Error>) -> Void in
+                                                switch isExistResult {
                                                     case .success(let isContactExist):
                                                         
                                                         XCTAssertFalse(isContactExist)
@@ -404,8 +403,8 @@ class ContactsAppTests: XCTestCase {
                         return
                     }
                     
-                    self.coreDataService.isContactExist(byEmail: contactEmail, completion: { (existsResult: Result<Bool, Error>) -> Void in
-                        switch existsResult {
+                    self.coreDataService.isContactExist(byEmail: contactEmail, completion: { (isExistsResult: Result<Bool, Error>) -> Void in
+                        switch isExistsResult {
                             case .success(let exists):
                                 
                                 XCTAssertTrue(exists)
