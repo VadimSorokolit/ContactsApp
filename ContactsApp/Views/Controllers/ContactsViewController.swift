@@ -150,11 +150,6 @@ class ContactsViewController: UIViewController {
         self.getData()
     }
     
-    private func registerForNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.handleSuccess), name: .success, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.handleError(_:)), name: .errorNotification, object: nil)
-    }
-
     private func setupViews() {
         self.view.backgroundColor = Constants.backgroundColor
         
@@ -210,12 +205,16 @@ class ContactsViewController: UIViewController {
         })
     }
     
+    private func registerForNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.handleSuccess), name: .success, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.handleError(_:)), name: .errorNotification, object: nil)
+    }
+    
     private func getData() {
-//      self.contactsViewModel.deleteAllContacts()
+        //  self.contactsViewModel.deleteAllContacts()
         self.contactsViewModel.fetchContacts()
     }
 
-    
     private func goToEditContactVC(withTitle title: String, withContact contact: ContactStruct) {
         let editContactViewController = EditContactViewController(title: title, contact: contact)
         editContactViewController.delegate = self
@@ -239,7 +238,6 @@ class ContactsViewController: UIViewController {
                 print("Database is not empty")
             }
             self.tableView.reloadData()
-            
         }
     }
     
