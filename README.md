@@ -2,7 +2,7 @@
 
 
 * Architecture - **MVVM**
-* Layout - **Snapkit**
+* Layout - **SnapKit**
 * Bindings - **Closures, NotificationCenter**
 * Database - **CoreData**
 * Tests - **Unit Tests**
