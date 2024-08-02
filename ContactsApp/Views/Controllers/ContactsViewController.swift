@@ -244,9 +244,11 @@ class ContactsViewController: UIViewController {
     }
     
     @objc private func handleError(_ notification: Notification) {
-        if let userInfo = notification.userInfo,
-           let errorMessage = userInfo["error"] as? String {
-            self.showErrorAlert(message: errorMessage)
+        DispatchQueue.main.async {
+            if let userInfo = notification.userInfo,
+               let errorMessage = userInfo["error"] as? String {
+                self.showErrorAlert(message: errorMessage)
+            }
         }
     }
     
