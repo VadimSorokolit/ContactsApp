@@ -136,14 +136,6 @@ class CoreDataService {
                     
                     try context.save()
                     
-                    self.fetchContacts(completion: { (fetchResult: Result<[ContactEntity], Error>) -> Void in
-                        switch fetchResult {
-                            case .success:
-                                completion(.success(()))
-                            case .failure(let error):
-                                completion(.failure(error))
-                        }
-                    })
                 } else {
                     let error = NSError(domain: Constants.errorContactUpdate, code: 1)
                     completion(.failure(error))

@@ -331,6 +331,7 @@ extension ContactsViewController: UITableViewDataSource {
         
         if let contactEmail = contactToRemove.email, editingStyle == .delete {
             self.contactsViewModel.deleteContact(byEmail: contactEmail)
+            self.contactsViewModel.contacts.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }

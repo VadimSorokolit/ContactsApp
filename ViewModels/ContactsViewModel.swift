@@ -19,16 +19,15 @@ class ContactsViewModel {
     // MARK: - Methods
     
     func fetchContacts() {
-        self.coreDataService.fetchContacts { result in
-            switch result {
+        self.coreDataService.fetchContacts(completion: { (fetchResult: Result<[ContactEntity], Error>) -> Void in
+            switch fetchResult {
                 case .success(let contacts):
                     self.contacts = contacts.map({ $0.asContactStruct() })
-                    print(self.contacts.count)
                     self.notify(name: .success)
                 case .failure(let error):
                     self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
             }
-        }
+        })
     }
 
     func searchContacts(byQuery query: String) {
