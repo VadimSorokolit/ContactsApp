@@ -146,23 +146,15 @@ class ContactsViewController: UIViewController {
     
     private func setup() {
         self.setupViews()
-        self.getData()
         self.registerForNotifications()
-    }
-    
-    deinit {
-        self.unregisterFromNotifications()
+        self.getData()
     }
     
     private func registerForNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleSuccess), name: .success, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleError(_:)), name: .errorNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.handleSuccess), name: .success, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.handleError(_:)), name: .errorNotification, object: nil)
     }
-    
-    private func unregisterFromNotifications() {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
+
     private func setupViews() {
         self.view.backgroundColor = Constants.backgroundColor
         
@@ -252,7 +244,8 @@ class ContactsViewController: UIViewController {
     }
     
     @objc private func handleError(_ notification: Notification) {
-        if let errorMessage = notification.object as? String {
+        if let userInfo = notification.userInfo,
+           let errorMessage = userInfo["error"] as? String {
             self.showErrorAlert(message: errorMessage)
         }
     }

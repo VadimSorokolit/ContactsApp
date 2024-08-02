@@ -145,7 +145,7 @@ class ContactsViewModel {
     }
     
     func contactVarificationBeforeSave(contact: ContactStruct) {
-        guard let contactEmail = contact.email else {
+        guard let contactEmail = contact.email, !contactEmail.isEmpty else {
             let errorMessage = "Email contact should not be nil"
             self.notify(name: .errorNotification, errorMessage: errorMessage)
             return
