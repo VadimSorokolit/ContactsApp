@@ -11,6 +11,11 @@ import CoreData
 
 class ContactsViewModel {
     
+    // MARK: - Objects
+    
+    private struct Constants {
+        static let errorContactIndex: String = "Contact with index doesn't exist"
+    }
     // MARK: - Properties
     
     private let coreDataService: CoreDataService = CoreDataService()
@@ -67,11 +72,13 @@ class ContactsViewModel {
             switch saveResult {
                 case .success(()):
                     self.contacts.append(contact1)
+                    self.notify(name: .success)
                     
                     self.coreDataService.saveContact(contact: contact2, completion: { (saveResult: Result<Void, Error>) -> Void in
                         switch saveResult {
                             case.success(()):
                                 self.contacts.append(contact2)
+                                self.notify(name: .success)
                                 
                                 self.coreDataService.saveContact(contact: contact3, completion: { (saveResult: Result<Void, Error>) -> Void in
                                     switch saveResult {
@@ -112,6 +119,9 @@ class ContactsViewModel {
                     if let index = self.contacts.firstIndex(where: { $0.email == contact.email }) {
                         self.contacts[index] = contact
                         self.notify(name: .success)
+                    } else {
+                        let error = NSError(domain: Constants.errorContactIndex, code: 1)
+                        self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
                     }
                 case .failure(let error):
                     self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
@@ -135,7 +145,7 @@ class ContactsViewModel {
         self.coreDataService.deleteContact(byEmail: email, completion: { (deleteResult: Result<Void, Error>) -> Void in
             switch deleteResult {
                 case .success(()):
-                    self.contacts = self.contacts.filter { $0.email != email }
+                    self.contacts = self.contacts.filter({ $0.email != email })
                     self.notify(name: .success)
                 case .failure(let error):
                     self.notify(name: .errorNotification, errorMessage: error.localizedDescription)

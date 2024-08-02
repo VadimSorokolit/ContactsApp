@@ -234,9 +234,7 @@ class ContactsViewController: UIViewController {
         DispatchQueue.main.async {
             if self.contactsViewModel.contacts.isEmpty {
                 self.contactsViewModel.testCreateContacts()
-            } else {
-                print("Database is not empty")
-            }
+            } 
             self.tableView.reloadData()
         }
     }

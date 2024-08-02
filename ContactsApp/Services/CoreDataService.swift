@@ -135,7 +135,6 @@ class CoreDataService {
                     existingContact.photo = editedContact.photo
                     
                     try context.save()
-                    
                 } else {
                     let error = NSError(domain: Constants.errorContactUpdate, code: 1)
                     completion(.failure(error))
