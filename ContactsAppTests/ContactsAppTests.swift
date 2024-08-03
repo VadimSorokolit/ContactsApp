@@ -306,7 +306,7 @@ class ContactsAppTests: XCTestCase {
                     XCTFail(error.localizedDescription)
             }
         })
-        self.wait(for: [expectation], timeout: 20.0)
+        self.wait(for: [expectation], timeout: 5.0)
     }
     
     func test_DeleteContact() {
@@ -429,7 +429,7 @@ class ContactsAppTests: XCTestCase {
                     XCTFail(error.localizedDescription)
             }
         })
-        self.wait(for: [expectation], timeout: 20.0)
+        self.wait(for: [expectation], timeout: 5.0)
     }
     
     func test_isContactExist() {
