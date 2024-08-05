@@ -49,7 +49,6 @@ class ContactsViewController: UIViewController {
     // MARK: - Properties
     
     private let contactsViewModel: ContactsViewModel
-    private var isSearching: Bool = false
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -211,8 +210,17 @@ class ContactsViewController: UIViewController {
     }
     
     private func getData() {
-        //  self.contactsViewModel.deleteAllContacts()
-        self.contactsViewModel.fetchContacts()
+//          self.contactsViewModel.deleteAllContacts()
+        self.contactsViewModel.fetchContacts(completion: { (fetchResult: Result<Void, Error>) -> Void in
+            DispatchQueue.main.async {
+                switch fetchResult {
+                    case .success(()):
+                        self.tableView.reloadData()
+                    case .failure(let error):
+                        self.showErrorAlert(message: error.localizedDescription)
+                }
+            }
+        })
     }
 
     private func goToEditContactVC(withTitle title: String, withContact contact: ContactStruct) {
@@ -261,20 +269,19 @@ extension ContactsViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.count >= 3 {
-            self.isSearching = true
-            self.contactsViewModel.searchContacts(byQuery: searchText)
+            self.contactsViewModel.searchContacts(byQuery: searchText, completion: { (searchResult: Result<Void, Error>) -> Void in
+                DispatchQueue.main.async {
+                    switch searchResult {
+                        case .success(()):
+                            self.tableView.reloadData()
+                        case .failure(let error):
+                            self.showErrorAlert(message: error.localizedDescription)
+                    }
+                }
+            })
         } else {
-            self.isSearching = false
+            self.getData()
         }
-        self.tableView.reloadData()
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.text = ""
-        searchBar.resignFirstResponder()
-        
-        self.isSearching = false
-        self.tableView.reloadData()
     }
     
 }

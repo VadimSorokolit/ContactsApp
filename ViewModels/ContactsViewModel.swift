@@ -24,26 +24,26 @@ class ContactsViewModel {
     
     // MARK: - Methods
     
-    func fetchContacts() {
+    func fetchContacts(completion: @escaping (Result<Void, Error>) -> Void) {
         self.coreDataService.fetchContacts(completion: { (fetchResult: Result<[ContactEntity], Error>) -> Void in
             switch fetchResult {
                 case .success(let contacts):
                     self.contacts = contacts.map({ $0.asStruct() })
-                    self.notify(name: .success)
+                    completion(.success(()))
                 case .failure(let error):
-                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
+                    completion(.failure(error))
             }
         })
     }
 
-    func searchContacts(byQuery query: String) {
+    func searchContacts(byQuery query: String, completion: @escaping (Result<Void, Error>) -> Void) {
         self.coreDataService.searchContacts(byFullName: query, jobPosition: query, completion: { (searchResult: Result<[ContactEntity], Error>) -> Void in
             switch searchResult {
                 case .success(let foundContacts):
                     self.contacts = foundContacts.map({ $0.asStruct() })
-                    self.notify(name: .success)
+                    completion(.success(()))
                 case .failure(let error):
-                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
+                    completion(.failure(error))
             }
         })
     }
