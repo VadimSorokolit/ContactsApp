@@ -98,7 +98,7 @@ extension TextFieldWithTitle: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.attributedPlaceholder = nil
     }
-
+    
     func textFieldDidChangeSelection(_ textField: UITextField) {
         self.delegate?.textEditing(textField: textField)
     }
@@ -110,4 +110,10 @@ extension TextFieldWithTitle: UITextFieldDelegate {
             }
         }
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
 }

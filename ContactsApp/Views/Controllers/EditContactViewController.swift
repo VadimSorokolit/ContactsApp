@@ -31,15 +31,18 @@ class EditContactViewController: UIViewController {
         static let photoLabelTitle: String = "Photo"
         static let saveButtonTitle: String = "Save contact"
         static let nameTextFieldTitle: String = "Full name"
-        static let jobPositionTextFieldTitle = "Job position"
-        static let emailTextFieldTitle = "Email"
-        static let nameTextFieldPlaceholder = "Enter name"
-        static let jobPositionTextFieldPlaceholder = "Enter position"
-        static let emailTextFieldPlaceholder = "Enter email"
-        static let errorMessageEmailDoesntMustContainSpaces = "Email doesn't must contain spaces"
-        static let errorMessageInvalidEmailAddress = "Invalid email address"
-        static let predicateFormat = "SELF MATCHES %@"
-        static let emailRegularExpression = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        static let jobPositionTextFieldTitle: String = "Job position"
+        static let emailTextFieldTitle: String = "Email"
+        static let nameTextFieldPlaceholder: String = "Enter name"
+        static let jobPositionTextFieldPlaceholder: String = "Enter position"
+        static let emailTextFieldPlaceholder: String = "Enter email"
+        static let errorMessageEmptyFullName: String = "Full name cannot be empty"
+        static let errorMessageEmptyJobPosition: String = "Job position cannot be empty"
+        static let errorMessageEmptyEmail: String = "Email cannot be empty"
+        static let errorMessageEmailDoesntMustContainSpaces: String = "Email doesn't must contain spaces"
+        static let errorMessageInvalidEmailAddress: String = "Invalid email address. Valid adress for example: test@test.com"
+        static let predicateFormat: String = "SELF MATCHES %@"
+        static let emailRegularExpression: String = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         static let addPhotoButtonSize: CGSize = CGSize(width: 143.0, height: 143.0)
         static let addPhotoButtonHeight: CGFloat = 143.0
         static let addPhotoButtonTopPadding: CGFloat = 12.0
@@ -211,6 +214,8 @@ class EditContactViewController: UIViewController {
     private func setup() {
         self.setupViews()
         self.setupContactFields()
+        self.registerForNotifications()
+        self.setupTapGesture()
     }
     
     private func setupViews() {
@@ -294,9 +299,19 @@ class EditContactViewController: UIViewController {
         self.addPhotoView.image = UIImage(data: contact.photo ?? Data()) ?? UIImage(named: Constants.addPhotoIconName)
     }
     
+    private func registerForNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    private func setupTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.hideKeyboardOnTap))
+        self.view.addGestureRecognizer(tapGesture)
+    }
+    
     private func checkValidEmail(_ value: String) -> String? {
         if value.isEmpty {
-            return nil
+            return Constants.errorMessageEmptyEmail
         }
         
         if value.contains(" ") {
@@ -309,7 +324,30 @@ class EditContactViewController: UIViewController {
         if !predicate.evaluate(with: value) {
             return Constants.errorMessageInvalidEmailAddress
         }
-        
+        return nil
+    }
+    
+    private func validateFields() -> String? {
+        let fullName = textFieldWithTitleName.textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let jobPosition = textFieldWithTitleJobPosition.textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let email = textFieldWithTitleEmail.textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+
+        if fullName.isEmpty {
+            return Constants.errorMessageEmptyFullName
+        }
+
+        if jobPosition.isEmpty {
+            return Constants.errorMessageEmptyJobPosition
+        }
+
+        if let emailError = self.checkValidEmail(email) {
+            return emailError
+        }
+
+        self.contact.fullName = fullName
+        self.contact.jobPosition = jobPosition
+        self.contact.email = email
+
         return nil
     }
     
@@ -318,6 +356,18 @@ class EditContactViewController: UIViewController {
         imagePickerController.sourceType = .photoLibrary
         imagePickerController.delegate = self
         self.present(imagePickerController, animated: true, completion: nil)
+    }
+    
+    private func adjustScrollViewForKeyboard(height: CGFloat, isShowing: Bool) {
+        let contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: height, right: 0.0)
+        self.scrollView.contentInset = contentInset
+        self.scrollView.scrollIndicatorInsets = contentInset
+    }
+    
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(alert, animated: true)
     }
     
     // MARK: - Events
@@ -331,10 +381,29 @@ class EditContactViewController: UIViewController {
     }
     
     @objc private func onSaveButtonDidTap() {
-        if let delegate = self.delegate {
+        if let errorMessage = self.validateFields() {
+            self.showErrorAlert(message: errorMessage)
+            return
+        } else if let delegate = self.delegate {
             delegate.didReturnEditContact(editedContact: contact)
             self.dismiss(animated: true, completion: nil)
         }
+    }
+    
+    @objc private func keyboardWillShow(notification: Notification) {
+        if let userInfo = notification.userInfo,
+           let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+           let keyboardHeight = keyboardFrame.height
+           self.adjustScrollViewForKeyboard(height: keyboardHeight, isShowing: true)
+        }
+    }
+    
+    @objc private func keyboardWillHide(notification: Notification) {
+        self.adjustScrollViewForKeyboard(height: 0.0, isShowing: false)
+    }
+    
+    @objc private func hideKeyboardOnTap() {
+        self.view.endEditing(true)
     }
     
 }
@@ -347,11 +416,8 @@ extension EditContactViewController: UIImagePickerControllerDelegate, UINavigati
         
         if let selectedImage = info[.originalImage] as? UIImage {
             self.addPhotoView.image = selectedImage
-            
             self.contact.photo = selectedImage.pngData()
         }
-        
-       
         picker.dismiss(animated: true, completion: nil)
     }
     
