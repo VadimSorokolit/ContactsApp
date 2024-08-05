@@ -268,11 +268,11 @@ class ContactsViewController: UIViewController {
 extension ContactsViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty {
-            self.getData()
-        }
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        if searchText.count == 3 {
+        if query.isEmpty {
+            self.getData()
+        } else if query.count >= 3 {
             self.contactsViewModel.searchContacts(byQuery: searchText, completion: { (searchResult: Result<Void, Error>) -> Void in
                 DispatchQueue.main.async {
                     switch searchResult {
