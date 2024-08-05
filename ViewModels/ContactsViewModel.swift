@@ -16,6 +16,7 @@ class ContactsViewModel {
     private struct Constants {
         static let errorContactIndex: String = "Contact with index doesn't exist"
     }
+    
     // MARK: - Properties
     
     private let coreDataService: CoreDataService = CoreDataService()
@@ -27,7 +28,7 @@ class ContactsViewModel {
         self.coreDataService.fetchContacts(completion: { (fetchResult: Result<[ContactEntity], Error>) -> Void in
             switch fetchResult {
                 case .success(let contacts):
-                    self.contacts = contacts.map({ $0.asContactStruct() })
+                    self.contacts = contacts.map({ $0.asStruct() })
                     self.notify(name: .success)
                 case .failure(let error):
                     self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
@@ -39,7 +40,7 @@ class ContactsViewModel {
         self.coreDataService.searchContacts(byFullName: query, jobPosition: query, completion: { (searchResult: Result<[ContactEntity], Error>) -> Void in
             switch searchResult {
                 case .success(let foundContacts):
-                    self.contacts = foundContacts.map({ $0.asContactStruct() })
+                    self.contacts = foundContacts.map({ $0.asStruct() })
                     self.notify(name: .success)
                 case .failure(let error):
                     self.notify(name: .errorNotification, errorMessage: error.localizedDescription)

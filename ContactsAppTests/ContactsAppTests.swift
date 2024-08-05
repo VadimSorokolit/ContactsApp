@@ -201,7 +201,7 @@ class ContactsAppTests: XCTestCase {
     }
     
     func test_SaveContact() {
-        let expectation = XCTestExpectation(description: "Save all contacts expectation")
+        let expectation = XCTestExpectation(description: "Save contact expectation")
         
         var newContact = ContactStruct()
         

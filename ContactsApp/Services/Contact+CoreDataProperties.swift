@@ -21,7 +21,7 @@ extension ContactEntity {
     @NSManaged public var photo: Data?
     
     // ContactEntity -> ContactStruct
-    func asContactStruct() -> ContactStruct {
+    func asStruct() -> ContactStruct {
         var newContact = ContactStruct()
         newContact.fullName = self.fullName
         newContact.jobPosition = self.jobPosition
