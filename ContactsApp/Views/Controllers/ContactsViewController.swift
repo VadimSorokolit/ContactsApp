@@ -328,9 +328,16 @@ extension ContactsViewController: UITableViewDataSource {
         let contactToRemove = self.contactsViewModel.contacts[indexPath.row]
         
         if let contactEmail = contactToRemove.email, editingStyle == .delete {
-            self.contactsViewModel.deleteContact(byEmail: contactEmail)
-            self.contactsViewModel.contacts.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            self.contactsViewModel.deleteContact(byEmail: contactEmail, completion: { (deleteResult: Result<Void, Error>) -> Void in
+                DispatchQueue.main.async {
+                    switch deleteResult {
+                        case .success(()):
+                            tableView.deleteRows(at: [indexPath], with: .automatic)
+                        case .failure(let error):
+                            self.showErrorAlert(message: error.localizedDescription)
+                    }
+                }
+            })
         }
     }
     

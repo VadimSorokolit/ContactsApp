@@ -19,7 +19,7 @@ class ContactsViewModel {
     // MARK: - Properties
     
     private let coreDataService: CoreDataService = CoreDataService()
-    var contacts: [ContactStruct] = []
+    private(set) var contacts: [ContactStruct] = []
     
     // MARK: - Methods
     
@@ -141,14 +141,14 @@ class ContactsViewModel {
         })
     }
         
-    func deleteContact(byEmail email: String) {
+    func deleteContact(byEmail email: String, completion: @escaping (Result<Void, Error>) -> Void) {
         self.coreDataService.deleteContact(byEmail: email, completion: { (deleteResult: Result<Void, Error>) -> Void in
             switch deleteResult {
                 case .success(()):
                     self.contacts = self.contacts.filter({ $0.email != email })
-                    self.notify(name: .success)
+                    completion(.success(()))
                 case .failure(let error):
-                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
+                    completion(.failure(error))
             }
         })
     }
