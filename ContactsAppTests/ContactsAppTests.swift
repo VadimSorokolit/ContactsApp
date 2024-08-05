@@ -285,6 +285,7 @@ class ContactsAppTests: XCTestCase {
                                                         
                                                         XCTFail(error.localizedDescription)
                                                 }
+                                                expectation.fulfill()
                                             })
                                             
                                         case .failure(let error):
@@ -298,7 +299,6 @@ class ContactsAppTests: XCTestCase {
                                 
                                 XCTFail(error.localizedDescription)
                         }
-                        expectation.fulfill()
                     })
                     
                 case .failure(let error):
