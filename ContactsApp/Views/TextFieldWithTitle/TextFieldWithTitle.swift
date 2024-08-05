@@ -26,6 +26,8 @@ class TextFieldWithTitle: UIView {
     
     weak var delegate: HandleEditTextFieldDelegate?
     
+    private var initialPlaceholder: String?
+    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.titleLabelFont
@@ -75,22 +77,37 @@ class TextFieldWithTitle: UIView {
         })
     }
     
-    func configure(title: String, placeholder: String) {
-        self.titleLabel.text = title
+    private func setupTextFieldPlaceholder(placeholder: String) {
         self.textField.attributedPlaceholder = NSAttributedString(
             string: placeholder,
             attributes: [NSAttributedString.Key.foregroundColor: Constants.backgroundColor]
         )
+        self.initialPlaceholder = placeholder
     }
     
+    func configure(title: String, placeholder: String) {
+        self.titleLabel.text = title
+        self.setupTextFieldPlaceholder(placeholder: placeholder)
+    }
 }
 
 // MARK: - UITextFieldDelegate
     
 extension TextFieldWithTitle: UITextFieldDelegate {
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.attributedPlaceholder = nil
+    }
 
     func textFieldDidChangeSelection(_ textField: UITextField) {
         self.delegate?.textEditing(textField: textField)
     }
     
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if !textField.hasText {
+            if let placeholder = self.initialPlaceholder {
+                self.setupTextFieldPlaceholder(placeholder: placeholder)
+            }
+        }
+    }
 }
