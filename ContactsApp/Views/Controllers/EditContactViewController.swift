@@ -213,7 +213,7 @@ class EditContactViewController: UIViewController {
 
     private func setup() {
         self.setupViews()
-        self.setupContactFields()
+        self.setupFields()
         self.registerForNotifications()
         self.setupTapGesture()
     }
@@ -292,7 +292,7 @@ class EditContactViewController: UIViewController {
         })
     }
     
-    private func setupContactFields() {
+    private func setupFields() {
         self.textFieldWithTitleName.textField.text = contact.fullName
         self.textFieldWithTitleJobPosition.textField.text = contact.jobPosition
         self.textFieldWithTitleEmail.textField.text = contact.email
