@@ -70,7 +70,8 @@ class EditContactViewController: UIViewController {
     weak var delegate: InterfaceContactDelegate?
     
     private let titleLabelText: String
-    private var contact: ContactStruct
+    private var originalContact: ContactStruct
+    private var editContact: ContactStruct
     
     private var statusBarHeight: CGFloat {
         var height: CGFloat = .zero
@@ -192,7 +193,8 @@ class EditContactViewController: UIViewController {
     
     required init(title: String, contact: ContactStruct) {
         self.titleLabelText = title
-        self.contact = contact
+        self.originalContact = contact
+        self.editContact = contact
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -293,10 +295,11 @@ class EditContactViewController: UIViewController {
     }
     
     private func setupFields() {
-        self.textFieldWithTitleName.textField.text = contact.fullName
-        self.textFieldWithTitleJobPosition.textField.text = contact.jobPosition
-        self.textFieldWithTitleEmail.textField.text = contact.email
-        self.addPhotoView.image = UIImage(data: contact.photo ?? Data()) ?? UIImage(named: Constants.addPhotoIconName)
+        self.textFieldWithTitleName.textField.text = editContact.fullName
+        self.textFieldWithTitleJobPosition.textField.text = editContact.jobPosition
+        self.textFieldWithTitleEmail.textField.text = editContact.email
+        self.addPhotoView.image = UIImage(data: editContact.photo ?? Data()) ?? UIImage(named: Constants.addPhotoIconName)
+        self.updateSaveButtonState()
     }
     
     private func registerForNotifications() {
@@ -344,9 +347,9 @@ class EditContactViewController: UIViewController {
             return emailError
         }
 
-        self.contact.fullName = fullName
-        self.contact.jobPosition = jobPosition
-        self.contact.email = email
+        self.editContact.fullName = fullName
+        self.editContact.jobPosition = jobPosition
+        self.editContact.email = email
 
         return nil
     }
@@ -384,8 +387,18 @@ class EditContactViewController: UIViewController {
         if let errorMessage = self.validateFields() {
             self.showErrorAlert(message: errorMessage)
         } else if let delegate = self.delegate {
-            delegate.didReturnEditContact(editedContact: contact)
+            delegate.didReturnEditContact(editedContact: self.editContact)
             self.dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    private func updateSaveButtonState() {
+        if self.originalContact != self.editContact {
+            self.saveButton.isEnabled = true
+            self.saveButton.backgroundColor = Constants.saveButtonBackgroundColor
+        } else {
+            self.saveButton.isEnabled = false
+            self.saveButton.backgroundColor = Constants.saveButtonBackgroundColor.withAlphaComponent(0.5)
         }
     }
     
@@ -414,7 +427,7 @@ extension EditContactViewController: UIImagePickerControllerDelegate, UINavigati
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[.originalImage] as? UIImage {
             self.addPhotoView.image = selectedImage
-            self.contact.photo = selectedImage.pngData()
+            self.editContact.photo = selectedImage.pngData()
         }
         picker.dismiss(animated: true, completion: nil)
     }
@@ -434,14 +447,15 @@ extension EditContactViewController: HandleEditTextFieldDelegate {
         
         switch textField {
         case self.textFieldWithTitleName.textField:
-            self.contact.fullName = text
+            self.editContact.fullName = text
         case self.textFieldWithTitleJobPosition.textField:
-            self.contact.jobPosition = text
+            self.editContact.jobPosition = text
         case self.textFieldWithTitleEmail.textField:
-            self.contact.email = text
+            self.editContact.email = text
         default:
             break
         }
+        self.updateSaveButtonState()
     }
     
 }

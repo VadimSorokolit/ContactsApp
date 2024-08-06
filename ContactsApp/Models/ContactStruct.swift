@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-struct ContactStruct {
+struct ContactStruct: Equatable {
     var fullName: String?
     var jobPosition: String?
     var email: String?
