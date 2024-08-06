@@ -92,7 +92,6 @@ class ContactsViewController: UIViewController {
         tableView.register(ContactCell.self, forCellReuseIdentifier: ContactCell.reuseID)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.separatorInset.left = Constants.defaultLabelsPadding
         tableView.estimatedRowHeight = UITableView.automaticDimension
         tableView.rowHeight = UITableView.automaticDimension
         return tableView
@@ -242,7 +241,7 @@ class ContactsViewController: UIViewController {
         DispatchQueue.main.async {
             if self.contactsViewModel.contacts.isEmpty {
                 self.contactsViewModel.testCreateContacts()
-            } 
+            }
             self.tableView.reloadData()
         }
     }
@@ -295,6 +294,7 @@ extension ContactsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedContact = self.contactsViewModel.contacts[indexPath.row]
         self.goToEditContactVC(withTitle: Constants.editContactTitle, withContact: selectedContact)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
@@ -327,9 +327,10 @@ extension ContactsViewController: UITableViewDataSource {
         
         if isCellLast {
             cell.hideSeparator()
+        } else {
+            cell.separatorInset.left = Constants.defaultLabelsPadding
         }
         
-        cell.selectionStyle = .none
         return cell
     }
     

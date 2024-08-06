@@ -17,6 +17,7 @@ class TextFieldWithTitle: UIView {
         static let titleLabelFont: UIFont? = UIFont(name: "Manrope-Bold", size: 14.0)
         static let textFieldFont: UIFont? = UIFont(name: "Manrope-Medium", size: 28.0)
         static let backgroundColor: UIColor = UIColor(hexString: "FFFFFF")
+        static let textFieldTintColor: UIColor = UIColor(hexString: "FFFFFF")
         static let titleLabelHeight: CGFloat = 19.0
         static let textFieldHeight: CGFloat = 38.0
         static let textFieldTopPadding: CGFloat = 10.0
@@ -97,6 +98,7 @@ extension TextFieldWithTitle: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.attributedPlaceholder = nil
+        textField.tintColor = Constants.textFieldTintColor
     }
     
     func textFieldDidChangeSelection(_ textField: UITextField) {

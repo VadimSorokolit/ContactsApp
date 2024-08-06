@@ -301,7 +301,7 @@ class EditContactViewController: UIViewController {
     
     private func registerForNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     private func setupTapGesture() {
@@ -328,9 +328,9 @@ class EditContactViewController: UIViewController {
     }
     
     private func validateFields() -> String? {
-        let fullName = textFieldWithTitleName.textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let fullName = self.textFieldWithTitleName.textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let jobPosition = textFieldWithTitleJobPosition.textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        let email = textFieldWithTitleEmail.textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let email = self.textFieldWithTitleEmail.textField.text ?? ""
 
         if fullName.isEmpty {
             return Constants.errorMessageEmptyFullName
@@ -359,7 +359,7 @@ class EditContactViewController: UIViewController {
     }
     
     private func adjustScrollViewForKeyboard(height: CGFloat, isShowing: Bool) {
-        let contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: height, right: 0.0)
+        let contentInset = UIEdgeInsets(top: .zero, left: .zero, bottom: height, right: .zero)
         self.scrollView.contentInset = contentInset
         self.scrollView.scrollIndicatorInsets = contentInset
     }
@@ -383,7 +383,6 @@ class EditContactViewController: UIViewController {
     @objc private func onSaveButtonDidTap() {
         if let errorMessage = self.validateFields() {
             self.showErrorAlert(message: errorMessage)
-            return
         } else if let delegate = self.delegate {
             delegate.didReturnEditContact(editedContact: contact)
             self.dismiss(animated: true, completion: nil)
@@ -399,7 +398,7 @@ class EditContactViewController: UIViewController {
     }
     
     @objc private func keyboardWillHide(notification: Notification) {
-        self.adjustScrollViewForKeyboard(height: 0.0, isShowing: false)
+        self.adjustScrollViewForKeyboard(height: .zero, isShowing: false)
     }
     
     @objc private func hideKeyboardOnTap() {
@@ -413,7 +412,6 @@ class EditContactViewController: UIViewController {
 extension EditContactViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
         if let selectedImage = info[.originalImage] as? UIImage {
             self.addPhotoView.image = selectedImage
             self.contact.photo = selectedImage.pngData()
