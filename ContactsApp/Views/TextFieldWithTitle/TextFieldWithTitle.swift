@@ -47,7 +47,7 @@ class TextFieldWithTitle: UIView {
         textField.leftViewMode = .always
         return textField
     }()
-
+    
     // MARK: - Initializers
     
     override init(frame: CGRect) {
@@ -92,6 +92,7 @@ class TextFieldWithTitle: UIView {
         self.titleLabel.text = title
         self.setupTextFieldPlaceholder(placeholder: placeholder)
     }
+    
 }
 
 // MARK: - UITextFieldDelegate
