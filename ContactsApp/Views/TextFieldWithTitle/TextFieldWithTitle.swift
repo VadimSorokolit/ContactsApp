@@ -21,6 +21,7 @@ class TextFieldWithTitle: UIView {
         static let titleLabelHeight: CGFloat = 19.0
         static let textFieldHeight: CGFloat = 38.0
         static let textFieldTopPadding: CGFloat = 10.0
+        static let textFieldFrameWidth: Double = 2.0
     }
     
     // MARK: - Properties
@@ -41,7 +42,8 @@ class TextFieldWithTitle: UIView {
         textField.delegate = self
         textField.font = Constants.textFieldFont
         textField.textColor = Constants.backgroundColor
-        textField.leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 2.0, height: textField.frame.height))
+        let textFieldFrame = CGRect(x: .zero, y: .zero, width: Constants.textFieldFrameWidth, height: textField.frame.height)
+        textField.leftView = UIView(frame: textFieldFrame)
         textField.leftViewMode = .always
         return textField
     }()
