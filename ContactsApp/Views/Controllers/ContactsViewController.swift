@@ -149,6 +149,9 @@ class ContactsViewController: UIViewController {
     }
     
     private func setupViews() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+        self.view.addGestureRecognizer(tap)
+        
         self.view.backgroundColor = Constants.backgroundColor
         
         self.headerContainerView.addSubview(self.titleLabel)
@@ -260,6 +263,10 @@ class ContactsViewController: UIViewController {
         self.goToEditContactVC(withTitle: Constants.newContactTitle, withContact: contact)
     }
     
+    @objc func dismissKeyboard() {
+        self.view.endEditing(true)
+    }
+    
 }
 
 // MARK: - UISearchBarDelegate
@@ -283,6 +290,10 @@ extension ContactsViewController: UISearchBarDelegate {
                 }
             })
         }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
     
 }
