@@ -175,7 +175,7 @@ class EditContactViewController: UIViewController {
     }()
     
     private lazy var addPhotoTapGesture: UITapGestureRecognizer = {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onAddPhotoTapped))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.onAddPhotoTapped))
         return tapGesture
     }()
     
@@ -218,10 +218,12 @@ class EditContactViewController: UIViewController {
         self.setupViews()
         self.setupFields()
         self.registerForNotifications()
-        self.setupTapGesture()
     }
     
     private func setupViews() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.hideKeyboardOnTap))
+        self.view.addGestureRecognizer(tapGesture)
+        
         self.view.backgroundColor = Constants.backgroundColor
         
         self.stackView.addArrangedSubview(self.textFieldWithTitleName)
@@ -296,10 +298,10 @@ class EditContactViewController: UIViewController {
     }
     
     private func setupFields() {
-        self.textFieldWithTitleName.textField.text = editContact.fullName
-        self.textFieldWithTitleJobPosition.textField.text = editContact.jobPosition
-        self.textFieldWithTitleEmail.textField.text = editContact.email
-        self.addPhotoView.image = UIImage(data: editContact.photo ?? Data()) ?? UIImage(named: Constants.addPhotoIconName)
+        self.textFieldWithTitleName.textField.text = self.editContact.fullName
+        self.textFieldWithTitleJobPosition.textField.text = self.editContact.jobPosition
+        self.textFieldWithTitleEmail.textField.text = self.editContact.email
+        self.addPhotoView.image = UIImage(data: self.editContact.photo ?? Data()) ?? UIImage(named: Constants.addPhotoIconName)
         self.updateSaveButtonState()
     }
     
@@ -307,12 +309,7 @@ class EditContactViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-    
-    private func setupTapGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.hideKeyboardOnTap))
-        self.view.addGestureRecognizer(tapGesture)
-    }
-    
+
     private func checkValidEmail(_ value: String) -> String? {
         if value.isEmpty {
             return Constants.errorMessageEmptyEmail

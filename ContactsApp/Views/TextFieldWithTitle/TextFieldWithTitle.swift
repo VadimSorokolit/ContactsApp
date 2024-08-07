@@ -20,15 +20,14 @@ class TextFieldWithTitle: UIView {
         static let backgroundColor: UIColor = UIColor(hexString: "FFFFFF")
         static let placeholderColor: UIColor = UIColor(hexString: "FFFFFF")
         static let textFieldTextColor: UIColor = UIColor(hexString: "FFFFFF")
+        static let textFieldTintColor: UIColor = UIColor(hexString: "FFFFFF")
         static let titleLabelHeight: CGFloat = 19.0
         static let textFieldHeight: CGFloat = 38.0
         static let textFieldTopPadding: CGFloat = 10.0
-        static let textFieldFrameWidth: Double = 2.0
+        static let textFieldLeftViewFrameWidth: Double = 2.0
     }
     
     // MARK: - Properties
-    
-    weak var delegate: UITextFieldDelegate?
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -39,11 +38,11 @@ class TextFieldWithTitle: UIView {
     
     lazy var textField: UITextField = {
         let textField = UITextField()
-        textField.delegate = self.delegate
         textField.font = Constants.textFieldFont
         textField.textColor = Constants.textFieldTextColor
-        let textFieldFrame = CGRect(x: .zero, y: .zero, width: Constants.textFieldFrameWidth, height: textField.frame.height)
-        textField.leftView = UIView(frame: textFieldFrame)
+        textField.tintColor = Constants.textFieldTintColor
+        let textFieldLeftViewFrame = CGRect(x: .zero, y: .zero, width: Constants.textFieldLeftViewFrameWidth, height: textField.frame.height)
+        textField.leftView = UIView(frame: textFieldLeftViewFrame)
         textField.leftViewMode = .always
         return textField
     }()
