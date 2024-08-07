@@ -9,10 +9,6 @@ import Foundation
 import UIKit
 import SnapKit
 
-protocol HandleEditTextFieldDelegate: AnyObject {
-    func textEditing(textField: UITextField)
-}
-
 class EditContactViewController: UIViewController {
     
     // MARK: - Objects
@@ -26,6 +22,7 @@ class EditContactViewController: UIViewController {
         static let saveButtonBackgroundColor: UIColor = UIColor(hexString: "FFFFFF")
         static let saveButtonTitleColor: UIColor = UIColor(hexString: "447BF1")
         static let separatorBackgroundColor: UIColor = UIColor(hexString: "FFFFFF")
+        static let placeholderColor: UIColor = UIColor(hexString: "FFFFFF")
         static let addPhotoIconName: String = "addPhoto"
         static let backButtonIconName: String = "x"
         static let photoLabelTitle: String = "Photo"
@@ -72,6 +69,7 @@ class EditContactViewController: UIViewController {
     private let titleLabelText: String
     private var originalContact: ContactStruct
     private var editContact: ContactStruct
+    private var initialPlaceholder: String?
     
     private var statusBarHeight: CGFloat {
         var height: CGFloat = .zero
@@ -125,25 +123,28 @@ class EditContactViewController: UIViewController {
     
     private lazy var textFieldWithTitleName: TextFieldWithTitle = {
         let textFieldWithTitle = TextFieldWithTitle()
-        textFieldWithTitle.delegate = self
+        textFieldWithTitle.textField.delegate = self
+        self.initialPlaceholder = Constants.nameTextFieldPlaceholder
         textFieldWithTitle.configure(title: Constants.nameTextFieldTitle, placeholder: Constants.nameTextFieldPlaceholder)
         return textFieldWithTitle
     }()
-
+    
     private lazy var textFieldWithTitleJobPosition: TextFieldWithTitle = {
         let textFieldWithTitle = TextFieldWithTitle()
-        textFieldWithTitle.delegate = self
+        textFieldWithTitle.textField.delegate = self
+        self.initialPlaceholder = Constants.jobPositionTextFieldPlaceholder
         textFieldWithTitle.configure(title: Constants.jobPositionTextFieldTitle, placeholder: Constants.jobPositionTextFieldPlaceholder)
         return textFieldWithTitle
     }()
     
     private lazy var textFieldWithTitleEmail: TextFieldWithTitle = {
         let textFieldWithTitle = TextFieldWithTitle()
-        textFieldWithTitle.delegate = self
+        textFieldWithTitle.textField.delegate = self
+        self.initialPlaceholder = Constants.emailTextFieldPlaceholder
         textFieldWithTitle.configure(title: Constants.emailTextFieldTitle, placeholder: Constants.emailTextFieldPlaceholder)
         return textFieldWithTitle
     }()
-
+    
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -202,7 +203,7 @@ class EditContactViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError(GlobalConstants.fatalError)
     }
-
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -210,9 +211,9 @@ class EditContactViewController: UIViewController {
         
         self.setup()
     }
-
+    
     // MARK: - Methods
-
+    
     private func setup() {
         self.setupViews()
         self.setupFields()
@@ -327,6 +328,7 @@ class EditContactViewController: UIViewController {
         if !predicate.evaluate(with: value) {
             return Constants.errorMessageInvalidEmailAddress
         }
+        
         return nil
     }
     
@@ -334,23 +336,23 @@ class EditContactViewController: UIViewController {
         let fullName = self.textFieldWithTitleName.textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let jobPosition = textFieldWithTitleJobPosition.textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let email = self.textFieldWithTitleEmail.textField.text ?? ""
-
+        
         if fullName.isEmpty {
             return Constants.errorMessageEmptyFullName
         }
-
+        
         if jobPosition.isEmpty {
             return Constants.errorMessageEmptyJobPosition
         }
-
+        
         if let emailError = self.checkValidEmail(email) {
             return emailError
         }
-
+        
         self.editContact.fullName = fullName
         self.editContact.jobPosition = jobPosition
         self.editContact.email = email
-
+        
         return nil
     }
     
@@ -373,6 +375,24 @@ class EditContactViewController: UIViewController {
         self.present(alert, animated: true)
     }
     
+    private func updateSaveButtonState() {
+        if self.originalContact != self.editContact {
+            self.saveButton.isEnabled = true
+            self.saveButton.backgroundColor = Constants.saveButtonBackgroundColor
+        } else {
+            self.saveButton.isEnabled = false
+            self.saveButton.backgroundColor = Constants.saveButtonBackgroundColor.withAlphaComponent(0.5)
+        }
+    }
+    
+    private func setupTextFieldPlaceholder(textField: UITextField, placeholder: String) {
+        textField.attributedPlaceholder = NSAttributedString(
+            string: placeholder,
+            attributes: [NSAttributedString.Key.foregroundColor: Constants.placeholderColor]
+        )
+        self.initialPlaceholder = placeholder
+    }
+    
     // MARK: - Events
     
     @objc private func onBackButtonDidTap() {
@@ -392,21 +412,11 @@ class EditContactViewController: UIViewController {
         }
     }
     
-    private func updateSaveButtonState() {
-        if self.originalContact != self.editContact {
-            self.saveButton.isEnabled = true
-            self.saveButton.backgroundColor = Constants.saveButtonBackgroundColor
-        } else {
-            self.saveButton.isEnabled = false
-            self.saveButton.backgroundColor = Constants.saveButtonBackgroundColor.withAlphaComponent(0.5)
-        }
-    }
-    
     @objc private func keyboardWillShow(notification: Notification) {
         if let userInfo = notification.userInfo,
            let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-           let keyboardHeight = keyboardFrame.height
-           self.adjustScrollViewForKeyboard(height: keyboardHeight, isShowing: true)
+            let keyboardHeight = keyboardFrame.height
+            self.adjustScrollViewForKeyboard(height: keyboardHeight, isShowing: true)
         }
     }
     
@@ -438,24 +448,42 @@ extension EditContactViewController: UIImagePickerControllerDelegate, UINavigati
     
 }
 
-// MARK: - HandleEditTextFieldDelegate
+// MARK: - UITextFieldDelegate
 
-extension EditContactViewController: HandleEditTextFieldDelegate {
+extension EditContactViewController: UITextFieldDelegate {
     
-    func textEditing(textField: UITextField) {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.attributedPlaceholder = nil
+    }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let text = textField.text else { return }
         
         switch textField {
-        case self.textFieldWithTitleName.textField:
-            self.editContact.fullName = text
-        case self.textFieldWithTitleJobPosition.textField:
-            self.editContact.jobPosition = text
-        case self.textFieldWithTitleEmail.textField:
-            self.editContact.email = text
-        default:
-            break
+            case self.textFieldWithTitleName.textField:
+                self.editContact.fullName = text
+            case self.textFieldWithTitleJobPosition.textField:
+                self.editContact.jobPosition = text
+            case self.textFieldWithTitleEmail.textField:
+                self.editContact.email = text
+            default:
+                break
         }
         self.updateSaveButtonState()
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if !textField.hasText {
+            if let placeholder = self.initialPlaceholder {
+                self.setupTextFieldPlaceholder(textField: textField, placeholder: placeholder)
+            }
+            self.updateSaveButtonState()
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
 }
