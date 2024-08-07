@@ -373,13 +373,14 @@ class EditContactViewController: UIViewController {
     }
     
     private func updateSaveButtonState() {
-        if self.originalContact != self.editContact {
-            self.saveButton.isEnabled = true
-            self.saveButton.backgroundColor = Constants.saveButtonBackgroundColor
-        } else {
-            self.saveButton.isEnabled = false
-            self.saveButton.backgroundColor = Constants.saveButtonBackgroundColor.withAlphaComponent(0.5)
-        }
+        let isAnyFieldNotEmpty = !(self.editContact.fullName?.isEmpty ?? true) ||
+                                 !(self.editContact.jobPosition?.isEmpty ?? true) ||
+                                 !(self.editContact.email?.isEmpty ?? true)
+        
+        let hasChanges = self.editContact != self.originalContact
+        
+        self.saveButton.isEnabled = hasChanges && isAnyFieldNotEmpty
+        self.saveButton.backgroundColor = Constants.saveButtonBackgroundColor.withAlphaComponent(self.saveButton.isEnabled ? 1.0 : 0.5)
     }
     
     private func setupTextFieldPlaceholder(textField: UITextField, placeholder: String) {
