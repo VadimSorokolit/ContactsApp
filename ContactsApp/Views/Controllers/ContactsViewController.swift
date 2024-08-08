@@ -133,7 +133,7 @@ class ContactsViewController: UIViewController {
     }
     
     // MARK: - Lifecycle
- 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -149,9 +149,6 @@ class ContactsViewController: UIViewController {
     }
     
     private func setupViews() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-        self.view.addGestureRecognizer(tap)
-        
         self.view.backgroundColor = Constants.backgroundColor
         
         self.headerContainerView.addSubview(self.titleLabel)
@@ -209,10 +206,11 @@ class ContactsViewController: UIViewController {
     private func registerForNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.handleSuccess), name: .success, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.handleError(_:)), name: .errorNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     private func getData() {
-//          self.contactsViewModel.deleteAllContacts()
+        //          self.contactsViewModel.deleteAllContacts()
         self.contactsViewModel.fetchContacts(completion: { (fetchResult: Result<Void, Error>) -> Void in
             DispatchQueue.main.async {
                 switch fetchResult {
@@ -224,7 +222,7 @@ class ContactsViewController: UIViewController {
             }
         })
     }
-
+    
     private func goToEditContactVC(withTitle title: String, withContact contact: ContactStruct) {
         let editContactViewController = EditContactViewController(title: title, contact: contact)
         editContactViewController.delegate = self
@@ -256,6 +254,11 @@ class ContactsViewController: UIViewController {
                 self.showErrorAlert(message: errorMessage)
             }
         }
+    }
+    
+    @objc private func keyboardWillHide(notification: Notification) {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+        self.view.addGestureRecognizer(tap)
     }
     
     @objc private func onAddButtonDidTap() {
