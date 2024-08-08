@@ -149,6 +149,10 @@ class ContactsViewController: UIViewController {
     }
     
     private func setupViews() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tap)
+        
         self.view.backgroundColor = Constants.backgroundColor
         
         self.headerContainerView.addSubview(self.titleLabel)
@@ -206,7 +210,6 @@ class ContactsViewController: UIViewController {
     private func registerForNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.handleSuccess), name: .success, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.handleError(_:)), name: .errorNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     private func getData() {
@@ -255,12 +258,7 @@ class ContactsViewController: UIViewController {
             }
         }
     }
-    
-    @objc private func keyboardWillHide(notification: Notification) {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-        self.view.addGestureRecognizer(tap)
-    }
-    
+
     @objc private func onAddButtonDidTap() {
         let contact = ContactStruct()
         self.goToEditContactVC(withTitle: Constants.newContactTitle, withContact: contact)
