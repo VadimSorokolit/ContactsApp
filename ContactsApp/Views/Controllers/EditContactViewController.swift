@@ -436,7 +436,10 @@ extension EditContactViewController: UIImagePickerControllerDelegate, UINavigati
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[.originalImage] as? UIImage {
+            self.addPhotoView.contentMode = .scaleAspectFill
+            
             self.addPhotoView.image = selectedImage
+            
             self.editContact.photo = selectedImage.pngData()
             self.isPhotoChanged = true
             self.updateSaveButtonState()
