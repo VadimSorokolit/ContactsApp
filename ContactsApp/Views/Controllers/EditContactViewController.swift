@@ -67,8 +67,9 @@ class EditContactViewController: UIViewController {
     weak var delegate: InterfaceContactDelegate?
     
     private let titleLabelText: String
-    private var originalContact: ContactStruct
+    private let originalContact: ContactStruct
     private var editContact: ContactStruct
+    private var isPhotoChanged: Bool = false
     private var initialPlaceholder: String?
     
     private var statusBarHeight: CGFloat {
@@ -373,14 +374,14 @@ class EditContactViewController: UIViewController {
     }
     
     private func updateSaveButtonState() {
-        let isAnyFieldNotEmpty = !(self.editContact.fullName?.isEmpty ?? true) ||
-                                 !(self.editContact.jobPosition?.isEmpty ?? true) ||
-                                 !(self.editContact.email?.isEmpty ?? true)
+        let isAnyFieldNotEmpty = !(editContact.fullName?.isEmpty ?? true) ||
+                                 !(editContact.jobPosition?.isEmpty ?? true) ||
+                                 !(editContact.email?.isEmpty ?? true)
         
-        let hasChanges = self.editContact != self.originalContact
+        let hasChanges = (editContact != originalContact) || (editContact.photo != originalContact.photo)
         
-        self.saveButton.isEnabled = hasChanges && isAnyFieldNotEmpty
-        self.saveButton.backgroundColor = Constants.saveButtonBackgroundColor.withAlphaComponent(self.saveButton.isEnabled ? 1.0 : 0.5)
+        saveButton.isEnabled = (hasChanges && isAnyFieldNotEmpty) || hasChanges
+        saveButton.backgroundColor = Constants.saveButtonBackgroundColor.withAlphaComponent(saveButton.isEnabled ? 1.0 : 0.5)
     }
     
     private func setupTextFieldPlaceholder(textField: UITextField, placeholder: String) {
@@ -399,6 +400,7 @@ class EditContactViewController: UIViewController {
     
     @objc private func onAddPhotoTapped() {
         self.presentPhotoLibrary()
+        self.isPhotoChanged = true
     }
     
     @objc private func onSaveButtonDidTap() {
@@ -436,6 +438,8 @@ extension EditContactViewController: UIImagePickerControllerDelegate, UINavigati
         if let selectedImage = info[.originalImage] as? UIImage {
             self.addPhotoView.image = selectedImage
             self.editContact.photo = selectedImage.pngData()
+            self.isPhotoChanged = true
+            self.updateSaveButtonState()
         }
         picker.dismiss(animated: true, completion: nil)
     }
@@ -467,6 +471,7 @@ extension EditContactViewController: UITextFieldDelegate {
             default:
                 break
         }
+        self.isPhotoChanged = false
         self.updateSaveButtonState()
     }
     
