@@ -30,7 +30,7 @@ class TextFieldWithTitle: UIView {
     // MARK: - Properties
     
     private var initialPlaceholder: String?
-
+    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.titleLabelFont
@@ -81,31 +81,26 @@ class TextFieldWithTitle: UIView {
         })
     }
     
-    func configure(title: String, placeholder: String) {
-        self.titleLabel.text = title
-        
-        let attributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: Constants.placeholderColor,
-            .font: Constants.placeholderFont
-        ]
-        
-        let attributedPlaceholder = NSAttributedString(string: placeholder, attributes: attributes)
-        self.textField.attributedPlaceholder = attributedPlaceholder
-        
-        self.initialPlaceholder = placeholder
-    }
-    
-    func setupDefaultPlaceholder() {
-        guard let initialPlaceholder = self.initialPlaceholder else {
-            return
-        }
-        self.textField.attributedPlaceholder = NSAttributedString(
-            string: initialPlaceholder,
+    private func makeAttributedPlaceholder(from text: String) -> NSAttributedString {
+        return NSAttributedString(
+            string: text,
             attributes: [
                 .foregroundColor: Constants.placeholderColor,
                 .font: Constants.placeholderFont
             ]
         )
+    }
+    
+    func configure(title: String, placeholder: String) {
+        self.titleLabel.text = title
+        self.textField.attributedPlaceholder = self.makeAttributedPlaceholder(from: placeholder)
+        self.initialPlaceholder = placeholder
+    }
+    
+    func setupDefaultPlaceholder() {
+        if let initialPlaceholder = self.initialPlaceholder {
+            self.textField.attributedPlaceholder = self.makeAttributedPlaceholder(from: initialPlaceholder)
+        }
     }
     
 }
