@@ -70,7 +70,6 @@ class EditContactViewController: UIViewController {
     private let originalContact: ContactStruct
     private var editContact: ContactStruct
     private var isPhotoChanged: Bool = false
-    private var initialPlaceholder: String?
     
     private var statusBarHeight: CGFloat {
         var height: CGFloat = .zero
@@ -125,7 +124,6 @@ class EditContactViewController: UIViewController {
     private lazy var textFieldWithTitleName: TextFieldWithTitle = {
         let textFieldWithTitle = TextFieldWithTitle()
         textFieldWithTitle.textField.delegate = self
-        self.initialPlaceholder = Constants.nameTextFieldPlaceholder
         textFieldWithTitle.configure(title: Constants.nameTextFieldTitle, placeholder: Constants.nameTextFieldPlaceholder)
         return textFieldWithTitle
     }()
@@ -133,7 +131,6 @@ class EditContactViewController: UIViewController {
     private lazy var textFieldWithTitleJobPosition: TextFieldWithTitle = {
         let textFieldWithTitle = TextFieldWithTitle()
         textFieldWithTitle.textField.delegate = self
-        self.initialPlaceholder = Constants.jobPositionTextFieldPlaceholder
         textFieldWithTitle.configure(title: Constants.jobPositionTextFieldTitle, placeholder: Constants.jobPositionTextFieldPlaceholder)
         return textFieldWithTitle
     }()
@@ -141,7 +138,6 @@ class EditContactViewController: UIViewController {
     private lazy var textFieldWithTitleEmail: TextFieldWithTitle = {
         let textFieldWithTitle = TextFieldWithTitle()
         textFieldWithTitle.textField.delegate = self
-        self.initialPlaceholder = Constants.emailTextFieldPlaceholder
         textFieldWithTitle.configure(title: Constants.emailTextFieldTitle, placeholder: Constants.emailTextFieldPlaceholder)
         return textFieldWithTitle
     }()
@@ -383,15 +379,31 @@ class EditContactViewController: UIViewController {
         saveButton.isEnabled = (hasChanges && isAnyFieldNotEmpty) || hasChanges
         saveButton.backgroundColor = Constants.saveButtonBackgroundColor.withAlphaComponent(saveButton.isEnabled ? 1.0 : 0.5)
     }
-    
-    private func setupTextFieldPlaceholder(textField: UITextField, placeholder: String) {
-        textField.attributedPlaceholder = NSAttributedString(
-            string: placeholder,
-            attributes: [NSAttributedString.Key.foregroundColor: Constants.placeholderColor]
-        )
-        self.initialPlaceholder = placeholder
+
+    private func getTextFieldWithTitle(for textField: UITextField) -> TextFieldWithTitle? {
+        if textField == self.textFieldWithTitleName.textField {
+            return self.textFieldWithTitleName
+        } else if textField == self.textFieldWithTitleJobPosition.textField {
+            return self.textFieldWithTitleJobPosition
+        } else if textField == self.textFieldWithTitleEmail.textField {
+            return self.textFieldWithTitleEmail
+        }
+        return nil
     }
     
+    private func updateContactProperty(for textField: UITextField, with text: String) {
+        switch textField {
+            case self.textFieldWithTitleName.textField:
+                self.editContact.fullName = text
+            case self.textFieldWithTitleJobPosition.textField:
+                self.editContact.jobPosition = text
+            case self.textFieldWithTitleEmail.textField:
+                self.editContact.email = text
+            default:
+                break
+        }
+    }
+
     // MARK: - Events
     
     @objc private func onBackButtonDidTap() {
@@ -464,25 +476,19 @@ extension EditContactViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let text = textField.text else { return }
         
-        switch textField {
-            case self.textFieldWithTitleName.textField:
-                self.editContact.fullName = text
-            case self.textFieldWithTitleJobPosition.textField:
-                self.editContact.jobPosition = text
-            case self.textFieldWithTitleEmail.textField:
-                self.editContact.email = text
-            default:
-                break
-        }
+        self.updateContactProperty(for: textField, with: text)
+        
         self.isPhotoChanged = false
         self.updateSaveButtonState()
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if !textField.hasText {
-            if let placeholder = self.initialPlaceholder {
-                self.setupTextFieldPlaceholder(textField: textField, placeholder: placeholder)
+            if let textFieldWithTitle = self.getTextFieldWithTitle(for: textField) {
+                textFieldWithTitle.setupDefaultPlaceholder()
             }
+            
+            self.isPhotoChanged = false
             self.updateSaveButtonState()
         }
     }

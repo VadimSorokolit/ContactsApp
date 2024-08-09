@@ -28,6 +28,8 @@ class TextFieldWithTitle: UIView {
     }
     
     // MARK: - Properties
+    
+    private var initialPlaceholder: String?
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -89,6 +91,21 @@ class TextFieldWithTitle: UIView {
         
         let attributedPlaceholder = NSAttributedString(string: placeholder, attributes: attributes)
         self.textField.attributedPlaceholder = attributedPlaceholder
+        
+        self.initialPlaceholder = placeholder
+    }
+    
+    func setupDefaultPlaceholder() {
+        guard let initialPlaceholder = self.initialPlaceholder else {
+            return
+        }
+        self.textField.attributedPlaceholder = NSAttributedString(
+            string: initialPlaceholder,
+            attributes: [
+                .foregroundColor: Constants.placeholderColor,
+                .font: Constants.placeholderFont
+            ]
+        )
     }
     
 }
