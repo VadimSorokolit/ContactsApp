@@ -123,21 +123,30 @@ class EditContactViewController: UIViewController {
     private lazy var textFieldWithTitleName: TextFieldWithTitle = {
         let textFieldWithTitle = TextFieldWithTitle()
         textFieldWithTitle.textField.delegate = self
-        textFieldWithTitle.configure(title: Constants.nameTextFieldTitle, placeholder: Constants.nameTextFieldPlaceholder)
+        textFieldWithTitle.configure(
+            title: Constants.nameTextFieldTitle,
+            placeholder: Constants.nameTextFieldPlaceholder
+        )
         return textFieldWithTitle
     }()
     
     private lazy var textFieldWithTitleJobPosition: TextFieldWithTitle = {
         let textFieldWithTitle = TextFieldWithTitle()
         textFieldWithTitle.textField.delegate = self
-        textFieldWithTitle.configure(title: Constants.jobPositionTextFieldTitle, placeholder: Constants.jobPositionTextFieldPlaceholder)
+        textFieldWithTitle.configure(
+            title: Constants.jobPositionTextFieldTitle,
+            placeholder: Constants.jobPositionTextFieldPlaceholder
+        )
         return textFieldWithTitle
     }()
     
     private lazy var textFieldWithTitleEmail: TextFieldWithTitle = {
         let textFieldWithTitle = TextFieldWithTitle()
         textFieldWithTitle.textField.delegate = self
-        textFieldWithTitle.configure(title: Constants.emailTextFieldTitle, placeholder: Constants.emailTextFieldPlaceholder)
+        textFieldWithTitle.configure(
+            title: Constants.emailTextFieldTitle,
+            placeholder: Constants.emailTextFieldPlaceholder
+        )
         return textFieldWithTitle
     }()
     
@@ -169,12 +178,7 @@ class EditContactViewController: UIViewController {
         imageView.isUserInteractionEnabled = true
         return imageView
     }()
-    
-    private lazy var addPhotoTapGesture: UITapGestureRecognizer = {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.onAddPhotoTapped))
-        return tapGesture
-    }()
-    
+        
     private lazy var saveButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = Constants.saveButtonBackgroundColor
@@ -238,7 +242,8 @@ class EditContactViewController: UIViewController {
         self.view.addSubview(self.separator)
         self.view.addSubview(self.scrollView)
         
-        self.addPhotoView.addGestureRecognizer(self.addPhotoTapGesture)
+        let tapGestureOnAddPhoto = UITapGestureRecognizer(target: self, action: #selector(self.onAddPhotoTapped))
+        self.addPhotoView.addGestureRecognizer(tapGestureOnAddPhoto)
         
         self.backButton.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.view.snp.top).offset(self.statusBarHeight + Constants.backButtonInsets.top)
@@ -327,7 +332,7 @@ class EditContactViewController: UIViewController {
     
     private func validateFields() -> String? {
         let fullName = self.textFieldWithTitleName.textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        let jobPosition = textFieldWithTitleJobPosition.textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let jobPosition = self.textFieldWithTitleJobPosition.textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let email = self.textFieldWithTitleEmail.textField.text ?? ""
         
         if fullName.isEmpty {
@@ -356,7 +361,7 @@ class EditContactViewController: UIViewController {
         self.present(imagePickerController, animated: true, completion: nil)
     }
     
-    private func adjustScrollViewForKeyboard(height: CGFloat, isShowing: Bool) {
+    private func adjustScrollViewForKeyboard(height: CGFloat) {
         let contentInset = UIEdgeInsets(top: .zero, left: .zero, bottom: height, right: .zero)
         self.scrollView.contentInset = contentInset
         self.scrollView.scrollIndicatorInsets = contentInset
@@ -369,23 +374,21 @@ class EditContactViewController: UIViewController {
     }
     
     private func updateSaveButtonState() {
-        let isAnyFieldNotEmpty = !(self.editContact.fullName?.isEmpty ?? true) ||
-                                 !(self.editContact.jobPosition?.isEmpty ?? true) ||
-                                 !(self.editContact.email?.isEmpty ?? true)
-        
-        let hasChanges = (self.editContact != self.originalContact) || (self.editContact.photo != self.originalContact.photo)
-        
-        self.saveButton.isEnabled = (hasChanges && isAnyFieldNotEmpty) || hasChanges
+        let hasChanges = (self.originalContact != self.editContact)
+        self.saveButton.isEnabled = hasChanges
         self.saveButton.backgroundColor = Constants.saveButtonBackgroundColor.withAlphaComponent(self.saveButton.isEnabled ? 1.0 : 0.5)
     }
-
+    
     private func getTextFieldWithTitle(for textField: UITextField) -> TextFieldWithTitle? {
-        if textField == self.textFieldWithTitleName.textField {
-            return self.textFieldWithTitleName
-        } else if textField == self.textFieldWithTitleJobPosition.textField {
-            return self.textFieldWithTitleJobPosition
-        } else if textField == self.textFieldWithTitleEmail.textField {
-            return self.textFieldWithTitleEmail
+        switch textField {
+            case self.textFieldWithTitleName.textField:
+                return self.textFieldWithTitleName
+            case self.textFieldWithTitleJobPosition.textField:
+                return self.textFieldWithTitleJobPosition
+            case self.textFieldWithTitleEmail.textField:
+                return self.textFieldWithTitleEmail
+            default:
+                break
         }
         return nil
     }
@@ -426,12 +429,12 @@ class EditContactViewController: UIViewController {
         if let userInfo = notification.userInfo,
            let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
             let keyboardHeight = keyboardFrame.height
-            self.adjustScrollViewForKeyboard(height: keyboardHeight, isShowing: true)
+            self.adjustScrollViewForKeyboard(height: keyboardHeight)
         }
     }
     
     @objc private func keyboardWillHide(notification: Notification) {
-        self.adjustScrollViewForKeyboard(height: .zero, isShowing: false)
+        self.adjustScrollViewForKeyboard(height: .zero)
     }
     
     @objc private func hideKeyboardOnTap() {
@@ -447,7 +450,6 @@ extension EditContactViewController: UIImagePickerControllerDelegate, UINavigati
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[.originalImage] as? UIImage {
             self.addPhotoView.contentMode = .scaleAspectFill
-            
             self.addPhotoView.image = selectedImage
             
             self.editContact.photo = selectedImage.pngData()
@@ -473,9 +475,7 @@ extension EditContactViewController: UITextFieldDelegate {
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let text = textField.text else { return }
-        
         self.updateContactProperty(for: textField, with: text)
-        
         self.updateSaveButtonState()
     }
     
@@ -484,7 +484,6 @@ extension EditContactViewController: UITextFieldDelegate {
             if let textFieldWithTitle = self.getTextFieldWithTitle(for: textField) {
                 textFieldWithTitle.setupDefaultPlaceholder()
             }
-            
             self.updateSaveButtonState()
         }
     }

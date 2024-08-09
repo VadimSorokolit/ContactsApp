@@ -280,7 +280,7 @@ extension ContactsViewController: UISearchBarDelegate {
         if query.isEmpty {
             self.getData()
         } else if query.count >= 3 {
-            self.contactsViewModel.searchContacts(byQuery: searchText, completion: { (searchResult: Result<Void, Error>) -> Void in
+            self.contactsViewModel.searchContacts(byQuery: query, completion: { (searchResult: Result<Void, Error>) -> Void in
                 DispatchQueue.main.async {
                     switch searchResult {
                         case .success(()):
