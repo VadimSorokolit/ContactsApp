@@ -148,6 +148,8 @@ class ContactsViewModel {
                 case .success(()):
                     self.contacts = self.contacts.filter({ $0.email != email })
                     completion(.success(()))
+                    // For test !!!
+                    self.notify(name: .success)
                 case .failure(let error):
                     completion(.failure(error))
             }

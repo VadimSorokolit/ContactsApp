@@ -213,12 +213,8 @@ class ContactsViewController: UIViewController {
     }
     
     private func getData() {
-//      self.contactsViewModel.deleteAllContacts()
-//        self.contactsViewModel.fetchContacts()
-    // For test !!!
-        if self.contactsViewModel.contacts.isEmpty {
-            self.contactsViewModel.testCreateContacts()
-        }
+//    self.contactsViewModel.deleteAllContacts()
+      self.contactsViewModel.fetchContacts()
     }
     
     private func goToEditContactVC(withTitle title: String, withContact contact: ContactStruct) {
@@ -238,6 +234,11 @@ class ContactsViewController: UIViewController {
     
     @objc private func handleSuccess() {
         DispatchQueue.main.async {
+            // For test !!!
+            if self.contactsViewModel.contacts.isEmpty {
+                self.contactsViewModel.testCreateContacts()
+            }
+            print(self.contactsViewModel.contacts.count)
             self.tableView.reloadData()
         }
     }
