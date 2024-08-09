@@ -471,6 +471,7 @@ extension EditContactViewController: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.attributedPlaceholder = nil
+        self.updateSaveButtonState()
     }
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
@@ -483,8 +484,8 @@ extension EditContactViewController: UITextFieldDelegate {
         if !textField.hasText {
             if let textFieldWithTitle = self.getTextFieldWithTitle(for: textField) {
                 textFieldWithTitle.setupDefaultPlaceholder()
+                self.updateSaveButtonState()
             }
-            self.updateSaveButtonState()
         }
     }
     

@@ -213,8 +213,8 @@ class ContactsViewController: UIViewController {
     }
     
     private func getData() {
-     // self.contactsViewModel.deleteAllContacts()
-        self.contactsViewModel.fetchContacts()
+//      self.contactsViewModel.deleteAllContacts()
+//        self.contactsViewModel.fetchContacts()
     // For test !!!
         if self.contactsViewModel.contacts.isEmpty {
             self.contactsViewModel.testCreateContacts()
