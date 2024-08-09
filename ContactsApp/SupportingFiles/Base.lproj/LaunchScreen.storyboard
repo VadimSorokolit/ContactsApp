@@ -17,14 +17,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="splashScreenImage" translatesAutoresizingMaskIntoConstraints="NO" id="2xC-De-QZB">
-                                <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splashScreenImage" translatesAutoresizingMaskIntoConstraints="NO" id="2xC-De-QZB">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <directionalEdgeInsets key="directionalLayoutMargins" top="0.0" leading="0.0" bottom="0.0" trailing="0.0"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="2xC-De-QZB" secondAttribute="bottom" id="Krl-bL-cqI"/>
+                            <constraint firstAttribute="trailing" secondItem="2xC-De-QZB" secondAttribute="trailing" id="VdP-gy-pPp"/>
+                            <constraint firstItem="2xC-De-QZB" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="abs-CS-2cX"/>
+                            <constraint firstItem="2xC-De-QZB" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="f4i-lB-cQi"/>
+                        </constraints>
                         <directionalEdgeInsets key="directionalLayoutMargins" top="0.0" leading="0.0" bottom="0.0" trailing="0.0"/>
                     </view>
                 </viewController>

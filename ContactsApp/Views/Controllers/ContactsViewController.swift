@@ -213,17 +213,12 @@ class ContactsViewController: UIViewController {
     }
     
     private func getData() {
-        //          self.contactsViewModel.deleteAllContacts()
-        self.contactsViewModel.fetchContacts(completion: { (fetchResult: Result<Void, Error>) -> Void in
-            DispatchQueue.main.async {
-                switch fetchResult {
-                    case .success(()):
-                        self.tableView.reloadData()
-                    case .failure(let error):
-                        self.showErrorAlert(message: error.localizedDescription)
-                }
-            }
-        })
+     // self.contactsViewModel.deleteAllContacts()
+        self.contactsViewModel.fetchContacts()
+    // For test !!!
+        if self.contactsViewModel.contacts.isEmpty {
+            self.contactsViewModel.testCreateContacts()
+        }
     }
     
     private func goToEditContactVC(withTitle title: String, withContact contact: ContactStruct) {
@@ -243,9 +238,6 @@ class ContactsViewController: UIViewController {
     
     @objc private func handleSuccess() {
         DispatchQueue.main.async {
-            if self.contactsViewModel.contacts.isEmpty {
-                self.contactsViewModel.testCreateContacts()
-            }
             self.tableView.reloadData()
         }
     }
@@ -280,16 +272,7 @@ extension ContactsViewController: UISearchBarDelegate {
         if query.isEmpty {
             self.getData()
         } else if query.count >= 3 {
-            self.contactsViewModel.searchContacts(byQuery: query, completion: { (searchResult: Result<Void, Error>) -> Void in
-                DispatchQueue.main.async {
-                    switch searchResult {
-                        case .success(()):
-                            self.tableView.reloadData()
-                        case .failure(let error):
-                            self.showErrorAlert(message: error.localizedDescription)
-                    }
-                }
-            })
+            self.contactsViewModel.searchContacts(byQuery: query)
         }
     }
     
