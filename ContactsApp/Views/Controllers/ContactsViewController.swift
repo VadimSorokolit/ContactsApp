@@ -238,7 +238,6 @@ class ContactsViewController: UIViewController {
             if self.contactsViewModel.contacts.isEmpty {
                 self.contactsViewModel.testCreateContacts()
             }
-            print(self.contactsViewModel.contacts.count)
             self.tableView.reloadData()
         }
     }
