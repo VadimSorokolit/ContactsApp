@@ -15,6 +15,8 @@ class ContactsViewModel {
     
     private struct Constants {
         static let errorContactIndex: String = "Contact with index doesn't exist"
+        static let errorContactEmail: String = "Email contact should not be nil"
+        static let userInfoKey: String = "error"
     }
     
     // MARK: - Properties
@@ -35,7 +37,7 @@ class ContactsViewModel {
             }
         })
     }
-
+    
     func searchContacts(byQuery query: String) {
         self.coreDataService.searchContacts(byFullName: query, jobPosition: query, completion: { (searchResult: Result<[ContactEntity], Error>) -> Void in
             switch searchResult {
@@ -47,7 +49,7 @@ class ContactsViewModel {
             }
         })
     }
-
+    
     // !!!! Only for test create contacts
     func testCreateContacts() {
         var contact1 = ContactStruct()
@@ -99,19 +101,6 @@ class ContactsViewModel {
             }
         })
     }
-     
-    // !!!! Only for test delete all contacts
-    func deleteAllContacts() {
-        self.coreDataService.deleteAllContacts(completion: { (deleteResult: Result<Void, Error>) -> Void in
-            switch deleteResult {
-                case .success(()):
-                    self.contacts.removeAll()
-                    self.notify(name: .success)
-                case .failure(let error):
-                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
-            }
-        })
-    }
     
     func updateContact(contact: ContactStruct) {
         self.coreDataService.updateContact(editedContact: contact, completion: { (updateResult: Result<Void, Error>) -> Void in
@@ -130,6 +119,33 @@ class ContactsViewModel {
         })
     }
     
+    // !!!! Only for test delete all contacts
+    func deleteAllContacts() {
+        self.coreDataService.deleteAllContacts(completion: { (deleteResult: Result<Void, Error>) -> Void in
+            switch deleteResult {
+                case .success(()):
+                    self.contacts.removeAll()
+                    self.notify(name: .success)
+                case .failure(let error):
+                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
+            }
+        })
+    }
+    
+    func deleteContact(byEmail email: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        self.coreDataService.deleteContact(byEmail: email, completion: { (deleteResult: Result<Void, Error>) -> Void in
+            switch deleteResult {
+                case .success(()):
+                    self.contacts = self.contacts.filter({ $0.email != email })
+                    completion(.success(()))
+                    // For test !!!!!!!!!!!!!!
+                    self.notify(name: .success)
+                case .failure(let error):
+                    completion(.failure(error))
+            }
+        })
+    }
+    
     func saveContact(contact: ContactStruct) {
         self.coreDataService.saveContact(contact: contact, completion: { (saveResult: Result<Void, Error>) -> Void in
             switch saveResult {
@@ -141,24 +157,10 @@ class ContactsViewModel {
             }
         })
     }
-        
-    func deleteContact(byEmail email: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        self.coreDataService.deleteContact(byEmail: email, completion: { (deleteResult: Result<Void, Error>) -> Void in
-            switch deleteResult {
-                case .success(()):
-                    self.contacts = self.contacts.filter({ $0.email != email })
-                    completion(.success(()))
-                    // For test !!!
-                    self.notify(name: .success)
-                case .failure(let error):
-                    completion(.failure(error))
-            }
-        })
-    }
     
     func contactVarificationBeforeSave(contact: ContactStruct) {
         guard let contactEmail = contact.email, !contactEmail.isEmpty else {
-            let errorMessage = "Email contact should not be nil"
+            let errorMessage = Constants.errorContactEmail
             self.notify(name: .errorNotification, errorMessage: errorMessage)
             return
         }
@@ -177,11 +179,11 @@ class ContactsViewModel {
             
         })
     }
-
+    
     private func notify(name: Notification.Name, errorMessage: String? = nil) {
         var userInfo: [String: String]? = nil
         if let error = errorMessage {
-            userInfo = ["error": error]
+            userInfo = [Constants.userInfoKey: error]
         }
         NotificationCenter.default.post(name: name, object: nil, userInfo: userInfo)
     }
