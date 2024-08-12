@@ -9,7 +9,18 @@ import Foundation
 import UIKit
 import CoreData
 
-class ContactsViewModel {
+protocol IAPIContacts: AnyObject {
+    func fetchContacts(completion: @escaping (Result<[ContactEntity], Error>) -> Void)
+    func fetchContact(byEmail email: String, completion: @escaping (Result<ContactEntity?, Error>) -> Void)
+    func searchContacts(byFullName fullName: String?, jobPosition: String?, completion: @escaping (Result<[ContactEntity], Error>) -> Void)
+    func updateContact(editedContact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void)
+    func saveContact(contact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void)
+    func deleteAllContacts(completion: @escaping (Result<Void,Error>) -> Void)
+    func deleteContact(byEmail email: String, completion: @escaping (Result<Void, Error>) -> Void)
+    func isContactExist(byEmail email: String, completion: @escaping (Result<Bool, Error>) -> Void)
+}
+
+class CoreDataService: IAPIContacts {
     
     // MARK: - Objects
     
