@@ -149,9 +149,9 @@ class ContactsViewController: UIViewController {
     }
     
     private func setupViews() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        self.view.addGestureRecognizer(tap)
+        let tapGestureHideKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.hideKeyboardOnTap))
+        tapGestureHideKeyboard.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapGestureHideKeyboard)
         
         self.view.backgroundColor = Constants.backgroundColor
         
@@ -252,11 +252,11 @@ class ContactsViewController: UIViewController {
     }
 
     @objc private func onAddButtonDidTap() {
-        let contact = ContactStruct()
-        self.goToEditContactVC(withTitle: Constants.newContactTitle, withContact: contact)
+        let newContact = ContactStruct()
+        self.goToEditContactVC(withTitle: Constants.newContactTitle, withContact: newContact)
     }
     
-    @objc func dismissKeyboard() {
+    @objc func hideKeyboardOnTap() {
         self.view.endEditing(true)
     }
     
