@@ -1,208 +1,206 @@
 //
-//  CoreDataService.swift
+//  ContactsViewModel.swift
 //  ContactsApp
 //
-//  Created by Vadim Sorokolit on 12.06.2024.
+//  Created by Vadim Sorokolit on 20.06.2024.
 //
 
 import Foundation
 import UIKit
 import CoreData
 
-class CoreDataService {
+protocol IAPIContacts: AnyObject {
+    func fetchContacts(completion: @escaping (Result<[ContactEntity], Error>) -> Void)
+    func fetchContact(byEmail email: String, completion: @escaping (Result<ContactEntity?, Error>) -> Void)
+    func searchContacts(byFullName fullName: String?, jobPosition: String?, completion: @escaping (Result<[ContactEntity], Error>) -> Void)
+    func updateContact(editedContact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void)
+    func saveContact(contact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void)
+    func deleteAllContacts(completion: @escaping (Result<Void,Error>) -> Void)
+    func deleteContact(byEmail email: String, completion: @escaping (Result<Void, Error>) -> Void)
+    func isContactExist(byEmail email: String, completion: @escaping (Result<Bool, Error>) -> Void)
+}
+
+class CoreDataService: IAPIContacts {
     
     // MARK: - Objects
     
     private struct Constants {
-        static let errorContactUpdate: String = "Contact doesn't update"
-        static let errorContactDoesntExist: String = "Contact doesn't exist"
+        static let errorContactIndex: String = "Contact with index doesn't exist"
+        static let errorContactEmail: String = "Email contact should not be nil"
+        static let userInfoKey: String = "error"
     }
     
     // MARK: - Properties
     
-    private var persistentContainer: NSPersistentContainer!
-    private var context: NSManagedObjectContext {
-        return self.persistentContainer.viewContext
-    }
-    
-    // MARK: - Initializers
-    
-    init() {
-        let appDelegate = UIApplication.shared.delegate as? AppDelegate
-        self.persistentContainer = appDelegate?.persistentContainer
-    }
-    
-    init(persistentContainer: NSPersistentContainer) {
-        self.persistentContainer = persistentContainer
-    }
+    private let coreDataService: CoreDataService = CoreDataService()
+    private(set) var contacts: [ContactStruct] = []
     
     // MARK: - Methods
     
-    // Fetch contacts
-    func fetchContacts(completion: @escaping (Result<[ContactEntity], Error>) -> Void) {
-        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
-            let fetchRequest: NSFetchRequest<ContactEntity> = ContactEntity.fetchRequest()
-            
-            do {
-                let contacts = try context.fetch(fetchRequest)
-                completion(.success(contacts))
-            } catch {
-                completion(.failure(error))
+    func fetchContacts() {
+        self.coreDataService.fetchContacts(completion: { (fetchResult: Result<[ContactEntity], Error>) -> Void in
+            switch fetchResult {
+                case .success(let contacts):
+                    self.contacts = contacts.map({ $0.asStruct() })
+                    self.notify(name: .success)
+                case .failure(let error):
+                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
             }
         })
     }
     
-    // Search contacts by fullName and jobPosition
-    func searchContacts(byFullName fullName: String?, jobPosition: String?, completion: @escaping (Result<[ContactEntity], Error>) -> Void) {
-        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
-            let fetchRequest = ContactEntity.fetchRequest()
-            var predicates: [NSPredicate] = []
-            
-            if let fullName = fullName, !fullName.isEmpty {
-                let trimmedFullName = fullName.trimmingCharacters(in: .whitespacesAndNewlines)
-                let fullNamePredicate = NSPredicate(format: "fullName CONTAINS[c] %@", trimmedFullName)
-                predicates.append(fullNamePredicate)
-            }
-            
-            if let jobPosition = jobPosition, !jobPosition.isEmpty {
-                let trimmedJobPosition = jobPosition.trimmingCharacters(in: .whitespacesAndNewlines)
-                let jobPositionPredicate = NSPredicate(format: "jobPosition CONTAINS[c] %@", trimmedJobPosition)
-                predicates.append(jobPositionPredicate)
-            }
-            
-            if predicates.isEmpty {
-                completion(.success([]))
-            } else {
-                let compoundPredicateType = NSCompoundPredicate.LogicalType.or
-                let compoundPredicate = NSCompoundPredicate(type: compoundPredicateType, subpredicates: predicates)
-                fetchRequest.predicate = compoundPredicate
-                
-                do {
-                    let foundContacts = try context.fetch(fetchRequest)
-                    completion(.success(foundContacts))
-                } catch {
-                    completion(.failure(error))
-                }
+    func searchContacts(byQuery query: String) {
+        self.coreDataService.searchContacts(byFullName: query, jobPosition: query, completion: { (searchResult: Result<[ContactEntity], Error>) -> Void in
+            switch searchResult {
+                case .success(let foundContacts):
+                    self.contacts = foundContacts.map({ $0.asStruct() })
+                    self.notify(name: .success)
+                case .failure(let error):
+                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
             }
         })
     }
     
-    // Fetch contact by email
-    func fetchContact(byEmail email: String, completion: @escaping (Result<ContactEntity?, Error>) -> Void) {
-        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
-            let fetchRequest = ContactEntity.fetchRequest()
-            let predicate = NSPredicate(format: "email == %@", email)
-            fetchRequest.predicate = predicate
-            fetchRequest.fetchLimit = 1
-            
-            do {
-                let contacts = try context.fetch(fetchRequest)
-                let contact = contacts.first
-                completion(.success(contact))
-            } catch {
-                completion(.failure(error))
-            }
-        })
-    }
-    
-    // Save contact
-    func saveContact(contact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void) {
-        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
-            
-            do {
-                _ = contact.asEntity(withContext: context)
-                try context.save()
-                completion(.success(()))
-            } catch {
-                completion(.failure(error))
-            }
-        })
-    }
-
-    // Update contact
-    func updateContact(editedContact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void) {
-        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
-            let fetchRequest: NSFetchRequest<ContactEntity> = ContactEntity.fetchRequest()
-            fetchRequest.predicate = NSPredicate(format: "email == %@", editedContact.email ?? "")
-            
-            do {
-                let contacts = try context.fetch(fetchRequest)
-                
-                if let existingContact = contacts.first {
-                    existingContact.fullName = editedContact.fullName
-                    existingContact.jobPosition = editedContact.jobPosition
-                    existingContact.email = editedContact.email
-                    existingContact.photo = editedContact.photo
+    // !!!! Only for test create contacts
+    func testCreateContacts() {
+        var contact1 = ContactStruct()
+        var contact2 = ContactStruct()
+        var contact3 = ContactStruct()
+        
+        contact1.fullName = "Vadim Sorokolit"
+        contact1.jobPosition = "iOS Developer"
+        contact1.email = "macintosh@ukr.net"
+        contact1.photo = nil
+        
+        contact2.fullName = "Viktor Shtoyko"
+        contact2.jobPosition = "Driver"
+        contact2.email = "kotik@ukr.net"
+        contact2.photo = nil
+        
+        contact3.fullName = "Marina Nazarenko"
+        contact3.jobPosition = "Teacher"
+        contact3.email = "everest@i.ua"
+        contact3.photo = UIImage(named: "splashScreenImage")?.pngData()
+        
+        self.coreDataService.saveContact(contact: contact1, completion: { (saveResult: Result<Void, Error>) -> Void in
+            switch saveResult {
+                case .success(()):
+                    self.contacts.append(contact1)
+                    self.notify(name: .success)
                     
-                    try context.save()
-                    completion(.success(()))
-                } else {
-                    let error = NSError(domain: Constants.errorContactUpdate, code: 1)
-                    completion(.failure(error))
-                }
-            } catch {
-                completion(.failure(error))
+                    self.coreDataService.saveContact(contact: contact2, completion: { (saveResult: Result<Void, Error>) -> Void in
+                        switch saveResult {
+                            case.success(()):
+                                self.contacts.append(contact2)
+                                self.notify(name: .success)
+                                
+                                self.coreDataService.saveContact(contact: contact3, completion: { (saveResult: Result<Void, Error>) -> Void in
+                                    switch saveResult {
+                                        case .success(()):
+                                            self.contacts.append(contact3)
+                                            self.notify(name: .success)
+                                        case .failure(let error):
+                                            self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
+                                    }
+                                })
+                            case .failure(let error):
+                                self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
+                        }
+                    })
+                case.failure(let error):
+                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
             }
         })
     }
     
-    // Delete all contacts
-    func deleteAllContacts(completion: @escaping (Result<Void,Error>) -> Void)  {
-        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
-            let fetchRequest = ContactEntity.fetchRequest()
-            
-            do {
-                let contacts = try context.fetch(fetchRequest)
-                contacts.forEach({ (contact: ContactEntity) -> Void in
-                    context.delete(contact)
-                })
-                try context.save()
-                completion(.success(()))
-            } catch {
-                completion(.failure(error))
+    func updateContact(contact: ContactStruct) {
+        self.coreDataService.updateContact(editedContact: contact, completion: { (updateResult: Result<Void, Error>) -> Void in
+            switch updateResult {
+                case .success(()):
+                    if let index = self.contacts.firstIndex(where: { $0.email == contact.email }) {
+                        self.contacts[index] = contact
+                        self.notify(name: .success)
+                    } else {
+                        let error = NSError(domain: Constants.errorContactIndex, code: 1)
+                        self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
+                    }
+                case .failure(let error):
+                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
             }
         })
     }
     
-    // Delete contact by email
+    // !!!! Only for test delete all contacts
+    func deleteAllContacts() {
+        self.coreDataService.deleteAllContacts(completion: { (deleteResult: Result<Void, Error>) -> Void in
+            switch deleteResult {
+                case .success(()):
+                    self.contacts.removeAll()
+                    self.notify(name: .success)
+                case .failure(let error):
+                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
+            }
+        })
+    }
+    
     func deleteContact(byEmail email: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
-            let fetchRequest: NSFetchRequest<ContactEntity> = ContactEntity.fetchRequest()
-            let predicate = NSPredicate(format: "email == %@", email)
-            fetchRequest.predicate = predicate
-            fetchRequest.fetchLimit = 1
-            
-            do {
-                let contacts = try context.fetch(fetchRequest)
-                if let contact = contacts.first {
-                    context.delete(contact)
-                    try context.save()
+        self.coreDataService.deleteContact(byEmail: email, completion: { (deleteResult: Result<Void, Error>) -> Void in
+            switch deleteResult {
+                case .success(()):
+                    self.contacts = self.contacts.filter({ $0.email != email })
                     completion(.success(()))
-                } else {
-                    let error = NSError(domain: Constants.errorContactDoesntExist, code: 1)
+                    // For test !!!!!!!!!!!!!!
+                    self.notify(name: .success)
+                case .failure(let error):
                     completion(.failure(error))
-                }
-            } catch {
-                completion(.failure(error))
             }
         })
     }
     
-    // Check contact by email
-    func isContactExist(byEmail email: String, completion: @escaping (Result<Bool, Error>) -> Void) {
-        self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
-            let fetchRequest: NSFetchRequest<ContactEntity> = ContactEntity.fetchRequest()
-            fetchRequest.predicate = NSPredicate(format: "email == %@", email)
-            fetchRequest.fetchLimit = 1
-            
-            do {
-                let contacts = try context.fetch(fetchRequest)
-                completion(.success(!contacts.isEmpty))
-            } catch {
-                completion(.failure(error))
+    func saveContact(contact: ContactStruct) {
+        self.coreDataService.saveContact(contact: contact, completion: { (saveResult: Result<Void, Error>) -> Void in
+            switch saveResult {
+                case .success(()):
+                    self.contacts.append(contact)
+                    self.notify(name: .success)
+                case .failure(let error):
+                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
             }
         })
+    }
+    
+    func contactVarificationBeforeSave(contact: ContactStruct) {
+        guard let contactEmail = contact.email, !contactEmail.isEmpty else {
+            let errorMessage = Constants.errorContactEmail
+            self.notify(name: .errorNotification, errorMessage: errorMessage)
+            return
+        }
+        
+        self.coreDataService.isContactExist(byEmail: contactEmail, completion: { (isExistResult: Result<Bool, Error>) -> Void in
+            switch isExistResult {
+                case .success(let isExist):
+                    if isExist {
+                        self.updateContact(contact: contact)
+                    } else {
+                        self.saveContact(contact: contact)
+                    }
+                case .failure(let error):
+                    self.notify(name: .errorNotification, errorMessage: error.localizedDescription)
+            }
+            
+        })
+    }
+    
+    private func notify(name: Notification.Name, errorMessage: String? = nil) {
+        var userInfo: [String: String]? = nil
+        if let error = errorMessage {
+            userInfo = [Constants.userInfoKey: error]
+        }
+        NotificationCenter.default.post(name: name, object: nil, userInfo: userInfo)
     }
     
 }
+
+
+
 

@@ -9,18 +9,7 @@ import Foundation
 import UIKit
 import CoreData
 
-protocol IAPIContacts: AnyObject {
-    func fetchContacts(completion: @escaping (Result<[ContactEntity], Error>) -> Void)
-    func fetchContact(byEmail email: String, completion: @escaping (Result<ContactEntity?, Error>) -> Void)
-    func searchContacts(byFullName fullName: String?, jobPosition: String?, completion: @escaping (Result<[ContactEntity], Error>) -> Void)
-    func updateContact(editedContact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void)
-    func saveContact(contact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void)
-    func deleteAllContacts(completion: @escaping (Result<Void,Error>) -> Void)
-    func deleteContact(byEmail email: String, completion: @escaping (Result<Void, Error>) -> Void)
-    func isContactExist(byEmail email: String, completion: @escaping (Result<Bool, Error>) -> Void)
-}
-
-class CoreDataService: IAPIContacts {
+class ContactsViewModel {
     
     // MARK: - Objects
     
@@ -32,13 +21,19 @@ class CoreDataService: IAPIContacts {
     
     // MARK: - Properties
     
-    private let coreDataService: CoreDataService = CoreDataService()
+    private let service: IAPIContacts
     private(set) var contacts: [ContactStruct] = []
+    
+    // MARK: - Initializer
+    
+    init(service: IAPIContacts) {
+        self.service = service
+    }
     
     // MARK: - Methods
     
     func fetchContacts() {
-        self.coreDataService.fetchContacts(completion: { (fetchResult: Result<[ContactEntity], Error>) -> Void in
+        self.service.fetchContacts(completion: { (fetchResult: Result<[ContactEntity], Error>) -> Void in
             switch fetchResult {
                 case .success(let contacts):
                     self.contacts = contacts.map({ $0.asStruct() })
@@ -50,7 +45,7 @@ class CoreDataService: IAPIContacts {
     }
     
     func searchContacts(byQuery query: String) {
-        self.coreDataService.searchContacts(byFullName: query, jobPosition: query, completion: { (searchResult: Result<[ContactEntity], Error>) -> Void in
+        self.service.searchContacts(byFullName: query, jobPosition: query, completion: { (searchResult: Result<[ContactEntity], Error>) -> Void in
             switch searchResult {
                 case .success(let foundContacts):
                     self.contacts = foundContacts.map({ $0.asStruct() })
@@ -82,19 +77,19 @@ class CoreDataService: IAPIContacts {
         contact3.email = "everest@i.ua"
         contact3.photo = UIImage(named: "splashScreenImage")?.pngData()
         
-        self.coreDataService.saveContact(contact: contact1, completion: { (saveResult: Result<Void, Error>) -> Void in
+        self.service.saveContact(contact: contact1, completion: { (saveResult: Result<Void, Error>) -> Void in
             switch saveResult {
                 case .success(()):
                     self.contacts.append(contact1)
                     self.notify(name: .success)
                     
-                    self.coreDataService.saveContact(contact: contact2, completion: { (saveResult: Result<Void, Error>) -> Void in
+                    self.service.saveContact(contact: contact2, completion: { (saveResult: Result<Void, Error>) -> Void in
                         switch saveResult {
                             case.success(()):
                                 self.contacts.append(contact2)
                                 self.notify(name: .success)
                                 
-                                self.coreDataService.saveContact(contact: contact3, completion: { (saveResult: Result<Void, Error>) -> Void in
+                                self.service.saveContact(contact: contact3, completion: { (saveResult: Result<Void, Error>) -> Void in
                                     switch saveResult {
                                         case .success(()):
                                             self.contacts.append(contact3)
@@ -114,7 +109,7 @@ class CoreDataService: IAPIContacts {
     }
     
     func updateContact(contact: ContactStruct) {
-        self.coreDataService.updateContact(editedContact: contact, completion: { (updateResult: Result<Void, Error>) -> Void in
+        self.service.updateContact(editedContact: contact, completion: { (updateResult: Result<Void, Error>) -> Void in
             switch updateResult {
                 case .success(()):
                     if let index = self.contacts.firstIndex(where: { $0.email == contact.email }) {
@@ -132,7 +127,7 @@ class CoreDataService: IAPIContacts {
     
     // !!!! Only for test delete all contacts
     func deleteAllContacts() {
-        self.coreDataService.deleteAllContacts(completion: { (deleteResult: Result<Void, Error>) -> Void in
+        self.service.deleteAllContacts(completion: { (deleteResult: Result<Void, Error>) -> Void in
             switch deleteResult {
                 case .success(()):
                     self.contacts.removeAll()
@@ -144,7 +139,7 @@ class CoreDataService: IAPIContacts {
     }
     
     func deleteContact(byEmail email: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        self.coreDataService.deleteContact(byEmail: email, completion: { (deleteResult: Result<Void, Error>) -> Void in
+        self.service.deleteContact(byEmail: email, completion: { (deleteResult: Result<Void, Error>) -> Void in
             switch deleteResult {
                 case .success(()):
                     self.contacts = self.contacts.filter({ $0.email != email })
@@ -158,7 +153,7 @@ class CoreDataService: IAPIContacts {
     }
     
     func saveContact(contact: ContactStruct) {
-        self.coreDataService.saveContact(contact: contact, completion: { (saveResult: Result<Void, Error>) -> Void in
+        self.service.saveContact(contact: contact, completion: { (saveResult: Result<Void, Error>) -> Void in
             switch saveResult {
                 case .success(()):
                     self.contacts.append(contact)
@@ -176,7 +171,7 @@ class CoreDataService: IAPIContacts {
             return
         }
         
-        self.coreDataService.isContactExist(byEmail: contactEmail, completion: { (isExistResult: Result<Bool, Error>) -> Void in
+        self.service.isContactExist(byEmail: contactEmail, completion: { (isExistResult: Result<Bool, Error>) -> Void in
             switch isExistResult {
                 case .success(let isExist):
                     if isExist {
