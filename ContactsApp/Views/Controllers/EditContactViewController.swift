@@ -221,8 +221,8 @@ class EditContactViewController: UIViewController {
     }
     
     private func setupViews() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.hideKeyboardOnTap))
-        self.view.addGestureRecognizer(tapGesture)
+        let tapGestureHideKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.hideKeyboardOnTap))
+        self.view.addGestureRecognizer(tapGestureHideKeyboard)
         
         self.view.backgroundColor = Constants.backgroundColor
         
@@ -242,10 +242,10 @@ class EditContactViewController: UIViewController {
         self.view.addSubview(self.separator)
         self.view.addSubview(self.scrollView)
         
-        let tapGestureOnAddPhoto = UITapGestureRecognizer(target: self, action: #selector(self.onAddPhotoTapped))
-        self.addPhotoView.addGestureRecognizer(tapGestureOnAddPhoto)
+        let tapGestureAddPhoto = UITapGestureRecognizer(target: self, action: #selector(self.onAddPhotoTapped))
+        self.addPhotoView.addGestureRecognizer(tapGestureAddPhoto)
         
-        self.backButton.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
+        self.backButton.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.view.snp.top).offset(self.statusBarHeight + Constants.backButtonInsets.top)
             make.trailing.equalTo(self.view.snp.trailing).inset(Constants.backButtonInsets.right)
             make.size.equalTo(Constants.backButtonSize)
@@ -257,18 +257,18 @@ class EditContactViewController: UIViewController {
             make.height.equalTo(Constants.titleLabelHeight)
         })
         
-        self.separator.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
+        self.separator.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.titleLabel.snp.bottom).offset(Constants.separatorTopInset)
             make.leading.trailing.equalTo(self.titleLabel)
             make.height.equalTo(Constants.separatorHeight)
         })
         
-        self.scrollView.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
+        self.scrollView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.separator.snp.bottom)
             make.leading.trailing.bottom.equalTo(self.view)
         })
         
-        self.containerView.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
+        self.containerView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.edges.equalTo(self.scrollView.snp.edges)
             make.width.equalTo(self.scrollView.snp.width)
         })
@@ -278,13 +278,13 @@ class EditContactViewController: UIViewController {
             make.leading.trailing.equalTo(self.containerView).inset(Constants.defaultLabelsPadding)
         })
         
-        self.labelPhoto.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
+        self.labelPhoto.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.stackView.snp.bottom).offset(Constants.photoLabelTopPadding)
             make.leading.trailing.equalTo(self.titleLabel)
             make.height.equalTo(Constants.photoLabelHeight)
         })
         
-        self.addPhotoView.snp.makeConstraints( { (make: ConstraintMaker) -> Void in
+        self.addPhotoView.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.labelPhoto.snp.bottom).offset(Constants.addPhotoButtonTopPadding)
             make.leading.equalTo(self.containerView.snp.leading).inset(Constants.defaultLabelsPadding)
             make.size.equalTo(Constants.addPhotoButtonSize)
