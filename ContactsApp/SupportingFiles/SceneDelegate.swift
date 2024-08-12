@@ -15,7 +15,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        let contactsViewModel = ContactsViewModel()
+        let apiContacts: IAPIContacts = CoreDataService()
+        let contactsViewModel = ContactsViewModel(service: apiContacts)
         let bootViewController = ContactsViewController(contactsViewModel: contactsViewModel)
         
         let window = UIWindow(windowScene: windowScene)
