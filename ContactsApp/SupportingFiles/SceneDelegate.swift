@@ -13,24 +13,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // MARK: - Properties
     
     var window: UIWindow?
-    let service: IAPIContacts
-    
-    // MARK: - Initializer
-    
-    init(service: IAPIContacts) {
-        self.service = service
-    }
     
     // MARK: - Methods
- 
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
-        let contactsViewModel = ContactsViewModel(service: self.service)
-        let bootViewController = ContactsViewController(contactsViewModel: contactsViewModel)
+        let contactService = appDelegate.provideContactService()
+        let contactsViewModel = ContactsViewModel(service: contactService)
+        let contactsViewController = ContactsViewController(contactsViewModel: contactsViewModel)
         
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = bootViewController
+        window.rootViewController = contactsViewController
         window.makeKeyAndVisible()
         self.window = window
     }
