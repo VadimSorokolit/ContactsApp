@@ -13,9 +13,7 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // MARK: - Properties
-    
-    var window: UIWindow?
-    
+
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "ContactsApp")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
