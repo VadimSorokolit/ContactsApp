@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import UIKit
+import UIKit // TODO: Remove after tests !!!!
 
 class ContactsViewModel {
     
@@ -20,19 +20,19 @@ class ContactsViewModel {
     
     // MARK: - Properties
     
-    private let service: IAPIContacts
+    private let contactsService: IAPIContacts
     private(set) var contacts: [ContactStruct] = []
     
     // MARK: - Initializer
     
     init(service: IAPIContacts) {
-        self.service = service
+        self.contactsService = service
     }
     
     // MARK: - Methods
     
     func fetchContacts() {
-        self.service.fetchContacts(completion: { (fetchResult: Result<[ContactEntity], Error>) -> Void in
+        self.contactsService.fetchContacts(completion: { (fetchResult: Result<[ContactEntity], Error>) -> Void in
             switch fetchResult {
                 case .success(let contacts):
                     self.contacts = contacts.map({ $0.asStruct() })
@@ -44,7 +44,7 @@ class ContactsViewModel {
     }
     
     func searchContacts(byQuery query: String) {
-        self.service.searchContacts(byFullName: query, jobPosition: query, completion: { (searchResult: Result<[ContactEntity], Error>) -> Void in
+        self.contactsService.searchContacts(byFullName: query, jobPosition: query, completion: { (searchResult: Result<[ContactEntity], Error>) -> Void in
             switch searchResult {
                 case .success(let foundContacts):
                     self.contacts = foundContacts.map({ $0.asStruct() })
@@ -76,19 +76,19 @@ class ContactsViewModel {
         contact3.email = "everest@i.ua"
         contact3.photo = UIImage(named: "splashScreenImage")?.pngData()
         
-        self.service.saveContact(contact: contact1, completion: { (saveResult: Result<Void, Error>) -> Void in
+        self.contactsService.saveContact(contact: contact1, completion: { (saveResult: Result<Void, Error>) -> Void in
             switch saveResult {
                 case .success(()):
                     self.contacts.append(contact1)
                     self.notify(name: .success)
                     
-                    self.service.saveContact(contact: contact2, completion: { (saveResult: Result<Void, Error>) -> Void in
+                    self.contactsService.saveContact(contact: contact2, completion: { (saveResult: Result<Void, Error>) -> Void in
                         switch saveResult {
                             case.success(()):
                                 self.contacts.append(contact2)
                                 self.notify(name: .success)
                                 
-                                self.service.saveContact(contact: contact3, completion: { (saveResult: Result<Void, Error>) -> Void in
+                                self.contactsService.saveContact(contact: contact3, completion: { (saveResult: Result<Void, Error>) -> Void in
                                     switch saveResult {
                                         case .success(()):
                                             self.contacts.append(contact3)
@@ -108,7 +108,7 @@ class ContactsViewModel {
     }
     
     func updateContact(contact: ContactStruct) {
-        self.service.updateContact(editedContact: contact, completion: { (updateResult: Result<Void, Error>) -> Void in
+        self.contactsService.updateContact(editedContact: contact, completion: { (updateResult: Result<Void, Error>) -> Void in
             switch updateResult {
                 case .success(()):
                     if let index = self.contacts.firstIndex(where: { $0.email == contact.email }) {
@@ -126,7 +126,7 @@ class ContactsViewModel {
     
     // !!!! Only for test delete all contacts
     func deleteAllContacts() {
-        self.service.deleteAllContacts(completion: { (deleteResult: Result<Void, Error>) -> Void in
+        self.contactsService.deleteAllContacts(completion: { (deleteResult: Result<Void, Error>) -> Void in
             switch deleteResult {
                 case .success(()):
                     self.contacts.removeAll()
@@ -138,7 +138,7 @@ class ContactsViewModel {
     }
     
     func deleteContact(byEmail email: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        self.service.deleteContact(byEmail: email, completion: { (deleteResult: Result<Void, Error>) -> Void in
+        self.contactsService.deleteContact(byEmail: email, completion: { (deleteResult: Result<Void, Error>) -> Void in
             switch deleteResult {
                 case .success(()):
                     self.contacts = self.contacts.filter({ $0.email != email })
@@ -152,7 +152,7 @@ class ContactsViewModel {
     }
     
     func saveContact(contact: ContactStruct) {
-        self.service.saveContact(contact: contact, completion: { (saveResult: Result<Void, Error>) -> Void in
+        self.contactsService.saveContact(contact: contact, completion: { (saveResult: Result<Void, Error>) -> Void in
             switch saveResult {
                 case .success(()):
                     self.contacts.append(contact)
@@ -170,7 +170,7 @@ class ContactsViewModel {
             return
         }
         
-        self.service.isContactExist(byEmail: contactEmail, completion: { (isExistResult: Result<Bool, Error>) -> Void in
+        self.contactsService.isContactExist(byEmail: contactEmail, completion: { (isExistResult: Result<Bool, Error>) -> Void in
             switch isExistResult {
                 case .success(let isExist):
                     if isExist {

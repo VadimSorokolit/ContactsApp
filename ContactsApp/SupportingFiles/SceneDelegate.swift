@@ -20,8 +20,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
-        let contactService = appDelegate.provideContactService()
-        let contactsViewModel = ContactsViewModel(service: contactService)
+        let contactsService = CoreDataService(persistentContainer: appDelegate.persistentContainer)
+        let contactsViewModel = ContactsViewModel(service: contactsService)
         let contactsViewController = ContactsViewController(contactsViewModel: contactsViewModel)
         
         let window = UIWindow(windowScene: windowScene)
