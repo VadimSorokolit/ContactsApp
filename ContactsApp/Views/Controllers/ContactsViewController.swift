@@ -262,6 +262,7 @@ extension ContactsViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text else { return }
+        
         self.handleSearch(text: searchText)
         searchBar.resignFirstResponder()
     }
