@@ -257,7 +257,17 @@ class ContactsViewController: UIViewController {
 extension ContactsViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        self.handleSearch(text: searchText)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchText = searchBar.text else { return }
+        self.handleSearch(text: searchText)
+        searchBar.resignFirstResponder()
+    }
+    
+    private func handleSearch(text: String) {
+        let query = text.trimmingCharacters(in: .whitespacesAndNewlines)
         
         if query.isEmpty {
             self.getData()
@@ -265,10 +275,7 @@ extension ContactsViewController: UISearchBarDelegate {
             self.contactsViewModel.searchContacts(byQuery: query)
         }
     }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-    }
+
     
 }
 
