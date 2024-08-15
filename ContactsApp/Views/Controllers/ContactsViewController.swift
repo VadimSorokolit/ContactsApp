@@ -9,10 +9,6 @@ import Foundation
 import UIKit
 import SnapKit
 
-protocol InterfaceContactDelegate : AnyObject {
-    func didReturnEditContact(editedContact: ContactStruct)
-}
-
 class ContactsViewController: UIViewController {
     
     // MARK: - Objects
@@ -34,9 +30,9 @@ class ContactsViewController: UIViewController {
         static let separatorHeight: CGFloat = 1.0
         static let titleLabelTopPadding: CGFloat = 80.0
         static let addButtonHeight: CGFloat = 70.0
-        static let addButtonInsets: UIEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 39.0, right: 27.0)
+        static let addButtonInsets: UIEdgeInsets = UIEdgeInsets(top: .zero, left: .zero, bottom: 39.0, right: 27.0)
         static let addButtonShadowOpacity: Float = 0.15
-        static let addButtonShadowOffset: CGSize = CGSize(width: 0.0, height: 4.0)
+        static let addButtonShadowOffset: CGSize = CGSize(width: .zero, height: 4.0)
         static let iconPlusSize: CGSize = CGSize(width: 30.0, height: 30.0)
         static let editContactTitle: String = "Edit contact"
         static let newContactTitle: String = "New contact"
@@ -62,7 +58,6 @@ class ContactsViewController: UIViewController {
         searchBar.delegate = self
         searchBar.placeholder = Constants.searchBarPlaceholder
         searchBar.backgroundImage = UIImage()
-        searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         searchBar.backgroundColor = Constants.searchBarBackgroundColor
         searchBar.layer.cornerRadius = Constants.searchBarCornerRadius
         searchBar.layer.masksToBounds = true
@@ -82,9 +77,9 @@ class ContactsViewController: UIViewController {
     }()
     
     private lazy var navBarSeparator: UIView = {
-        let lineView = UIView()
-        lineView.backgroundColor = Constants.separatorBackgroundColor
-        return lineView
+        let separator = UIView()
+        separator.backgroundColor = Constants.separatorBackgroundColor
+        return separator
     }()
     
     private lazy var tableView: UITableView = {
@@ -213,8 +208,7 @@ class ContactsViewController: UIViewController {
     }
     
     private func getData() {
-//    self.contactsViewModel.deleteAllContacts()
-      self.contactsViewModel.fetchContacts()
+        self.contactsViewModel.fetchContacts()
     }
     
     private func goToEditContactVC(withTitle title: String, withContact contact: ContactStruct) {
@@ -234,10 +228,6 @@ class ContactsViewController: UIViewController {
     
     @objc private func handleSuccess() {
         DispatchQueue.main.async {
-            // For test !!!
-            if self.contactsViewModel.contacts.isEmpty {
-                self.contactsViewModel.testCreateContacts()
-            }
             self.tableView.reloadData()
         }
     }
@@ -271,7 +261,7 @@ extension ContactsViewController: UISearchBarDelegate {
         
         if query.isEmpty {
             self.getData()
-        } else if query.count >= 3 {
+        } else if query.count > 2 {
             self.contactsViewModel.searchContacts(byQuery: query)
         }
     }
@@ -312,13 +302,11 @@ extension ContactsViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ContactCell.reuseID, for: indexPath) as? ContactCell else {
             return UITableViewCell()
         }
-        
         let contacts = self.contactsViewModel.contacts
         let contact = contacts[indexPath.row]
+        let isCellLast = indexPath.row == contacts.indices.last
         
         cell.setupCell(with: contact)
-        
-        let isCellLast = indexPath.row == contacts.indices.last
         
         if isCellLast {
             cell.hideSeparator()
@@ -350,10 +338,10 @@ extension ContactsViewController: UITableViewDataSource {
 
 // MARK: - InterfaceContactDelegate
 
-extension ContactsViewController: InterfaceContactDelegate {
+extension ContactsViewController: editContactViewControllerDelegate {
     
     func didReturnEditContact(editedContact: ContactStruct) {
-        self.contactsViewModel.contactVarificationBeforeSave(contact: editedContact)
+        self.contactsViewModel.updateOrSave(contact: editedContact)
     }
     
 }

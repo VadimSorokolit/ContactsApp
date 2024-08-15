@@ -17,10 +17,10 @@ class ContactCell: UITableViewCell {
         static let fullNameLabelFont: UIFont? = UIFont(name: "Manrope-Bold", size: 16.0)
         static let jobPositionLabelFont: UIFont? = UIFont(name: "Manrope-Medium", size: 14.0)
         static let placeholderImageName: String = "placeholder"
-        static let fullNameLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 15.0, left: 14.0, bottom: 0.0, right: 30.0)
+        static let fullNameLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 15.0, left: 14.0, bottom: .zero, right: 30.0)
         static let imageViewWidth: CGFloat = 50.0
-        static let jobPositionLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 3.0, left: 0.0, bottom: 15.0, right: 0.0)
-        static let photoImageViewInsets: UIEdgeInsets = UIEdgeInsets(top: 15.0, left: 30.0, bottom: 15.0, right: 0.0)
+        static let jobPositionLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 3.0, left: .zero, bottom: 15.0, right: .zero)
+        static let photoImageViewInsets: UIEdgeInsets = UIEdgeInsets(top: 15.0, left: 30.0, bottom: 15.0, right: .zero)
     }
     
     // MARK: - Properties
@@ -45,7 +45,7 @@ class ContactCell: UITableViewCell {
     
     private lazy var photoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.layer.cornerRadius = Constants.imageViewWidth / 2
+        imageView.layer.cornerRadius = Constants.imageViewWidth / 2.0
         imageView.clipsToBounds = true
         return imageView
     }()

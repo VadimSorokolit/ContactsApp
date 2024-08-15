@@ -25,10 +25,12 @@ struct ContactStruct: Equatable {
         let rhsEmail = rhs.email ?? ""
         let rhsPhoto = rhs.photo ?? Data()
         
-        return lhsFullName == rhsFullName
-                && lhsJobPosition == rhsJobPosition
-                && lhsEmail == rhsEmail
-                && lhsPhoto == rhsPhoto
+        let isEqual = lhsFullName == rhsFullName
+                      && lhsJobPosition == rhsJobPosition
+                      && lhsEmail == rhsEmail
+                      && lhsPhoto == rhsPhoto
+        
+        return isEqual
     }
     
     // ContactStruct -> ContactEntity

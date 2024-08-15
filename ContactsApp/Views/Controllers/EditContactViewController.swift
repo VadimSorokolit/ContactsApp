@@ -1,5 +1,5 @@
 //
-//  EditContactController.swift
+//  EditContactViewController.swift
 //  ContactsApp
 //
 //  Created by Vadim Sorokolit on 16.07.2024.
@@ -8,6 +8,10 @@
 import Foundation
 import UIKit
 import SnapKit
+
+protocol editContactViewControllerDelegate : AnyObject {
+    func didReturnEditContact(editedContact: ContactStruct)
+}
 
 class EditContactViewController: UIViewController {
     
@@ -22,7 +26,6 @@ class EditContactViewController: UIViewController {
         static let saveButtonBackgroundColor: UIColor = UIColor(hexString: "FFFFFF")
         static let saveButtonTitleColor: UIColor = UIColor(hexString: "447BF1")
         static let separatorBackgroundColor: UIColor = UIColor(hexString: "FFFFFF")
-        static let placeholderColor: UIColor = UIColor(hexString: "FFFFFF")
         static let addPhotoIconName: String = "addPhoto"
         static let backButtonIconName: String = "x"
         static let photoLabelTitle: String = "Photo"
@@ -33,9 +36,9 @@ class EditContactViewController: UIViewController {
         static let nameTextFieldPlaceholder: String = "Enter name"
         static let jobPositionTextFieldPlaceholder: String = "Enter position"
         static let emailTextFieldPlaceholder: String = "Enter email"
-        static let errorMessageEmptyFullName: String = "Full name cannot be empty"
-        static let errorMessageEmptyJobPosition: String = "Job position cannot be empty"
-        static let errorMessageEmptyEmail: String = "Email cannot be empty"
+        static let errorMessageEmptyFullName: String = "Full name can't be empty"
+        static let errorMessageEmptyJobPosition: String = "Job position can't be empty"
+        static let errorMessageEmptyEmail: String = "Email can't be empty"
         static let errorMessageEmailDoesntMustContainSpaces: String = "Email doesn't must contain spaces"
         static let errorMessageInvalidEmailAddress: String = "Invalid email address. Valid adress for example: test@test.com"
         static let predicateFormat: String = "SELF MATCHES %@"
@@ -43,7 +46,7 @@ class EditContactViewController: UIViewController {
         static let addPhotoButtonSize: CGSize = CGSize(width: 143.0, height: 143.0)
         static let addPhotoButtonHeight: CGFloat = 143.0
         static let addPhotoButtonTopPadding: CGFloat = 12.0
-        static let backButtonInsets: UIEdgeInsets = UIEdgeInsets(top: 10.0, left: 0.0, bottom: 0.0, right: 34.0)
+        static let backButtonInsets: UIEdgeInsets = UIEdgeInsets(top: 10.0, left: .zero, bottom: .zero, right: 34.0)
         static let backButtonSize: CGSize = CGSize(width: 33.0, height: 33.0)
         static let backButtonIconSize: CGSize = CGSize(width: 19.25, height: 19.25)
         static let backButtonImagePadding: CGFloat = 6.87
@@ -64,7 +67,7 @@ class EditContactViewController: UIViewController {
     
     // MARK: - Properties
     
-    weak var delegate: InterfaceContactDelegate?
+    weak var delegate: editContactViewControllerDelegate?
     
     private let titleLabelText: String
     private let originalContact: ContactStruct
@@ -105,9 +108,9 @@ class EditContactViewController: UIViewController {
     }()
     
     private lazy var separator: UIView = {
-        let lineView = UIView()
-        lineView.backgroundColor = Constants.separatorBackgroundColor
-        return lineView
+        let separator = UIView()
+        separator.backgroundColor = Constants.separatorBackgroundColor
+        return separator
     }()
     
     private lazy var scrollView: UIScrollView = {
@@ -167,6 +170,7 @@ class EditContactViewController: UIViewController {
     
     private lazy var addPhotoView: UIImageView = {
         let imageView = UIImageView()
+        let tapGestureAddPhoto = UITapGestureRecognizer(target: self, action: #selector(self.onAddPhotoTapped))
         
         if let addPhotoImage = UIImage(named: Constants.addPhotoIconName) {
             let image = addPhotoImage.resized(to: Constants.addPhotoButtonSize)
@@ -176,6 +180,7 @@ class EditContactViewController: UIViewController {
         imageView.layer.cornerRadius = Constants.addPhotoButtonHeight / 2.0
         imageView.clipsToBounds = true
         imageView.isUserInteractionEnabled = true
+        imageView.addGestureRecognizer(tapGestureAddPhoto)
         return imageView
     }()
         
@@ -241,9 +246,6 @@ class EditContactViewController: UIViewController {
         self.view.addSubview(self.titleLabel)
         self.view.addSubview(self.separator)
         self.view.addSubview(self.scrollView)
-        
-        let tapGestureAddPhoto = UITapGestureRecognizer(target: self, action: #selector(self.onAddPhotoTapped))
-        self.addPhotoView.addGestureRecognizer(tapGestureAddPhoto)
         
         self.backButton.snp.makeConstraints({ (make: ConstraintMaker) -> Void in
             make.top.equalTo(self.view.snp.top).offset(self.statusBarHeight + Constants.backButtonInsets.top)
@@ -376,7 +378,7 @@ class EditContactViewController: UIViewController {
     private func updateSaveButtonState() {
         let hasChanges = (self.originalContact != self.editContact)
         self.saveButton.isEnabled = hasChanges
-        self.saveButton.backgroundColor = Constants.saveButtonBackgroundColor.withAlphaComponent(self.saveButton.isEnabled ? 1.0 : 0.5)
+        self.saveButton.backgroundColor = Constants.saveButtonBackgroundColor.withAlphaComponent(hasChanges ? 1.0 : 0.5)
     }
     
     private func getTextFieldWithTitle(for textField: UITextField) -> TextFieldWithTitle? {
@@ -388,9 +390,8 @@ class EditContactViewController: UIViewController {
             case self.textFieldWithTitleEmail.textField:
                 return self.textFieldWithTitleEmail
             default:
-                break
+                return nil
         }
-        return nil
     }
     
     private func updateContactProperty(for textField: UITextField, with text: String) {
@@ -421,7 +422,7 @@ class EditContactViewController: UIViewController {
             self.showErrorAlert(message: errorMessage)
         } else if let delegate = self.delegate {
             delegate.didReturnEditContact(editedContact: self.editContact)
-            self.dismiss(animated: true, completion: nil)
+            self.onBackButtonDidTap()
         }
     }
     
@@ -471,11 +472,11 @@ extension EditContactViewController: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.attributedPlaceholder = nil
-        self.updateSaveButtonState()
     }
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let text = textField.text else { return }
+        
         self.updateContactProperty(for: textField, with: text)
         self.updateSaveButtonState()
     }
@@ -484,7 +485,6 @@ extension EditContactViewController: UITextFieldDelegate {
         if !textField.hasText {
             if let textFieldWithTitle = self.getTextFieldWithTitle(for: textField) {
                 textFieldWithTitle.setupDefaultPlaceholder()
-                self.updateSaveButtonState()
             }
         }
     }

@@ -50,16 +50,20 @@ class TextFieldWithTitle: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.setupViews()
+        self.setup()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         
-        self.setupViews()
+        self.setup()
     }
     
     // MARK: - Methods
+    
+    private func setup() {
+        self.setupViews()
+    }
     
     private func setupViews() {
         self.addSubview(self.titleLabel)

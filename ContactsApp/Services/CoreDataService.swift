@@ -6,16 +6,13 @@
 //
 
 import Foundation
-import UIKit
 import CoreData
 
 protocol IAPIContacts: AnyObject {
     func fetchContacts(completion: @escaping (Result<[ContactEntity], Error>) -> Void)
-    func fetchContact(byEmail email: String, completion: @escaping (Result<ContactEntity?, Error>) -> Void)
     func searchContacts(byFullName fullName: String?, jobPosition: String?, completion: @escaping (Result<[ContactEntity], Error>) -> Void)
     func saveContact(contact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void)
     func updateContact(editedContact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void)
-    func deleteAllContacts(completion: @escaping (Result<Void,Error>) -> Void)
     func deleteContact(byEmail email: String, completion: @escaping (Result<Void, Error>) -> Void)
     func isContactExist(byEmail email: String, completion: @escaping (Result<Bool, Error>) -> Void)
 }
@@ -32,6 +29,7 @@ class CoreDataService: IAPIContacts {
     // MARK: - Properties
     
     private var persistentContainer: NSPersistentContainer!
+    
     private var context: NSManagedObjectContext {
         return self.persistentContainer.viewContext
     }
@@ -61,7 +59,7 @@ class CoreDataService: IAPIContacts {
     // Fetch contact by email
     func fetchContact(byEmail email: String, completion: @escaping (Result<ContactEntity?, Error>) -> Void) {
         self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
-            let fetchRequest = ContactEntity.fetchRequest()
+            let fetchRequest: NSFetchRequest<ContactEntity> = ContactEntity.fetchRequest()
             let predicate = NSPredicate(format: "email == %@", email)
             fetchRequest.predicate = predicate
             fetchRequest.fetchLimit = 1
@@ -79,7 +77,7 @@ class CoreDataService: IAPIContacts {
     // Search contacts by fullName and jobPosition
     func searchContacts(byFullName fullName: String?, jobPosition: String?, completion: @escaping (Result<[ContactEntity], Error>) -> Void) {
         self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
-            let fetchRequest = ContactEntity.fetchRequest()
+            let fetchRequest: NSFetchRequest<ContactEntity> = ContactEntity.fetchRequest()
             var predicates: [NSPredicate] = []
             
             if let fullName = fullName, !fullName.isEmpty {
@@ -87,7 +85,7 @@ class CoreDataService: IAPIContacts {
                 let fullNamePredicate = NSPredicate(format: "fullName CONTAINS[c] %@", trimmedFullName)
                 predicates.append(fullNamePredicate)
             }
-            
+
             if let jobPosition = jobPosition, !jobPosition.isEmpty {
                 let trimmedJobPosition = jobPosition.trimmingCharacters(in: .whitespacesAndNewlines)
                 let jobPositionPredicate = NSPredicate(format: "jobPosition CONTAINS[c] %@", trimmedJobPosition)
@@ -97,8 +95,7 @@ class CoreDataService: IAPIContacts {
             if predicates.isEmpty {
                 completion(.success([]))
             } else {
-                let compoundPredicateType = NSCompoundPredicate.LogicalType.or
-                let compoundPredicate = NSCompoundPredicate(type: compoundPredicateType, subpredicates: predicates)
+                let compoundPredicate = NSCompoundPredicate(type: .or, subpredicates: predicates)
                 fetchRequest.predicate = compoundPredicate
                 
                 do {
@@ -114,7 +111,6 @@ class CoreDataService: IAPIContacts {
     // Save contact
     func saveContact(contact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void) {
         self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
-            
             do {
                 // Needs for create new Entity
                 _ = contact.asEntity(withContext: context)
@@ -130,7 +126,8 @@ class CoreDataService: IAPIContacts {
     func updateContact(editedContact: ContactStruct, completion: @escaping (Result<Void, Error>) -> Void) {
         self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
             let fetchRequest: NSFetchRequest<ContactEntity> = ContactEntity.fetchRequest()
-            fetchRequest.predicate = NSPredicate(format: "email == %@", editedContact.email ?? "")
+            let predicate = NSPredicate(format: "email == %@", editedContact.email ?? "")
+            fetchRequest.predicate = predicate
             
             do {
                 let contacts = try context.fetch(fetchRequest)
@@ -156,7 +153,7 @@ class CoreDataService: IAPIContacts {
     // Delete all contacts
     func deleteAllContacts(completion: @escaping (Result<Void,Error>) -> Void)  {
         self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
-            let fetchRequest = ContactEntity.fetchRequest()
+            let fetchRequest: NSFetchRequest<ContactEntity> = ContactEntity.fetchRequest()
             
             do {
                 let contacts = try context.fetch(fetchRequest)
@@ -181,6 +178,7 @@ class CoreDataService: IAPIContacts {
             
             do {
                 let contacts = try context.fetch(fetchRequest)
+                
                 if let contact = contacts.first {
                     context.delete(contact)
                     try context.save()
@@ -199,7 +197,8 @@ class CoreDataService: IAPIContacts {
     func isContactExist(byEmail email: String, completion: @escaping (Result<Bool, Error>) -> Void) {
         self.persistentContainer.performBackgroundTask({ (context: NSManagedObjectContext) -> Void in
             let fetchRequest: NSFetchRequest<ContactEntity> = ContactEntity.fetchRequest()
-            fetchRequest.predicate = NSPredicate(format: "email == %@", email)
+            let predicate = NSPredicate(format: "email == %@", email)
+            fetchRequest.predicate = predicate
             fetchRequest.fetchLimit = 1
             
             do {
