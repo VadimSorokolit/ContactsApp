@@ -1,5 +1,5 @@
 //
-//  NotificationNames.swift
+//  NotificationName+customNames.swift
 //  ContactsApp
 //
 //  Created by Vadim Sorokolit on 20.06.2024.

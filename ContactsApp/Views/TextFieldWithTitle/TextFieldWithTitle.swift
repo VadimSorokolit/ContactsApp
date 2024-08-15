@@ -16,7 +16,11 @@ class TextFieldWithTitle: UIView {
     private struct Constants {
         static let titleLabelFont: UIFont? = UIFont(name: "Manrope-Bold", size: 14.0)
         static let textFieldFont: UIFont? = UIFont(name: "Manrope-Medium", size: 28.0)
+        static let placeholderFont: UIFont = UIFont(name: "Manrope-Medium", size: 28.0) ?? .systemFont(ofSize: 28.0)
         static let backgroundColor: UIColor = UIColor(hexString: "FFFFFF")
+        static let placeholderColor: UIColor = UIColor(hexString: "FFFFFF")
+        static let textFieldTextColor: UIColor = UIColor(hexString: "FFFFFF")
+        static let textFieldTintColor: UIColor = UIColor(hexString: "FFFFFF")
         static let titleLabelHeight: CGFloat = 19.0
         static let textFieldHeight: CGFloat = 38.0
         static let textFieldTopPadding: CGFloat = 10.0
@@ -24,7 +28,7 @@ class TextFieldWithTitle: UIView {
     
     // MARK: - Properties
     
-    weak var delegate: HandleEditTextFieldDelegate?
+    private var initialPlaceholder: String?
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -35,29 +39,31 @@ class TextFieldWithTitle: UIView {
     
     lazy var textField: UITextField = {
         let textField = UITextField()
-        textField.delegate = self
         textField.font = Constants.textFieldFont
-        textField.textColor = Constants.backgroundColor
-        textField.leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 2.0, height: textField.frame.height))
-        textField.leftViewMode = .always
+        textField.textColor = Constants.textFieldTextColor
+        textField.tintColor = Constants.textFieldTintColor
         return textField
     }()
-
+    
     // MARK: - Initializers
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.setupViews()
+        self.setup()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         
-        self.setupViews()
+        self.setup()
     }
     
     // MARK: - Methods
+    
+    private func setup() {
+        self.setupViews()
+    }
     
     private func setupViews() {
         self.addSubview(self.titleLabel)
@@ -75,22 +81,28 @@ class TextFieldWithTitle: UIView {
         })
     }
     
-    func configure(title: String, placeholder: String) {
-        self.titleLabel.text = title
-        self.textField.attributedPlaceholder = NSAttributedString(
-            string: placeholder,
-            attributes: [NSAttributedString.Key.foregroundColor: Constants.backgroundColor]
+    private func makeAttributedPlaceholder(from text: String) -> NSAttributedString {
+        return NSAttributedString(
+            string: text,
+            attributes: [
+                .foregroundColor: Constants.placeholderColor,
+                .font: Constants.placeholderFont
+            ]
         )
     }
     
-}
-
-// MARK: - UITextFieldDelegate
+    func configure(title: String, placeholder: String) {
+        self.titleLabel.text = title
+        self.textField.attributedPlaceholder = self.makeAttributedPlaceholder(from: placeholder)
+        self.initialPlaceholder = placeholder
+    }
     
-extension TextFieldWithTitle: UITextFieldDelegate {
-
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        self.delegate?.textEditing(textField: textField)
+    func setupDefaultPlaceholder() {
+        if let initialPlaceholder = self.initialPlaceholder {
+            self.textField.attributedPlaceholder = self.makeAttributedPlaceholder(from: initialPlaceholder)
+        }
     }
     
 }
+
+

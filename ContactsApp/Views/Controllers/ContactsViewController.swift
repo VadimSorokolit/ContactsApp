@@ -9,10 +9,6 @@ import Foundation
 import UIKit
 import SnapKit
 
-protocol InterfaceContactDelegate : AnyObject {
-    func didReturnEditContact(editedContact: ContactStruct)
-}
-
 class ContactsViewController: UIViewController {
     
     // MARK: - Objects
@@ -34,9 +30,9 @@ class ContactsViewController: UIViewController {
         static let separatorHeight: CGFloat = 1.0
         static let titleLabelTopPadding: CGFloat = 80.0
         static let addButtonHeight: CGFloat = 70.0
-        static let addButtonInsets: UIEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 39.0, right: 27.0)
+        static let addButtonInsets: UIEdgeInsets = UIEdgeInsets(top: .zero, left: .zero, bottom: 39.0, right: 27.0)
         static let addButtonShadowOpacity: Float = 0.15
-        static let addButtonShadowOffset: CGSize = CGSize(width: 0.0, height: 4.0)
+        static let addButtonShadowOffset: CGSize = CGSize(width: .zero, height: 4.0)
         static let iconPlusSize: CGSize = CGSize(width: 30.0, height: 30.0)
         static let editContactTitle: String = "Edit contact"
         static let newContactTitle: String = "New contact"
@@ -49,7 +45,6 @@ class ContactsViewController: UIViewController {
     // MARK: - Properties
     
     private let contactsViewModel: ContactsViewModel
-    private var isSearching: Bool = false
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -63,7 +58,6 @@ class ContactsViewController: UIViewController {
         searchBar.delegate = self
         searchBar.placeholder = Constants.searchBarPlaceholder
         searchBar.backgroundImage = UIImage()
-        searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         searchBar.backgroundColor = Constants.searchBarBackgroundColor
         searchBar.layer.cornerRadius = Constants.searchBarCornerRadius
         searchBar.layer.masksToBounds = true
@@ -83,9 +77,9 @@ class ContactsViewController: UIViewController {
     }()
     
     private lazy var navBarSeparator: UIView = {
-        let lineView = UIView()
-        lineView.backgroundColor = Constants.separatorBackgroundColor
-        return lineView
+        let separator = UIView()
+        separator.backgroundColor = Constants.separatorBackgroundColor
+        return separator
     }()
     
     private lazy var tableView: UITableView = {
@@ -93,7 +87,6 @@ class ContactsViewController: UIViewController {
         tableView.register(ContactCell.self, forCellReuseIdentifier: ContactCell.reuseID)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.separatorInset.left = Constants.defaultLabelsPadding
         tableView.estimatedRowHeight = UITableView.automaticDimension
         tableView.rowHeight = UITableView.automaticDimension
         return tableView
@@ -135,7 +128,7 @@ class ContactsViewController: UIViewController {
     }
     
     // MARK: - Lifecycle
- 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -151,6 +144,10 @@ class ContactsViewController: UIViewController {
     }
     
     private func setupViews() {
+        let tapGestureHideKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.hideKeyboardOnTap))
+        tapGestureHideKeyboard.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapGestureHideKeyboard)
+        
         self.view.backgroundColor = Constants.backgroundColor
         
         self.headerContainerView.addSubview(self.titleLabel)
@@ -211,10 +208,9 @@ class ContactsViewController: UIViewController {
     }
     
     private func getData() {
-        //  self.contactsViewModel.deleteAllContacts()
         self.contactsViewModel.fetchContacts()
     }
-
+    
     private func goToEditContactVC(withTitle title: String, withContact contact: ContactStruct) {
         let editContactViewController = EditContactViewController(title: title, contact: contact)
         editContactViewController.delegate = self
@@ -232,9 +228,6 @@ class ContactsViewController: UIViewController {
     
     @objc private func handleSuccess() {
         DispatchQueue.main.async {
-            if self.contactsViewModel.contacts.isEmpty {
-                self.contactsViewModel.testCreateContacts()
-            } 
             self.tableView.reloadData()
         }
     }
@@ -247,10 +240,14 @@ class ContactsViewController: UIViewController {
             }
         }
     }
-    
+
     @objc private func onAddButtonDidTap() {
-        let contact = ContactStruct()
-        self.goToEditContactVC(withTitle: Constants.newContactTitle, withContact: contact)
+        let newContact = ContactStruct()
+        self.goToEditContactVC(withTitle: Constants.newContactTitle, withContact: newContact)
+    }
+    
+    @objc func hideKeyboardOnTap() {
+        self.view.endEditing(true)
     }
     
 }
@@ -260,21 +257,17 @@ class ContactsViewController: UIViewController {
 extension ContactsViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.count >= 3 {
-            self.isSearching = true
-            self.contactsViewModel.searchContacts(byQuery: searchText)
-        } else {
-            self.isSearching = false
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if query.isEmpty {
+            self.getData()
+        } else if query.count > 2 {
+            self.contactsViewModel.searchContacts(byQuery: query)
         }
-        self.tableView.reloadData()
     }
     
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.text = ""
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        
-        self.isSearching = false
-        self.tableView.reloadData()
     }
     
 }
@@ -286,6 +279,7 @@ extension ContactsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedContact = self.contactsViewModel.contacts[indexPath.row]
         self.goToEditContactVC(withTitle: Constants.editContactTitle, withContact: selectedContact)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
@@ -308,19 +302,18 @@ extension ContactsViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ContactCell.reuseID, for: indexPath) as? ContactCell else {
             return UITableViewCell()
         }
-        
         let contacts = self.contactsViewModel.contacts
         let contact = contacts[indexPath.row]
+        let isCellLast = indexPath.row == contacts.indices.last
         
         cell.setupCell(with: contact)
         
-        let isCellLast = indexPath.row == contacts.indices.last
-        
         if isCellLast {
             cell.hideSeparator()
+        } else {
+            cell.separatorInset.left = Constants.defaultLabelsPadding
         }
         
-        cell.selectionStyle = .none
         return cell
     }
     
@@ -345,10 +338,10 @@ extension ContactsViewController: UITableViewDataSource {
 
 // MARK: - InterfaceContactDelegate
 
-extension ContactsViewController: InterfaceContactDelegate {
+extension ContactsViewController: editContactViewControllerDelegate {
     
     func didReturnEditContact(editedContact: ContactStruct) {
-        self.contactsViewModel.contactVarificationBeforeSave(contact: editedContact)
+        self.contactsViewModel.updateOrSave(contact: editedContact)
     }
     
 }

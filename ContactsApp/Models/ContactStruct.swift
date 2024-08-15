@@ -8,11 +8,30 @@
 import Foundation
 import CoreData
 
-struct ContactStruct {
+struct ContactStruct: Equatable {
     var fullName: String?
     var jobPosition: String?
     var email: String?
     var photo: Data?
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        let lhsFullName = lhs.fullName ?? ""
+        let lhsJobPosition = lhs.jobPosition ?? ""
+        let lhsEmail = lhs.email ?? ""
+        let lhsPhoto = lhs.photo ?? Data()
+        
+        let rhsFullName = rhs.fullName ?? ""
+        let rhsJobPosition = rhs.jobPosition ?? ""
+        let rhsEmail = rhs.email ?? ""
+        let rhsPhoto = rhs.photo ?? Data()
+        
+        let isEqual = lhsFullName == rhsFullName
+                      && lhsJobPosition == rhsJobPosition
+                      && lhsEmail == rhsEmail
+                      && lhsPhoto == rhsPhoto
+        
+        return isEqual
+    }
     
     // ContactStruct -> ContactEntity
     func asEntity(withContext context: NSManagedObjectContext) -> ContactEntity {
@@ -23,6 +42,6 @@ struct ContactStruct {
         contact.photo = self.photo
         return contact
     }
-
+    
 }
 
