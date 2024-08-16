@@ -29,7 +29,7 @@
 		DD66DD052C352A4C00EA3EDB /* UIColor+hexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD66DD042C352A4C00EA3EDB /* UIColor+hexString.swift */; };
 		DD72B98D2C18C998003FBB46 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD72B98C2C18C998003FBB46 /* CoreDataService.swift */; };
 		DD73768C2C3C53B300791B0E /* Manrope-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DD73768B2C3C53B300791B0E /* Manrope-ExtraBold.ttf */; };
-		DD73768E2C3C6F0600791B0E /* UIImage+resized.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD73768D2C3C6F0600791B0E /* UIImage+resized.swift */; };
+		DD73768E2C3C6F0600791B0E /* UIImage+resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD73768D2C3C6F0600791B0E /* UIImage+resize.swift */; };
 		DD7376912C3E64AF00791B0E /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7376902C3E64AF00791B0E /* ContactCell.swift */; };
 		DD8198102C52D431008C40B7 /* ContactEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD81980E2C52D431008C40B7 /* ContactEntity+CoreDataProperties.swift */; };
 		DD8198112C52D431008C40B7 /* ContactEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD81980F2C52D431008C40B7 /* ContactEntity+CoreDataClass.swift */; };
@@ -90,7 +90,7 @@
 		DD66DD042C352A4C00EA3EDB /* UIColor+hexString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+hexString.swift"; sourceTree = "<group>"; };
 		DD72B98C2C18C998003FBB46 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		DD73768B2C3C53B300791B0E /* Manrope-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Manrope-ExtraBold.ttf"; sourceTree = "<group>"; };
-		DD73768D2C3C6F0600791B0E /* UIImage+resized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+resized.swift"; sourceTree = "<group>"; };
+		DD73768D2C3C6F0600791B0E /* UIImage+resize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+resize.swift"; sourceTree = "<group>"; };
 		DD7376902C3E64AF00791B0E /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 		DD81980E2C52D431008C40B7 /* ContactEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ContactEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		DD81980F2C52D431008C40B7 /* ContactEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ContactEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -163,7 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				DD0DB2192C24A6880058A001 /* NotificationName+customNames.swift */,
-				DD73768D2C3C6F0600791B0E /* UIImage+resized.swift */,
+				DD73768D2C3C6F0600791B0E /* UIImage+resize.swift */,
 				DD66DD042C352A4C00EA3EDB /* UIColor+hexString.swift */,
 			);
 			path = Extensions;
@@ -574,7 +574,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD0991202C1A36DF009DEBA0 /* ContactsApp.xcdatamodeld in Sources */,
-				DD73768E2C3C6F0600791B0E /* UIImage+resized.swift in Sources */,
+				DD73768E2C3C6F0600791B0E /* UIImage+resize.swift in Sources */,
 				DD72B98D2C18C998003FBB46 /* CoreDataService.swift in Sources */,
 				DD8198102C52D431008C40B7 /* ContactEntity+CoreDataProperties.swift in Sources */,
 				DD35F19D2C4EFA340027F1EB /* AlertsManager.swift in Sources */,

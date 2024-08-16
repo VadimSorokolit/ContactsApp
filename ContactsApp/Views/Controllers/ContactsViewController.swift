@@ -98,7 +98,7 @@ class ContactsViewController: UIViewController {
         button.tintColor = Constants.backgroundColor
         
         if let plusImage = UIImage(named: Constants.addButtonIconName) {
-            let image = plusImage.resized(to: Constants.iconPlusSize)
+            let image = plusImage.resize(to: Constants.iconPlusSize)
             button.setImage(image, for: .normal)
         }
         
@@ -276,7 +276,6 @@ extension ContactsViewController: UISearchBarDelegate {
             self.contactsViewModel.searchContacts(byQuery: query)
         }
     }
-
     
 }
 
@@ -346,7 +345,7 @@ extension ContactsViewController: UITableViewDataSource {
 
 // MARK: - InterfaceContactDelegate
 
-extension ContactsViewController: editContactViewControllerDelegate {
+extension ContactsViewController: EditContactViewControllerDelegate {
     
     func didReturnEditContact(editedContact: ContactStruct) {
         self.contactsViewModel.updateOrSave(contact: editedContact)

@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-protocol editContactViewControllerDelegate : AnyObject {
+protocol EditContactViewControllerDelegate : AnyObject {
     func didReturnEditContact(editedContact: ContactStruct)
 }
 
@@ -67,7 +67,7 @@ class EditContactViewController: UIViewController {
     
     // MARK: - Properties
     
-    weak var delegate: editContactViewControllerDelegate?
+    weak var delegate: EditContactViewControllerDelegate?
     
     private let titleLabelText: String
     private let originalContact: ContactStruct
@@ -89,7 +89,7 @@ class EditContactViewController: UIViewController {
         if let xImage = UIImage(named: Constants.backButtonIconName) {
             let increasedSize = CGSize(width: Constants.backButtonIconSize.width + (2.0 * Constants.backButtonImagePadding),
                                        height: Constants.backButtonIconSize.height + (2.0 * Constants.backButtonImagePadding))
-            let image = xImage.resized(to: increasedSize)
+            let image = xImage.resize(to: increasedSize)
             
             button.setImage(image, for: .normal)
             button.imageView?.contentMode = .scaleAspectFit
@@ -173,7 +173,7 @@ class EditContactViewController: UIViewController {
         let tapGestureAddPhoto = UITapGestureRecognizer(target: self, action: #selector(self.onAddPhotoTapped))
         
         if let addPhotoImage = UIImage(named: Constants.addPhotoIconName) {
-            let image = addPhotoImage.resized(to: Constants.addPhotoButtonSize)
+            let image = addPhotoImage.resize(to: Constants.addPhotoButtonSize)
             imageView.image = image
         }
         
