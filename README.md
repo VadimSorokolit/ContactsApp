@@ -9,5 +9,5 @@
 * DI - **Initializer**
 
 <br />
-<img src = "https://github.com/user-attachments/assets/fbd2a58b-9564-48cd-9d28-5de25a824e25" width = 48.8%>
-<img src = "https://github.com/user-attachments/assets/02c98f6c-c7e1-4ff7-b37e-12ed9fa00cdf" width = 48.8%>
+<img src = "https://github.com/user-attachments/assets/03a7508b-7803-4127-8911-80b12a11a43b" width = 48.8%>
+<img src = "https://github.com/user-attachments/assets/ea8185d2-3f31-4ee6-b63c-3fd740d650c5" width = 48.8%>
